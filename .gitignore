@@ -17,3 +17,5 @@ Debug/*
 src/RoutingTableTestBench
 src/RoutingTableTestBench.o
 src/RoutingTable.o
+src/TerminalGUITestBench
+src/TerminalGUITestBench.o

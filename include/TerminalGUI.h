@@ -25,6 +25,8 @@ public:
 	void help() const;
     
 	void commandsListener() const;
+
+	bool getAlive();
 private:
 	bool alive;
 	Settings *settingsPtr;

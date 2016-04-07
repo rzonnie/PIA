@@ -23,6 +23,10 @@ TerminalGUI::TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT) {
 TerminalGUI::~TerminalGUI() {
 }
 
+bool TerminalGUI::getAlive() {
+	return alive;
+}
+
 void TerminalGUI::help() const {
 	printf("Welcome. PIA has a few important commands you can use to chat with someone:\n"
 		"1. 'help' displays this help message\n"
@@ -43,19 +47,22 @@ void TerminalGUI::commandsListener() const {
 		}
 		case '2': // 2 Displays the devices we can access
 		{
-			std::cout << settingsPtr->getMulticastGroup() << std::endl;
-			std::cout << settingsPtr->getMulticastGroup() << std::endl;
-
+			for (auto element: routingTablePtr->getRoutingTable())
+			{
+				printf("%u\n" , element.to);
+			}
 		}
 		case '3': // 3 Lists the settings
 		{
-			
+			std::cout << settingsPtr->getMulticastGroup() << std::endl;
+			std::cout << settingsPtr->getLocalIP() << std::endl;
+			std::cout << settingsPtr->getPort() << std::endl;
+			std::cout << settingsPtr->getUsername() << std::endl;
 		}
-		case '4': //Quits. Sets a boolean on false which we might need to send to the PIA engine and calls the destructor on itself.
+		case '4': //Quits. Sets a boolean on false which we might need to send to the PIA engine
 		{
 			std::cout << "Exit Program" <<  std::endl;
 			alive = false;
-			~TerminalGUI();
 		}
 		default:
 		{
