@@ -9,21 +9,26 @@
 #ifndef TERMINALGUI_H
 #define	TERMINALGUI_H
 
+#include <cstdlib>
 #include <iostream>
+#include "../include/RoutingTable.h" //In the PIA engine, these classes have to be initiated first to prevent circular dependencies.
+#include "../include/Settings.h" 
 
 class TerminalGUI {
 public:
-    TerminalGUI();
-    virtual ~TerminalGUI();
+	TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT);
+	virtual ~TerminalGUI();
     
-    /**
-     * Print the help text in terminal
-     */
-    void help() const;
+	/**
+	* Print the help text in terminal
+	*/
+	void help() const;
     
-    void commandsListener() const;
+	void commandsListener() const;
 private:
-    
+	bool alive;
+	Settings *settingsPtr;
+	RoutingTable *routingTablePtr;
 };
 
 #endif	/* TERMINALGUI_H */
