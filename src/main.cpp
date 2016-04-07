@@ -6,7 +6,6 @@
  */
 
 #include "../include/main.h"
-#include <bitset>
 
 Settings settings;
 int main(int argc, char** argv) {
@@ -39,17 +38,11 @@ int main(int argc, char** argv) {
         PIAEngine engine;
         engine.run();
     }
-    
-    std::string concatenate, henk = "henk", anja = "anja";
-    std::bitset<32> henkBit(henk.c_str());
-    //std::bitset<32> anjaBit("anja");
-    //concatenate  << henk << anja;
-    //concatenate = "asdfasd" + henk;
-    //std::cout << "Error: " << henkBit << std::endl;
-    
 
-    //PIA piapacket;
-    //std::cout<<piapacket.getData();
+    PIA piapacket;
+    piapacket.setNta(1);
+    piapacket.setAck(1);
+    piapacket.getData();
 
     return 0;
 }

@@ -20,7 +20,7 @@ public:
     virtual ~PIA();
 
     //returns the complete PIA protocol data
-    std::string getData();
+    char getData();
 
     //set properties
     void setDestinationAddress(uint32_t destinationAddress);

@@ -1,4 +1,21 @@
+<<<<<<< HEAD
 #include "Socket.h"
+=======
+#include "../include/Socket.h"
+#include "../include/BlockingQueue.h"
+
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <string>
+#include <cstring>
+#include <stdio.h>
+#include <stdexcept>
+#include <iostream>
+#include <sys/types.h>
+#include <stdlib.h>
+
+>>>>>>> 4b1dd158665f556e8118495426aec1b32d655bcc
 
 
 Socket::SocketSocket(bool sendingSocket, std::string ip, int port, std::string group)

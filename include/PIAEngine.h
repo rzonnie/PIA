@@ -9,8 +9,13 @@
 #ifndef PIAENGINE_H
 #define	PIAENGINE_H
 
+#include "RoutingTableStruct.h"
+
+
 #include <iostream>
 #include "TerminalGUI.h"
+#include "Settings.h"
+#include "RoutingTable.h"
 #include <string>
 
 class PIAEngine {
@@ -20,7 +25,8 @@ public:
     
     void run();
 private:
-
+    Settings settings;
+    RoutingTable routingTable = RoutingTable(3);
 };
 
 #endif	/* PIAENGINE_H */

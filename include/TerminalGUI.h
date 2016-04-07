@@ -11,20 +11,21 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "../include/RoutingTable.h" //In the PIA engine, these classes have to be initiated first to prevent circular dependencies.
-#include "../include/Settings.h" 
+#include "RoutingTable.h"
+#include "Settings.h"
 
 class TerminalGUI {
 public:
-	TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT);
-	virtual ~TerminalGUI();
-    
+	TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT); //Unfortunately not with capital 'r'...
+        virtual ~TerminalGUI();
 	/**
 	* Print the help text in terminal
 	*/
 	void help() const;
     
-	void commandsListener() const;
+	void commandsListener();
+
+	bool getAlive();
 private:
 	bool alive;
 	Settings *settingsPtr;
