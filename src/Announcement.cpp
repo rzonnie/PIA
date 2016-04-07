@@ -8,9 +8,10 @@ Announcement::Announcement(struct RoutingTableStruct RoutingTable)
 
 void constantAnnounce(struct RoutingTableStruct RoutingTable)
 {
+    Socket AnnouncementSocket(1);
     while(!quit)
     {
-        sendPacket      // TO BE ADDED
+        AnnouncementSocket.sendPacket("hoi, test-message");
         sleep(1);
     }
 }
@@ -18,4 +19,5 @@ void constantAnnounce(struct RoutingTableStruct RoutingTable)
 void quitAnnounce()
 {
     quit = true;
+    AnnouncementSocket.~Socket;
 }
