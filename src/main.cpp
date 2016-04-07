@@ -6,14 +6,10 @@
  */
 
 #include "../include/main.h"
+#include "SendSocket.h"
 
-Settings settings;
 int main(int argc, char** argv) {
-    PIA piapacket;
-    piapacket.setNta(1);
-    piapacket.setAck(1);
-    piapacket.getData();
-    
+    Settings settings;
     // Create a namespace alias
     namespace po = boost::program_options;
 
@@ -23,7 +19,7 @@ int main(int argc, char** argv) {
     desc.add_options()
             ("help", "Prints this help message")
             ("port", po::value<int>()->default_value(14000), "Port number")
-            ("ip", po::value<std::string>()->default_value("192.168.5.1"), "Local IP address")
+            ("ip", po::value<std::string>()->default_value("192.168.5.2"), "Local IP address")
             ("mgroup", po::value<std::string>()->default_value("228.1.2.3"), "Multicast group you want to use")
             ("username", po::value<std::string>()->default_value("PIA"), "Temporary Username");
     
@@ -43,6 +39,9 @@ int main(int argc, char** argv) {
         PIAEngine engine;
         engine.run();
     }
+    
+    SendSocket tempSocket(&settings);
+    tempSocket.sendPacket("This should be an entire packet");
 
     return 0;
 }

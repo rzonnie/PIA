@@ -70,7 +70,7 @@ char PIA::getData() {
     buffer[15] = flagsAndHeader & 0xff;
     
     // Put the payload inside the packet
-    strncpy(buffer + 16, payload.c_str(), sizeof (buffer));
+    strncpy(buffer + 16, payload.c_str(), strlen (buffer));
     
     int cnt = 0;
     for (auto element : buffer) {
