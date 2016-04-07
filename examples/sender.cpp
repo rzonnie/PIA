@@ -50,6 +50,8 @@ int sendPacket(string ip, uint port, string group) {
         //send a packet every 5 seconds
         while (1) {
             std::string bla = "Bart, als je dit leest werkt het!";
+            char hoi[9];
+            hoi[1] = "H";
             if (sendto(sock, bla.c_str(), bla.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
                 perror("Sendto failed");
             printf("Packet of size %d sent!\n", (int) bla.size());
