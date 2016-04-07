@@ -37,6 +37,7 @@ public:
     int getPort();
     void setUsername(std::string username);
     std::string getUsername();
+    const uint16_t getMTU() const;
 private:
     std::string username;
     uint32_t port;
@@ -44,6 +45,7 @@ private:
     // Network Readable IP addresses
     uint32_t localIP;
     uint32_t multicastGroup;
+    uint16_t MTU = 1472;
 };
 
 #endif	/* SETTINGS_H */

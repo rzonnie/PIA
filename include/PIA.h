@@ -47,7 +47,7 @@ private:
     std::string payload = ""; // 128 - ...
 
     uint headerLength = 16;
-    uint maxSize = 1500;
+    uint maxSize = 1472;
 };
 
 #endif /* SRC_PIA_H_ */

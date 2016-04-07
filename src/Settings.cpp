@@ -57,3 +57,7 @@ std::string Settings::getUsername() {
     return username;
 }
 
+const uint16_t Settings::getMTU() const {
+    return MTU;
+}
+

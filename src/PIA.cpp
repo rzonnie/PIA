@@ -82,10 +82,11 @@ void PIA::getData(char buffer[]) {
     buffer[15] = flagsAndHeader & 0xff;
 
     // Put the payload inside the packet
-    strncpy(buffer + headerLength, payload.c_str(), 1490);
+    strncpy(buffer + headerLength, payload.c_str(), maxSize);
 }
 
 size_t PIA::size() const {
+    std::cout << payload.size() + headerLength << std::endl;
     return payload.size() + headerLength;
 }
 
@@ -98,5 +99,4 @@ for (uint cnt = 0; cnt < max; ++cnt) {
     std::bitset<8> henk(buffer[cnt]);
     std::cout << "Byte " << cnt << " " << henk << std::endl;
     }*/
-
 }

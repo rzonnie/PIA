@@ -24,7 +24,6 @@ public:
 	void help() const;
     
 	void commandsListener();
-
 	bool getAlive();
 private:
 	bool alive;
