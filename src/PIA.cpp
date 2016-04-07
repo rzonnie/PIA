@@ -6,6 +6,7 @@
  */
 
 #include "../include/PIA.h"
+#include <bitset>
 
 PIA::PIA() {
     // TODO Auto-generated constructor stub
@@ -26,30 +27,27 @@ void PIA::setDestinationAddress(uint32_t destinationAddress) {
 }
 
 //set flags
-
 void PIA::setNta(bool nta) {
     if (nta)
-        flagsAndHeader |= (1 << 7);
+        flagsAndHeader |= (1 << 31);
     else
-        flagsAndHeader &= ~(1 << 7);
+        flagsAndHeader &= ~(1 << 31);
 }
 
 void PIA::setAck(bool ack) {
     if (ack)
-        flagsAndHeader |= (1 << 6);
+        flagsAndHeader |= (1 << 30);
     else
-        flagsAndHeader &= ~(1 << 6);
+        flagsAndHeader &= ~(1 << 30);
 }
 
 void PIA::setSequenceNumber(uint32_t sequenceNumber) {
     this->sequenceNumber = sequenceNumber;
 }
 
-std::string PIA::getData() {
+char PIA::getData() {
     //Complete packet
     char buffer[16 + payload.size()];
-    std::cout << "Payload size: " << payload.size() + 16;
-    strncpy(buffer + 16, payload.c_str(), sizeof (buffer));
 
     buffer[0] = (destinationAddress >> 24) & 0xff;
     buffer[1] = (destinationAddress >> 16) & 0xff;
@@ -70,12 +68,14 @@ std::string PIA::getData() {
     buffer[13] = (flagsAndHeader >> 16) & 0xff;
     buffer[14] = (flagsAndHeader >> 8) & 0xff;
     buffer[15] = flagsAndHeader & 0xff;
-
+    
+    // Put the payload inside the packet
+    strncpy(buffer + 16, payload.c_str(), sizeof (buffer));
+    
     int cnt = 0;
     for (auto element : buffer) {
-        std::cout << "Byte " << cnt << " " << element << std::endl;
+        std::bitset<8> henk(element);
+        std::cout << "Byte " << cnt << " " << henk << std::endl;
         cnt++;
     }
-
-    return 0;
 }

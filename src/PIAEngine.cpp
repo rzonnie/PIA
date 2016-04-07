@@ -18,6 +18,12 @@ void PIAEngine::run() {
     
     TerminalGUI gui(&settings, &routingTable);
     bool quit = true;
+    
+    while (!quit) {
+        quit = gui.getAlive();
+    }
+    
+    std::cout << "Byee" << std::endl;
 }
 
 

@@ -40,7 +40,9 @@ int main(int argc, char** argv) {
     }
 
     PIA piapacket;
-    std::cout<<piapacket.getData();
+    piapacket.setNta(1);
+    piapacket.setAck(1);
+    piapacket.getData();
 
     return 0;
 }
