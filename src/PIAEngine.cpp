@@ -17,10 +17,11 @@ PIAEngine::~PIAEngine() {
 void PIAEngine::run() {
     
     TerminalGUI gui(&settings, &routingTable);
-    bool quit = true;
+    bool quit = false;
     
     while (!quit) {
-        quit = gui.getAlive();
+        gui.commandsListener();
+        quit = !gui.getAlive();
     }
     
     std::cout << "Byee" << std::endl;
