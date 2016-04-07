@@ -37,31 +37,43 @@ RoutingTableStruct routingTable::makeStruct(uint8_t to, uint8_t via, uint8_t dis
 
 void routingTable::updateRoutingTable(vector <RoutingTableStruct> NewRoutingTable)
 {
-	int i;
-	int j;
+	int k = 0; //Solution to the accessing specific 
 	bool newElement = false;
-	for (i = 0; i <= NewRoutingTable.size(); i++) //Loop over all routing table entries
+	for (auto i: NewRoutingTable) //Loop over all routing table entries
 	{
-		if (NewRoutingTable[i].via != myIdentifier) //This checks if this entry is not measured from me as a point to prevent loops
+		if (i.via != myIdentifier) //This checks if this entry is not measured from me as a point to prevent loops
 		{
-			for (j= 0; j <= RoutingTable.size(); j++) //Loop over all routing table entries to consider if you have the destination already
+			for (auto j: RoutingTable) //Loop over all routing table entries to consider if you have the destination already
 			{
-				if (RoutingTable[j].to = NewRoutingTable[i].to) //Check if the destination is already in your list
+				if (j.to == i.to) //Check if the destination is already in your list
 				{
-					if (RoutingTable[j].distance > NewRoutingTable[i].distance) //Is the distance smaller?
+					if (j.distance > i.distance + 1) //Is the distance smaller than at least the step to the node?
 					{
-						RoutingTable.erase(RoutingTable.begin() + i - 1); //Destroy old element, possible because vector is not ordered
-						RoutingTableStruct NewEntry; //Initialise New Entry
-						NewEntry = makeStruct(NewRoutingTable[i].to, NewRoutingTable[0].to, NewRoutingTable[i].distance + 1); //New entry has to = to, via = to0 = ID and distance += 1
-						addRoutingTableStruct(NewEntry); //Add new element
+						cout << "Ik kom hier 1x " << i.distance + 1 << endl;
+						RoutingTable.erase(RoutingTable.begin()+k-1); //Use k instead of auto, otherwise .begin and.erase are not possible.
+						addRoutingTableStruct(makeStruct(i.to, NewRoutingTable[0].via, i.distance + 1));
+						printf("%u\n", j.distance);
+						printf("%u\n", j.via);
 					}
 					newElement = true;
 				}
+				k++; //Increase k to still be able to access the k'th element of the vector
 			}
 			if (!newElement) //If j looped over the full routing table I already had, and the destination was not found there:
 			{
-				addRoutingTableStruct(NewRoutingTable[i]); //Add it to my routing table
+				addRoutingTableStruct(makeStruct(i.to, NewRoutingTable[0].via, i.distance + 1)); //Add it to my routing table
 			}
 		}
+		newElement = false;
+		k = 0;
 	}
 }
+
+/*
+void routingTable::printRoutingTable(){
+	for (auto element : RoutingTable) {
+		for (auto element2 : element) {
+			cout << "Temp" << element.to << endl;
+		}
+	}
+}*/
