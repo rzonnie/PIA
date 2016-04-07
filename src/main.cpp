@@ -9,6 +9,11 @@
 
 Settings settings;
 int main(int argc, char** argv) {
+    PIA piapacket;
+    piapacket.setNta(1);
+    piapacket.setAck(1);
+    piapacket.getData();
+    
     // Create a namespace alias
     namespace po = boost::program_options;
 
@@ -38,11 +43,6 @@ int main(int argc, char** argv) {
         PIAEngine engine;
         engine.run();
     }
-
-    PIA piapacket;
-    piapacket.setNta(1);
-    piapacket.setAck(1);
-    piapacket.getData();
 
     return 0;
 }
