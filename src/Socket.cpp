@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#include "Socket.h"
-=======
 #include "../include/Socket.h"
-#include "../include/BlockingQueue.h"
 
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -15,18 +11,15 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
->>>>>>> 4b1dd158665f556e8118495426aec1b32d655bcc
-
-
-Socket::SocketSocket(bool sendingSocket, std::string ip, int port, std::string group)
+Socket::Socket(bool sendingSocket, std::string ip, int port, std::string group)
 {
     if (sendingSocket)  // we want to make a sending Socket
     {
-        makeSendingSocket(std::string ip, int port, std::string group);
+        makeSendingSocket(ip, port, group);
     }
     else           // we want a receiving socket
     {
-        makeReceivingSocket(std::string ip, int port, std::string group);
+        receivePacket(ip, port, group, );
     }
 }
 
@@ -37,7 +30,7 @@ Socket::~Socket()
 
 void makeSendingSocket(std::string ip, int port, std::string group)
 {
-    int sock = -1;
+    sock = -1;
 
     try {
         /**
@@ -126,16 +119,16 @@ int makeReceivingSocket(std::string ip, int port, std::string group)
 
 void sendPacket(std::string message)
 {
-    if (sendto(sock, message.c_str(), message.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our data
+    if (sendto(this->sock, message.c_str(), message.size(), 0, (struct sockaddr*) &local, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our data
         perror("Sending failed");
     printf("Packet of size %d sent!\n", (int) message.size());
 }
 
-int receivePacket(std::string ip, int port, std::string group, BlockingQueue<std::string> &q) {
+void receivePacket(std::string ip, int port, std::string group, BlockingQueue<std::string> &q) {
     try {
         int rsock;
 
-        rsock = get_receive_socket(ip, port, group);
+        rsock = makeReceivingSocket(ip, port, group);
 
         // prepare a structure to put peer data into
         struct sockaddr_in peer_address;

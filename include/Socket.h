@@ -23,7 +23,9 @@ class Socket
         void makeSendingSocket(std::string ip, int port, std::string group);
         void sendPacket(std::string message);
         void makeReceivingSocket(std::string ip, int port, std::string group);
-        int receivePacket(std::string ip, int port, std::string group, BlockingQueue<std::string> &q)
+        void receivePacket(std::string ip, int port, std::string group, BlockingQueue<std::string> &q);
+        struct sockaddr_in multicastSender;
+        int sock;
 };
 
 #endif // SOCKET_H

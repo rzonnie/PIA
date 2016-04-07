@@ -1,25 +1,15 @@
 #include "../include/Announcement.h"
 
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <string>
-#include <cstring>
-#include <stdio.h>
-#include <stdexcept>
-#include <iostream>
 
-
-Announcement::Announcement(struct RoutingTableStruct RoutingTable)
+Announcement::Announcement(std::string ip, int port, std::string group, std::vector<struct RoutingTableStruct> routingTable)
 {
     quit = false;
-    constantAnnounce(RoutingTable); //go immediately into the loop
+    constantAnnounce(ip, port, group, routingTable); //go immediately into the loop
 }
 
-void constantAnnounce(struct RoutingTableStruct *RoutingTable)
-
+void Announcement::constantAnnounce(std::string ip, int port, std::string group, std::vector<struct RoutingTableStruct> routingTable)
+{
     int sock = -1;
-
     try {
         /**
          * Create a new datagram socket
@@ -56,7 +46,7 @@ void constantAnnounce(struct RoutingTableStruct *RoutingTable)
 
         //send a packet every 5 seconds
         while (!quit) {
-                routingTable = //
+            std::string message = stringify(routingTable);
             if (sendto(sock, message.c_str(), message.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
                 perror("Sendto failed");
             printf("Announcement of size %d sent!\n", (int) message.size());
@@ -68,12 +58,24 @@ void constantAnnounce(struct RoutingTableStruct *RoutingTable)
 
     if (sock != -1)
         close(sock);
-
-    return 0;
 }
 
-void quitAnnounce()
+void Announcement::quitAnnounce()
 {
     quit = true;
-    AnnouncementSocket.~Socket;
+}
+
+std::string stringify (std::vector<struct RoutingTableStruct> routingTableIn)
+{
+    std::string strRoutingTable;
+
+    for (auto i:routingTableIn)
+    {
+        strRoutingTable.append(std::to_string(i.to));
+        strRoutingTable.append(std::to_string(i.distance));
+        strRoutingTable.append(std::to_string(i.via));
+        strRoutingTable.append(std::to_string(i.from));
+
+    }
+    return strRoutingTable;
 }
