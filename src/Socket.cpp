@@ -1,5 +1,4 @@
 #include "Socket.h"
-#include "../include/BlockingQueue.h"
 
 
 Socket::SocketSocket(bool sendingSocket, std::string ip, int port, std::string group)
