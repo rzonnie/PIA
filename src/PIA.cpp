@@ -17,16 +17,12 @@ PIA::~PIA() {
 }
 
 void PIA::setAcknowledgementNumber(uint32_t acknowledgementNumber) {
-    AcknowledgementNumber = acknowledgementNumber;
+    acknowledgementNumber = acknowledgementNumber;
 }
 
 void PIA::setDestinationAddress(uint32_t destinationAddress) {
     //inet_addr(localIP.c_str());
     this->destinationAddress = destinationAddress;
-}
-
-void PIA::setHeaderLength(uint16_t headerLength) {
-    this->headerLength = headerLength;
 }
 
 //set flags
@@ -44,14 +40,31 @@ void PIA::setSequenceNumber(uint32_t sequenceNumber) {
 }
 
 std::string PIA::getData() {
+    //Complete packet
+    char buffer[16 + payload.size()];
+    std::cout << "Payload size: " << payload.size() + 16;
+    strncpy(buffer + 16, payload.c_str(), sizeof (buffer));
 
-    //clear the data string
-    PIAdata.clear();
-    PIAdata = std::to_string(destinationAddress);
-    //(std::string)destinationAddress + (std::string)sequenceNumber + (std::string)AcknowledgementNumber + (std::string)NTA + (std::string)ACK;
+    buffer[0] = (destinationAddress >> 24) & 0xff;
+    buffer[1] = (destinationAddress >> 16) & 0xff;
+    buffer[2] = (destinationAddress >> 8) & 0xff;
+    buffer[3] = destinationAddress & 0xff;
+    
+    buffer[4] = (sequenceNumber >> 24) & 0xff;
+    buffer[5] = (sequenceNumber >> 16) & 0xff;
+    buffer[6] = (sequenceNumber >> 8) & 0xff;
+    buffer[7] = sequenceNumber & 0xff;
+    
+    buffer[8] = (acknowledgementNumber >> 24) & 0xff;
+    buffer[9] = (acknowledgementNumber >> 16) & 0xff;
+    buffer[10] = (acknowledgementNumber >> 8) & 0xff;
+    buffer[11] = acknowledgementNumber & 0xff;
+    
+    int cnt = 0;
+    for (auto element : buffer) {
+        std::cout << "Byte " << cnt << " " << element << std::endl;
+        cnt++;
+    }
 
-
-    std::cout << sizeof (PIAdata) << std::endl;
-
-    return PIAdata;
+    return 0;
 }
