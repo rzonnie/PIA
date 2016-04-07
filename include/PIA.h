@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <vector>
 
 #ifndef SRC_PIA_H_
 #define SRC_PIA_H_
@@ -20,17 +21,20 @@ public:
     virtual ~PIA();
 
     //returns the complete PIA protocol data
-    char getData();
+    void getData(std::vector<char> &buffer);
+    void readData(char* buffer[]);
 
     //set properties
     void setDestinationAddress(uint32_t destinationAddress);
     void setSequenceNumber(uint32_t sequenceNumber);
     void setAcknowledgementNumber(uint32_t acknowledgementNumber);
-    void setHeaderLength(uint16_t headerLength = {0x00000000});
+    void setHeaderLength(uint16_t headerLength);
     
     void setAck(bool ack);
     void setNta(bool nta);
 
+    uint getLength();
+    void printPacket();
 
 private:
     //Packet contents
@@ -38,7 +42,10 @@ private:
     uint32_t sequenceNumber = 0; //32 -63
     uint32_t acknowledgementNumber = 0; //64 - 95
     uint32_t flagsAndHeader = 0; // 96 - 127
-    std::string payload = "empty shizzle"; // 128 - ...
+    std::string payload = ""; // 128 - ...
+
+    uint headerLength = 16;
+    uint maxSize = 1500;
 };
 
 #endif /* SRC_PIA_H_ */

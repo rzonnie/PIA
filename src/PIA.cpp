@@ -18,7 +18,7 @@ PIA::~PIA() {
 }
 
 void PIA::setAcknowledgementNumber(uint32_t acknowledgementNumber) {
-    acknowledgementNumber = acknowledgementNumber;
+    this->acknowledgementNumber = acknowledgementNumber;
 }
 
 void PIA::setDestinationAddress(uint32_t destinationAddress) {
@@ -45,9 +45,16 @@ void PIA::setSequenceNumber(uint32_t sequenceNumber) {
     this->sequenceNumber = sequenceNumber;
 }
 
-char PIA::getData() {
+void PIA::readData(char* buffer[]){
+
+}
+
+uint PIA::getLength(){
+	return 16 + payload.size();
+}
+
+void PIA::getData(std::vector<char> &buffer) {
     //Complete packet
-    char buffer[16 + payload.size()];
 
     buffer[0] = (destinationAddress >> 24) & 0xff;
     buffer[1] = (destinationAddress >> 16) & 0xff;
@@ -70,12 +77,17 @@ char PIA::getData() {
     buffer[15] = flagsAndHeader & 0xff;
     
     // Put the payload inside the packet
-    strncpy(buffer + 16, payload.c_str(), sizeof (buffer));
-    
-    int cnt = 0;
-    for (auto element : buffer) {
-        std::bitset<8> henk(element);
-        std::cout << "Byte " << cnt << " " << henk << std::endl;
-        cnt++;
-    }
+    strncpy(buffer + headerLength, payload.c_str(), 1500);
+}
+
+void PIA::printPacket(){
+	std::vector<char> buffer;
+	this->getData(buffer);
+
+    uint max = 1000;
+    for (uint cnt = 0; cnt < max; ++cnt) {
+    	std::bitset<8> henk(buffer[cnt]);
+    	std::cout << "Byte " << cnt << " " << henk << std::endl;
+	}
+
 }

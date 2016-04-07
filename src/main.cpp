@@ -39,10 +39,17 @@ int main(int argc, char** argv) {
         engine.run();
     }
 
+
+
     PIA piapacket;
     piapacket.setNta(1);
     piapacket.setAck(1);
-    piapacket.getData();
+
+    std::vector<char> hoi;
+
+    //read a packet
+    piapacket.getData(hoi);
+    piapacket.printPacket();
 
     return 0;
 }
