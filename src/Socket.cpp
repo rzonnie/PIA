@@ -1,18 +1,6 @@
 #include "Socket.h"
 #include "../include/BlockingQueue.h"
 
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <string>
-#include <cstring>
-#include <stdio.h>
-#include <stdexcept>
-#include <iostream>
-#include <sys/types.h>
-#include <stdlib.h>
-
-
 
 Socket::SocketSocket(bool sendingSocket, std::string ip, int port, std::string group)
 {
