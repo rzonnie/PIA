@@ -10,10 +10,10 @@ int main()
 	int GuidoID = 2;
 	int RemiID = 3;
 	int BartID = 4;
-	routingTable OlafsRoutingTable(OlafID);
-	routingTable GuidosRoutingTable(GuidoID);
-	routingTable RemisRoutingTable(RemiID);
-	routingTable BartsRoutingTable(BartID);
+	RoutingTable OlafsRoutingTable(OlafID);
+	RoutingTable GuidosRoutingTable(GuidoID);
+	RoutingTable RemisRoutingTable(RemiID);
+	RoutingTable BartsRoutingTable(BartID);
 	
 	//Olaf is going to receive Guido's Routing Table. Let's see how he handles it.
 	OlafsRoutingTable.updateRoutingTable(GuidosRoutingTable.getRoutingTable());

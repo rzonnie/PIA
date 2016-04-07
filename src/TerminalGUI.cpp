@@ -8,60 +8,47 @@
 
 #include "../include/TerminalGUI.h"
 
-TerminalGUI::TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT) {
-	settingsPtr = handleToSettings;
-	routingTablePtr = handleToRT;
-	alive = true;
-	help();
-	commandsListener();
+TerminalGUI::TerminalGUI(Settings *handleToSettings, RoutingTable* handleToRT) {
+    settingsPtr = handleToSettings;
+    routingTablePtr = handleToRT;
+    alive = true;
+    help();
+    commandsListener();
 }
 
 TerminalGUI::~TerminalGUI() {
 }
 
 bool TerminalGUI::getAlive() {
-	return alive;
+    return alive;
 }
 
 void TerminalGUI::help() const {
-	printf("Welcome. PIA has a few important commands you can use to chat with someone:\n"
-		"1. 'help' displays this help message\n"
-		"2. 'list-devices' lists all devices you can access within this ad hoc network\n"
-		"3. 'list-config' list the current config\n"
-		"4. 'quit' although we assume you won't ever quit PIA\n");
+    printf("Welcome. PIA has a few important commands you can use to chat with someone:\n"
+            "1. 'help' displays this help message\n"
+            "2. 'list-devices' lists all devices you can access within this ad hoc network\n"
+            "3. 'list-config' list the current config\n"
+            "4. 'quit' although we assume you won't ever quit PIA\n");
 }
 
-void TerminalGUI::commandsListener() const {
-	std::string userInput;
-	std::cin >> userInput;
-	std::cout << "Command: " << userInput << std::endl;
-	switch (userInput) 
-	{
-		case '1': // 1 Displays the 'help' message
-		{
-			help();
-		}
-		case '2': // 2 Displays the devices we can access
-		{
-			for (auto element: routingTablePtr->getRoutingTable())
-			{
-				printf("%u\n" , element.to);
-			}
-		}
-		case '3': // 3 Lists the settings
-		{
-			std::cout << settingsPtr->getMulticastGroup() << std::endl;
-			std::cout << settingsPtr->getLocalIP() << std::endl;
-			std::cout << settingsPtr->getPort() << std::endl;
-			std::cout << settingsPtr->getUsername() << std::endl;
-		}
-		case '4': //Quits. Sets a boolean on false which we might need to send to the PIA engine
-		{
-			std::cout << "Exit Program" <<  std::endl;
-			alive = false;
-		}
-		default:
-		{
-			//Praten.
-		}
+void TerminalGUI::commandsListener() {
+    std::string userInput;
+    std::cin >> userInput;
+    std::cout << "Command: " << userInput << std::endl;
+
+    if (userInput == "help" || userInput == "1") {
+        help();
+    } else if (userInput == "list-devices" || userInput == "2") {
+        for (auto element : routingTablePtr->getRoutingTable()) {
+            printf("%u\n", element.to);
+        }
+    } else if (userInput == "list-config" || userInput == "3") {
+        std::cout << settingsPtr->getMulticastGroup() << std::endl;
+        std::cout << settingsPtr->getLocalIP() << std::endl;
+        std::cout << settingsPtr->getPort() << std::endl;
+        std::cout << settingsPtr->getUsername() << std::endl;
+    } else if (userInput == "quit" || userInput == "4") {
+        std::cout << "Exit Program" << std::endl;
+        this->alive = false;
+    }
 }

@@ -11,27 +11,25 @@
 
 #include <cstdlib>
 #include <iostream>
-
-class routingTable; //Implicit class definition
-
-class Settings;
+#include "RoutingTable.h"
+#include "Settings.h"
 
 class TerminalGUI {
 public:
-	TerminalGUI(Settings *handleToSettings, routingTable *HandleToRT); //Unfortunately not with capital 'r'...
-    
+	TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT); //Unfortunately not with capital 'r'...
+        virtual ~TerminalGUI();
 	/**
 	* Print the help text in terminal
 	*/
 	void help() const;
     
-	void commandsListener() const;
+	void commandsListener();
 
 	bool getAlive();
 private:
 	bool alive;
 	Settings *settingsPtr;
-	routingTable *routingTablePtr;
+	RoutingTable *routingTablePtr;
 };
 
 #endif	/* TERMINALGUI_H */

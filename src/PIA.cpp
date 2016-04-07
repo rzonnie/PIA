@@ -28,11 +28,17 @@ void PIA::setDestinationAddress(uint32_t destinationAddress) {
 //set flags
 
 void PIA::setNta(bool nta) {
-
+    if (nta)
+        flagsAndHeader |= (1 << 7);
+    else
+        flagsAndHeader &= ~(1 << 7);
 }
 
 void PIA::setAck(bool ack) {
-
+    if (ack)
+        flagsAndHeader |= (1 << 6);
+    else
+        flagsAndHeader &= ~(1 << 6);
 }
 
 void PIA::setSequenceNumber(uint32_t sequenceNumber) {
@@ -49,17 +55,22 @@ std::string PIA::getData() {
     buffer[1] = (destinationAddress >> 16) & 0xff;
     buffer[2] = (destinationAddress >> 8) & 0xff;
     buffer[3] = destinationAddress & 0xff;
-    
+
     buffer[4] = (sequenceNumber >> 24) & 0xff;
     buffer[5] = (sequenceNumber >> 16) & 0xff;
     buffer[6] = (sequenceNumber >> 8) & 0xff;
     buffer[7] = sequenceNumber & 0xff;
-    
+
     buffer[8] = (acknowledgementNumber >> 24) & 0xff;
     buffer[9] = (acknowledgementNumber >> 16) & 0xff;
     buffer[10] = (acknowledgementNumber >> 8) & 0xff;
     buffer[11] = acknowledgementNumber & 0xff;
-    
+
+    buffer[12] = (flagsAndHeader >> 24) & 0xff;
+    buffer[13] = (flagsAndHeader >> 16) & 0xff;
+    buffer[14] = (flagsAndHeader >> 8) & 0xff;
+    buffer[15] = flagsAndHeader & 0xff;
+
     int cnt = 0;
     for (auto element : buffer) {
         std::cout << "Byte " << cnt << " " << element << std::endl;

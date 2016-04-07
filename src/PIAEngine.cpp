@@ -15,7 +15,8 @@ PIAEngine::~PIAEngine() {
 }
 
 void PIAEngine::run() {
-    TerminalGUI gui;
+    
+    TerminalGUI gui(&settings, &routingTable);
     bool quit = true;
 }
 
