@@ -13,7 +13,6 @@ TerminalGUI::TerminalGUI(Settings *handleToSettings, RoutingTable* handleToRT) {
     routingTablePtr = handleToRT;
     alive = true;
     help();
-    commandsListener();
 }
 
 TerminalGUI::~TerminalGUI() {
