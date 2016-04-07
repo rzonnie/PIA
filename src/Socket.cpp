@@ -14,15 +14,15 @@
 
 
 
-Socket::Socket(bool sendingSocket, string ip, uint port, string group)
+Socket::SocketSocket(bool sendingSocket, std::string ip, int port, std::string group)
 {
     if (sendingSocket)  // we want to make a sending Socket
     {
-        makeSendingSocket(string ip, uint port, string group);
+        makeSendingSocket(std::string ip, int port, std::string group);
     }
     else           // we want a receiving socket
     {
-        makeReceivingSocket(string ip, uint port, string group);
+        makeReceivingSocket(std::string ip, int port, std::string group);
     }
 }
 
@@ -31,7 +31,7 @@ Socket::~Socket()
     //dtor
 }
 
-void makeSendingSocket(string ip, uint port, string group)
+void makeSendingSocket(std::string ip, int port, std::string group)
 {
     int sock = -1;
 
@@ -75,7 +75,7 @@ void makeSendingSocket(string ip, uint port, string group)
         }
 }
 
-int makeReceivingSocket(string ip, uint port, string group)
+int makeReceivingSocket(std::string ip, int port, std::string group)
 {
     /**
      * Create a new datagram socket
@@ -127,7 +127,7 @@ void sendPacket(std::string message)
     printf("Packet of size %d sent!\n", (int) message.size());
 }
 
-int receivePacket(string ip, uint port, string group, BlockingQueue<std::string> &q) {
+int receivePacket(std::string ip, int port, std::string group, BlockingQueue<std::string> &q) {
     try {
         int rsock;
 
