@@ -15,7 +15,7 @@ int sendPacket(string ip, uint port, string group) {
 
     try {
         /**
-         * Create a new datagram socket 
+         * Create a new datagram socket
          */
         if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
             throw std::runtime_error("Socket creation failed");
