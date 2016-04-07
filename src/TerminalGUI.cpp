@@ -8,10 +8,6 @@
 
 #include "../include/TerminalGUI.h"
 
-class RoutingTable; //Implicit class definition
-
-class Settings;
-
 TerminalGUI::TerminalGUI(Settings *handleToSettings, RoutingTable *HandleToRT) {
 	settingsPtr = handleToSettings;
 	routingTablePtr = handleToRT;
