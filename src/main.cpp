@@ -8,6 +8,7 @@
 #include "../include/main.h"
 
 Settings settings;
+
 int main(int argc, char** argv) {
     // Create a namespace alias
     namespace po = boost::program_options;
@@ -21,14 +22,14 @@ int main(int argc, char** argv) {
             ("ip", po::value<std::string>()->default_value("192.168.5.1"), "Local IP address")
             ("mgroup", po::value<std::string>()->default_value("228.1.2.3"), "Multicast group you want to use")
             ("username", po::value<std::string>()->default_value("PIA"), "Temporary Username");
-    
+
     // Create a boost supplied options map
-    po::variables_map vm;   
-    
+    po::variables_map vm;
+
     // Fill the boost options map
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
-    
+
     // Check for the help flag
     if (vm.count("help")) {
         std::cout << desc << "\n";
@@ -44,12 +45,19 @@ int main(int argc, char** argv) {
     PIA piapacket;
     piapacket.setNta(1);
     piapacket.setAck(1);
+    std::string payload = "payloaddata";
+    piapacket.setPayload(payload);
 
-    std::vector<char> hoi;
+    char buffer[1500] = {};
 
     //read a packet
-    piapacket.getData(hoi);
-    piapacket.printPacket();
+    piapacket.getData(buffer);
+    //piapacket.printPacket();
+
+    for (uint cnt = 0; cnt < piapacket.size(); ++cnt) {
+        std::bitset<8> henk(buffer[cnt]);
+        std::cout << "Byte " << cnt << " " << henk << std::endl;
+    }
 
     return 0;
 }

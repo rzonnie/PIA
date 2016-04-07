@@ -21,7 +21,7 @@ public:
     virtual ~PIA();
 
     //returns the complete PIA protocol data
-    void getData(std::vector<char> &buffer);
+    void getData(char buffer[]);
     void readData(char* buffer[]);
 
     //set properties
@@ -29,12 +29,14 @@ public:
     void setSequenceNumber(uint32_t sequenceNumber);
     void setAcknowledgementNumber(uint32_t acknowledgementNumber);
     void setHeaderLength(uint16_t headerLength);
+    void setPayload(std::string payload);
     
     void setAck(bool ack);
     void setNta(bool nta);
 
     uint getLength();
     void printPacket();
+    size_t size() const;
 
 private:
     //Packet contents
