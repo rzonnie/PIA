@@ -6,7 +6,6 @@
  */
 
 #include "../include/PIA.h"
-#include <bitset>
 
 PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber,bool ACK, bool NTA) {
     //constructor with arguments
@@ -76,8 +75,22 @@ void PIA::setPayload(std::string payload) {
     this->payload = payload;
 }
 
-void PIA::readData(char* buffer[]) {
+void PIA::readData(char buffer[]) {
 
+	//read the packet header
+	destinationAddress		= ((buffer[0]&0xff)) | ((buffer[1]&0xff)<<8) | ((buffer[2]&0xff)<<16) | ((buffer[3]&0xff)<<24);
+	sequenceNumber			= ((buffer[7]&0xff)) | ((buffer[6]&0xff)<<8) | ((buffer[5]&0xff)<<16) | ((buffer[4]&0xff)<<24);
+	acknowledgementNumber	= ((buffer[11]&0xff)) | ((buffer[10]&0xff)<<8) | ((buffer[9]&0xff)<<16) | ((buffer[8]&0xff)<<24);
+	flagsAndHeader			= ((buffer[15]&0xff)) | ((buffer[14]&0xff)<<8) | ((buffer[13]&0xff)<<16) | ((buffer[12]&0xff)<<24);
+
+	//read the payload
+	payload.clear();
+    uint i = headerLength;
+    while(i<maxSize-headerLength){
+    	//std::cout<<buffer[i]<<"|";
+    	payload.push_back(buffer[i]);
+    	i++;
+    }
 }
 
 void PIA::getData(char buffer[]) {
@@ -112,16 +125,35 @@ size_t PIA::size() const {
     return payload.size() + headerLength;
 }
 
-void PIA::printPacket(){
-    char buffer[1488] = {};
-    this->getData(buffer);
+void PIA::printPacket(bool format){
+    //Print readable data
+	if(format){
+    	std::cout<<"\n*Destination\t: ";
+    	char ipAddr[16];
+    	snprintf(ipAddr,sizeof ipAddr,"%u.%u.%u.%u" ,(destinationAddress & 0xff000000) >> 24
+    												,(destinationAddress & 0x00ff0000) >> 16
+    												,(destinationAddress & 0x0000ff00) >> 8
+    												,(destinationAddress & 0x000000ff));
+        std::cout<<ipAddr;
+        std::cout<<"\n*Sequence\t: "<<sequenceNumber
+        		 <<"\n*Acknowledgement: "<<acknowledgementNumber
+    			 <<"\n*Flags&Header\t: "<<std::bitset<32>(flagsAndHeader)
+    			 <<"\n*Payload("<<strlen(payload.c_str())<<"bytes): "<<payload
+    			 <<std::endl;
+    }
+    //Print raw bytes
+    else{
+		char buffer[1488] = {};
+		this->getData(buffer);
 
-	uint max = this->size();
-	std::cout << "-----Header----- " <<std::endl;
-	if(max>maxSize) max=maxSize+headerLength;
-	for (uint cnt = 0; cnt < max; ++cnt) {
-		std::bitset<8> henk(buffer[cnt]);
-		if(cnt == headerLength) std::cout << "-----Payload----- " <<std::endl;
-		std::cout << "Byte " << cnt << " " << henk << std::endl;
+		uint max = this->size();
+		std::cout << "-----Header----- " <<std::endl;
+		if(max>maxSize) max=maxSize+headerLength;
+		for (uint cnt = 0; cnt < max; ++cnt) {
+			std::bitset<8> henk(buffer[cnt]);
+			if(cnt == headerLength) std::cout << "-----Payload----- " <<std::endl;
+			std::cout << "Byte " << cnt << " " << henk << std::endl;
+		}
+		std::cout<<std::endl;
     }
 }

@@ -23,7 +23,7 @@ public:
 
     //returns the complete PIA protocol data
     void getData(char buffer[]);
-    void readData(char* buffer[]);
+    void readData(char buffer[]);
 
     //set properties
     void setDestinationAddress(uint32_t destinationAddress);
@@ -38,7 +38,7 @@ public:
     bool isAck() const;
     void setNta(bool nta);
 
-    void printPacket();
+    void printPacket(bool format);
     size_t size() const;
 
 private:
