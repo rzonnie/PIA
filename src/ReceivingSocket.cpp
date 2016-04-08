@@ -1,12 +1,12 @@
-#include "ReceivingSocket.h"
+#include "../include/ReceivingSocket.h"
 
 ReceivingSocket::ReceivingSocket(std::string ip, int port, std::string group)
 {
-    stopReceiving = false
+    quit = false;
     get_receive_socket(ip, port, group);
 }
 
-int get_receive_socket(string ip, uint16_t port, string group) {
+int ReceivingSocket::get_receive_socket(string ip, uint16_t port, string group) {
     /**
      * Create a new datagram socket
      */
@@ -47,7 +47,7 @@ int get_receive_socket(string ip, uint16_t port, string group) {
     return retsock;
 }
 
-int receivePacket(string ip, uint port, string group, BlockingQueue<std::string> &q) {
+int ReceivingSocket::receivePacket(string ip, uint port, string group, BlockingQueue<std::string> &q) {
     try {
         int rsock;
 
@@ -63,7 +63,7 @@ int receivePacket(string ip, uint port, string group, BlockingQueue<std::string>
         int len;
         len = 0;
 
-        while (!stopReceiving) {
+        while (!quit) {
             // Receive packet and put its contents in data, recvfrom will block until a packet for this socket has been received
             len = recvfrom(rsock, data, sizeof (data), 0, (struct sockaddr *) &peer_address, &peer_address_len);
             if (len > 0) {
@@ -78,8 +78,8 @@ int receivePacket(string ip, uint port, string group, BlockingQueue<std::string>
     return 0;
 }
 
-void stopReceiving ()
+void ReceivingSocket::stopReceiving ()
 {
-    stopReceiving = true;
+    quit = true;
     std::cout << "Stopping the receiver";
 }
