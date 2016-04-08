@@ -96,17 +96,20 @@ void PIA::getData(char buffer[]) {
 }
 
 size_t PIA::size() const {
-    std::cout << payload.size() + headerLength << std::endl;
+    std::cout <<"Packet size: "<< payload.size() + headerLength << std::endl;
     return payload.size() + headerLength;
 }
 
 void PIA::printPacket(){
-    char buffer[1400] = {};
+    char buffer[1488] = {};
     this->getData(buffer);
 
 	uint max = this->size();
+	std::cout << "-----Header----- " <<std::endl;
+	if(max>maxSize) max=maxSize+headerLength;
 	for (uint cnt = 0; cnt < max; ++cnt) {
 		std::bitset<8> henk(buffer[cnt]);
+		if(cnt == headerLength) std::cout << "-----Payload----- " <<std::endl;
 		std::cout << "Byte " << cnt << " " << henk << std::endl;
     }
 }
