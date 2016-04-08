@@ -67,11 +67,6 @@ void SendSocket::sendPacket(PIA &packet) {
     //read a packet
     packet.getData(buffer);
 
-    for (uint cnt = 0; cnt < packet.size(); ++cnt) {
-        std::bitset<8> henk(buffer[cnt]);
-        std::cout << "Byte " << cnt << " " << henk << " " << buffer[cnt] << std::endl;
-    }
-
     //send a packet every 5 seconds
     if (sendto(sock, buffer, settings->getMTU(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
         perror("Sendto failed");
