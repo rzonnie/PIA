@@ -6,7 +6,7 @@
  */
 
 #include "../include/main.h"
-#include "SendSocket.h"
+#include "../include/SendSocket.h"
 #include <arpa/inet.h>
 
 Settings settings;

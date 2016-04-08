@@ -11,8 +11,8 @@
  * Created on April 7, 2016, 2:33 PM
  */
 
-#include "SendSocket.h"
-#include "Settings.h"
+#include "../include/SendSocket.h"
+#include "../include/Settings.h"
 
 SendSocket::SendSocket(Settings* settings) {
     this->settings = settings;
