@@ -86,7 +86,7 @@ void PIA::readData(char buffer[]) {
 	//read the payload
 	payload.clear();
     uint i = headerLength;
-    while(i<maxSize-headerLength){
+    while(i<maxSize+headerLength){
     	//std::cout<<buffer[i]<<"|";
     	payload.push_back(buffer[i]);
     	i++;
@@ -128,17 +128,17 @@ size_t PIA::size() const {
 void PIA::printPacket(bool format){
     //Print readable data
 	if(format){
-    	std::cout<<"\n*Destination\t: ";
+    	std::cout<<"\n*Destination Address\t: ";
     	char ipAddr[16];
     	snprintf(ipAddr,sizeof ipAddr,"%u.%u.%u.%u" ,(destinationAddress & 0xff000000) >> 24
     												,(destinationAddress & 0x00ff0000) >> 16
     												,(destinationAddress & 0x0000ff00) >> 8
     												,(destinationAddress & 0x000000ff));
         std::cout<<ipAddr;
-        std::cout<<"\n*Sequence\t: "<<sequenceNumber
-        		 <<"\n*Acknowledgement: "<<acknowledgementNumber
-    			 <<"\n*Flags&Header\t: "<<std::bitset<32>(flagsAndHeader)
-    			 <<"\n*Payload("<<strlen(payload.c_str())<<"bytes): "<<payload
+        std::cout<<"\n*Sequence Number\t: "<<sequenceNumber
+        		 <<"\n*Acknowledgement Number\t: "<<acknowledgementNumber
+    			 <<"\n*Flags & Header\t\t: "<<std::bitset<32>(flagsAndHeader)
+    			 <<"\n*Payload ("<<strlen(payload.c_str())<<" bytes)\t: "<<payload
     			 <<std::endl;
     }
     //Print raw bytes
