@@ -43,14 +43,18 @@ void Announcement::constantAnnounce(std::string ip, int port, std::string group,
         multicastSender.sin_family = AF_INET;
         multicastSender.sin_addr.s_addr = inet_addr(group.c_str());
         multicastSender.sin_port = htons(port);
+        std::string message; 
 
         //send a packet every 5 seconds
-        while (!quit) {
-            std::string message = stringify(routingTable);
-            if (sendto(sock, message.c_str(), message.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
-                perror("Sendto failed");
-            printf("Announcement of size %d sent!\n", (int) message.size());
-            sleep(1);
+        while (!quit)
+	{
+		message = stringify(routingTable);
+        	if (sendto(sock, message.c_str(), message.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
+		{
+                	perror("Sendto failed");
+		}
+            	printf("Announcement of size %d sent!\n", (int) message.size());
+            	sleep(1);
         }
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
@@ -65,7 +69,7 @@ void Announcement::quitAnnounce()
     quit = true;
 }
 
-std::string stringify (std::vector<struct RoutingTableStruct> routingTableIn)
+std::string Announcement::stringify (std::vector<struct RoutingTableStruct> routingTableIn)
 {
     std::string strRoutingTable;
 
