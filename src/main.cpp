@@ -43,8 +43,10 @@ int main(int argc, char** argv) {
 
     PIA piapacket(
     		10234, //IPaddr
-			100, //sequence
-			20, //ack
+			100, //sequencenr
+			20, //acknr
+			true, //ACK flag
+			true, //NTA flag
 			"hi there" //payload
 			);
     piapacket.setNta(1);
@@ -55,8 +57,8 @@ int main(int argc, char** argv) {
     
     piapacket.setPayload(payload);
     
-    SendSocket tempSocket(&settings);
-    tempSocket.sendPacket(piapacket);
+    //SendSocket tempSocket(&settings);
+    //tempSocket.sendPacket(piapacket);
 
     return 0;
 }

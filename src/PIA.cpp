@@ -12,22 +12,26 @@ PIA::PIA() {
    //empty constructor
 
 }
-PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber) {
+PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber,bool ACK, bool NTA) {
     //constructor with arguments
 	this->destinationAddress = destinationAddress;
 	this->sequenceNumber = sequenceNumber;
 	this->acknowledgementNumber = acknowledgementNumber;
+	setAck(ACK);
+	setNta(NTA);
 }
 
-PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, std::string payload) {
+PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber,bool ACK, bool NTA, std::string payload) {
     //constructor with arguments (and payload)
 	this->destinationAddress = destinationAddress;
 	this->sequenceNumber = sequenceNumber;
 	this->acknowledgementNumber = acknowledgementNumber;
 	this->payload = payload;
+	setAck(ACK);
+	setNta(NTA);
 }
 
-PIA::PIA() {
+PIA::~PIA() {
     //destructor
 }
 
@@ -104,8 +108,8 @@ void PIA::printPacket() const{
     /*std::vector<char> buffer;
     this->getData(buffer);
 
-uint max = 1000;
-for (uint cnt = 0; cnt < max; ++cnt) {
+	uint max = 1000;
+	for (uint cnt = 0; cnt < max; ++cnt) {
     std::bitset<8> henk(buffer[cnt]);
     std::cout << "Byte " << cnt << " " << henk << std::endl;
     }*/

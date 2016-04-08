@@ -18,8 +18,8 @@
 class PIA {
 public:
     PIA();
-    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber);
-    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, std::string payload);
+    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA);
+    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA, std::string payload);
     virtual ~PIA();
 
     //returns the complete PIA protocol data
