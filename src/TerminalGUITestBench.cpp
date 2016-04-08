@@ -8,11 +8,12 @@
 int main()
 {
 	std::string username = "me";
+	std::string 
 	Settings mySettings(username, 1, 65, 0); //Username: me, port: 1, IP: 65, MulticastGroup: 0
-	RoutingTable myRoutingTable(65); //Identifier: 65;
+	routingTable myRoutingTable(65); //Identifier: 65;
 	
 	Settings *handleToSettings = &mySettings; //Create handles to settings and routingtable
-	RoutingTable *handleToRT = &myRoutingTable;
+	routingTable *handleToRT = &myRoutingTable;
 	
 	TerminalGUI myTerminalGUI(mySettings, myRoutingTable); //Create terminal user interface
 	return 0;
