@@ -8,23 +8,34 @@
 
 #include "../include/PIAEngine.h"
 
-PIAEngine::PIAEngine() {
+PIAEngine::PIAEngine(Settings* settings)
+: settings(settings) {
+    sendThread.detach();
 }
 
 PIAEngine::~PIAEngine() {
 }
 
 void PIAEngine::run() {
-    
-    TerminalGUI gui(&settings, &routingTable);
+
+    TerminalGUI gui(settings, &routingTable);
     bool quit = false;
+    
+    PIA piapacket(
+            inet_addr("192.168.5.1"), //IPaddr
+            100, //sequencenr
+            20, //acknr
+            true, //ACK flag
+            true, //NTA flag
+            "hi there" //payload
+            );
+    
+    dynamicQueue.push_back(piapacket, 0);
     
     while (!quit) {
         gui.commandsListener();
         quit = !gui.getAlive();
     }
-    
-    std::cout << "Byee" << std::endl;
 }
 
 

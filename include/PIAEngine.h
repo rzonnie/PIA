@@ -9,24 +9,28 @@
 #ifndef PIAENGINE_H
 #define	PIAENGINE_H
 
-#include "RoutingTableStruct.h"
-
-
 #include <iostream>
 #include "TerminalGUI.h"
 #include "Settings.h"
 #include "RoutingTable.h"
+#include "DynamicQueue.h"
 #include <string>
+#include "SendSocket.h"
+#include "RoutingTableStruct.h"
+#include <thread>
 
 class PIAEngine {
 public:
-    PIAEngine();
+    PIAEngine(Settings* settings);
     virtual ~PIAEngine();
     
     void run();
 private:
-    Settings settings;
+    Settings* settings;
     RoutingTable routingTable = RoutingTable(3);
+    DynamicQueue dynamicQueue;
+    SendSocket sendTemp = SendSocket(settings, &dynamicQueue);
+    std::thread sendThread = std::thread(&SendSocket::run, &sendTemp);
 };
 
 #endif	/* PIAENGINE_H */

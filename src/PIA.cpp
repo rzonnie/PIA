@@ -7,6 +7,10 @@
 
 #include "../include/PIA.h"
 
+PIA::PIA() {
+    // empty constructor ^^
+}
+
 PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber,bool ACK, bool NTA) {
     //constructor with arguments
 	this->destinationAddress = destinationAddress;
@@ -21,7 +25,7 @@ PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowle
 	this->destinationAddress = destinationAddress;
 	this->sequenceNumber = sequenceNumber;
 	this->acknowledgementNumber = acknowledgementNumber;
-	this->payload = payload;
+	setPayload(payload);
 	setAck(ACK);
 	setNta(NTA);
 }

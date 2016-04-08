@@ -27,11 +27,26 @@ public:
      * Add a PIA specified packet to one of the queues. It is automatically determined
      * what type of packet it is
      * @param packet PIA
+     * @param sendState bool
      */
-    void addToQueue(PIA packet);
+    void push_back(PIA packet, bool sendState = false);
+    
+    PIA retrievePacket();
+    
+    /**
+     * Get the default queue size
+     * @return size_t size
+     */
+    size_t size_default() const;
+    
+    /**
+     * Get the ack queue size
+     * @return size_t size
+     */
+    size_t size_ack() const;
     
     std::vector<uint32_t>* getAckQueuedElements();
-    std::vector<uint32_t>* getDefaultQueuedElements();
+    std::vector<std::pair<uint32_t, bool> >* getDefaultQueuedElements();
     
 private:
     /**
@@ -39,18 +54,18 @@ private:
      * bool is set to true, it means an ack has been received for the previous packet
      * and it can thus be sent
      */
-    std::map<uint32_t, std::pair<bool, char[1500]> > defaultQueue;
+    std::map<uint32_t, PIA> defaultQueue;
     
     /**
      * All sequence numbers inside the queue should be saved otherwise it is unknown
      * what packets are inside the queue
      */
-    std::vector<uint32_t> defaultQueuedElements;
+    std::vector<std::pair<uint32_t, bool> > defaultQueuedElements;
     
     /**
      * Make a seprate queue for all the acknowledgements
      */
-    std::map<uint32_t, char[1500]> ackQueue;
+    std::map<uint32_t, PIA> ackQueue;
     
     /**
      * All sequence numbers inside the queue should be saved otherwise it is unknown
@@ -62,7 +77,6 @@ private:
      * Necessary for thread locking
      */
     pthread_mutex_t mutex_queue;
-    pthread_cond_t cond;
 };
 
 #endif /* DYNAMICQUEUE_H */
