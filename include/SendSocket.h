@@ -19,16 +19,20 @@
 #include <iostream>
 #include "Settings.h"
 #include "PIA.h"
+#include "DynamicQueue.h"
 
 class SendSocket {
 public:
-    SendSocket(Settings* settings);
+    SendSocket(Settings* settings, DynamicQueue* dynamicQueue);
     virtual ~SendSocket();
     
     void sendPacket(PIA &packet);
+    void run();
 private:
     Settings *settings;
+    DynamicQueue* dynamicQueue;
     int sock = -1;
+    bool quit = false;
 };
 
 #endif /* SENDSOCKET_H */
