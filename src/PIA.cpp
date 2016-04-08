@@ -157,3 +157,11 @@ void PIA::printPacket(bool format){
 		std::cout<<std::endl;
     }
 }
+
+uint32_t PIA::getDestinationAddress() const{
+	return destinationAddress;
+}
+
+std::string PIA::getPayload() const{
+	return payload;
+}
