@@ -18,6 +18,8 @@
 class PIA {
 public:
     PIA();
+    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber);
+    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, std::string payload);
     virtual ~PIA();
 
     //returns the complete PIA protocol data
@@ -28,14 +30,12 @@ public:
     void setDestinationAddress(uint32_t destinationAddress);
     void setSequenceNumber(uint32_t sequenceNumber);
     void setAcknowledgementNumber(uint32_t acknowledgementNumber);
-    void setHeaderLength(uint16_t headerLength);
     void setPayload(std::string payload);
     
     void setAck(bool ack);
     void setNta(bool nta);
 
-    uint getLength();
-    void printPacket();
+    void printPacket() const;
     size_t size() const;
 
 private:
@@ -46,7 +46,7 @@ private:
     uint32_t flagsAndHeader = 0; // 96 - 127
     std::string payload = ""; // 128 - ...
 
-    uint headerLength = 16;
+    const uint headerLength = 16;
     uint maxSize = 1472;
 };
 

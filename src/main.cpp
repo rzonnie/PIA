@@ -41,7 +41,12 @@ int main(int argc, char** argv) {
         engine.run();
     }
 
-    PIA piapacket;
+    PIA piapacket(
+    		10234, //IPaddr
+			100, //sequence
+			20, //ack
+			"hi there" //payload
+			);
     piapacket.setNta(1);
     piapacket.setAck(1);
     piapacket.setDestinationAddress(inet_addr("192.168.5.1"));

@@ -9,12 +9,26 @@
 #include <bitset>
 
 PIA::PIA() {
-    // TODO Auto-generated constructor stub
+   //empty constructor
 
 }
+PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber) {
+    //constructor with arguments
+	this->destinationAddress = destinationAddress;
+	this->sequenceNumber = sequenceNumber;
+	this->acknowledgementNumber = acknowledgementNumber;
+}
 
-PIA::~PIA() {
-    // TODO Auto-generated destructor stub
+PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, std::string payload) {
+    //constructor with arguments (and payload)
+	this->destinationAddress = destinationAddress;
+	this->sequenceNumber = sequenceNumber;
+	this->acknowledgementNumber = acknowledgementNumber;
+	this->payload = payload;
+}
+
+PIA::PIA() {
+    //destructor
 }
 
 void PIA::setAcknowledgementNumber(uint32_t acknowledgementNumber) {
@@ -54,10 +68,6 @@ void PIA::readData(char* buffer[]) {
 
 }
 
-uint PIA::getLength() {
-    return 16 + payload.size();
-}
-
 void PIA::getData(char buffer[]) {
     //Complete packet
 
@@ -90,7 +100,7 @@ size_t PIA::size() const {
     return payload.size() + headerLength;
 }
 
-void PIA::printPacket() {
+void PIA::printPacket() const{
     /*std::vector<char> buffer;
     this->getData(buffer);
 
