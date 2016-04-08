@@ -17,6 +17,7 @@
 
 class PIA {
 public:
+    PIA();
     PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA);
     PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA, std::string payload);
     virtual ~PIA();
@@ -49,8 +50,8 @@ private:
     uint32_t flagsAndHeader = 0; // 96 - 127
     std::string payload = ""; // 128 - ...
 
-    const uint headerLength = 16;
-    const uint maxSize = 1472;
+    uint headerLength = 16;
+    uint maxSize = 1472;
 };
 
 #endif /* SRC_PIA_H_ */

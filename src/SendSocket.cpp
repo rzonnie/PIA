@@ -14,7 +14,7 @@
 #include "../include/SendSocket.h"
 #include "../include/Settings.h"
 
-SendSocket::SendSocket(Settings* settings) {
+SendSocket::SendSocket(Settings* settings, DynamicQueue* dynamicQueue) {
     this->settings = settings;
     try {
         /**
@@ -49,6 +49,16 @@ SendSocket::SendSocket(Settings* settings) {
 SendSocket::~SendSocket() {
     if (sock != -1)
         close(sock);
+    std::cout << "Thread now closed" << std::endl;
+}
+
+void SendSocket::run() {
+    while (true) {
+        sleep(1);
+        PIA packet = dynamicQueue->retrievePacket();
+        std::cout << "HELP: " << packet.size() << std::endl;
+        sendPacket(packet);
+    }
 }
 
 void SendSocket::sendPacket(PIA &packet) {
@@ -63,12 +73,12 @@ void SendSocket::sendPacket(PIA &packet) {
     multicastSender.sin_port = htons(settings->getPort());
 
     char buffer[1500] = {};
-
+    
     //read a packet
     packet.getData(buffer);
 
     //send a packet every 5 seconds
-    if (sendto(sock, buffer, settings->getMTU(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
+    if (sendto(sock, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
         perror("Sendto failed");
     printf("Packet of size %d sent!\n", (int) packet.size());
 }
