@@ -28,12 +28,13 @@ public:
 
     //set properties
     void setDestinationAddress(uint32_t destinationAddress);
+    uint32_t getDestinationAddress() const;
     void setSequenceNumber(uint32_t sequenceNumber);
     uint32_t getSequenceNumber() const;
     void setAcknowledgementNumber(uint32_t acknowledgementNumber);
     uint32_t getAcknowledgementNumber() const;
-    void setHeaderLength(uint16_t headerLength);
     void setPayload(std::string payload);
+    std::string getPayload() const;
     
     void setAck(bool ack);
     bool isAck() const;
