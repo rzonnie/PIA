@@ -35,7 +35,7 @@ public:
     void setAck(bool ack);
     void setNta(bool nta);
 
-    void printPacket() const;
+    void printPacket();
     size_t size() const;
 
 private:
@@ -47,7 +47,7 @@ private:
     std::string payload = ""; // 128 - ...
 
     const uint headerLength = 16;
-    uint maxSize = 1472;
+    const uint maxSize = 1472;
 };
 
 #endif /* SRC_PIA_H_ */

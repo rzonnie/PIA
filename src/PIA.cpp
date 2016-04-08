@@ -104,13 +104,13 @@ size_t PIA::size() const {
     return payload.size() + headerLength;
 }
 
-void PIA::printPacket() const{
-    /*std::vector<char> buffer;
+void PIA::printPacket(){
+    char buffer[1400] = {};
     this->getData(buffer);
 
-	uint max = 1000;
+	uint max = this->size();
 	for (uint cnt = 0; cnt < max; ++cnt) {
-    std::bitset<8> henk(buffer[cnt]);
-    std::cout << "Byte " << cnt << " " << henk << std::endl;
-    }*/
+		std::bitset<8> henk(buffer[cnt]);
+		std::cout << "Byte " << cnt << " " << henk << std::endl;
+    }
 }
