@@ -1,16 +1,13 @@
 #include "../include/ReceivingSocket.h"
 
-ReceivingSocket::ReceivingSocket(std::string ip, int port, std::string group)
-{
-    quit = false;
-    get_receive_socket(ip, port, group);
+ReceivingSocket::ReceivingSocket(std::string ip, int port, std::string group) {
+    stopReceiving = false;
 }
 
 int ReceivingSocket::get_receive_socket(string ip, uint16_t port, string group) {
     /**
      * Create a new datagram socket
      */
-    int retsock;
     if ((retsock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) //Get a IPv4 (AF_INET) socket for UDP packets (SOCK_DGRAM)
         throw std::runtime_error("Failed to create socket!");
 
@@ -49,9 +46,7 @@ int ReceivingSocket::get_receive_socket(string ip, uint16_t port, string group) 
 
 int ReceivingSocket::receivePacket(string ip, uint port, string group, BlockingQueue<std::string> &q) {
     try {
-        int rsock;
-
-        rsock = get_receive_socket(ip, port, group);
+        int rsock = get_receive_socket(ip, port, group);
 
         // prepare a structure to put peer data into
         struct sockaddr_in peer_address;
@@ -63,7 +58,7 @@ int ReceivingSocket::receivePacket(string ip, uint port, string group, BlockingQ
         int len;
         len = 0;
 
-        while (!quit) {
+        while (!stopReceiving) {
             // Receive packet and put its contents in data, recvfrom will block until a packet for this socket has been received
             len = recvfrom(rsock, data, sizeof (data), 0, (struct sockaddr *) &peer_address, &peer_address_len);
             if (len > 0) {
@@ -78,8 +73,6 @@ int ReceivingSocket::receivePacket(string ip, uint port, string group, BlockingQ
     return 0;
 }
 
-void ReceivingSocket::stopReceiving ()
-{
-    quit = true;
-    std::cout << "Stopping the receiver";
+bool ReceivingSocket::isStopReceiving() const {
+    return stopReceiving;
 }

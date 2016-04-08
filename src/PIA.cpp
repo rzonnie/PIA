@@ -35,6 +35,10 @@ void PIA::setAcknowledgementNumber(uint32_t acknowledgementNumber) {
     this->acknowledgementNumber = acknowledgementNumber;
 }
 
+uint32_t PIA::getAcknowledgementNumber() const {
+    return this->acknowledgementNumber;
+}
+
 void PIA::setDestinationAddress(uint32_t destinationAddress) {
     //inet_addr(localIP.c_str());
     this->destinationAddress = destinationAddress;
@@ -56,8 +60,16 @@ void PIA::setAck(bool ack) {
         flagsAndHeader &= ~(1 << 30);
 }
 
+bool PIA::isAck() const {
+    return (flagsAndHeader >> 30 & 1);
+}
+
 void PIA::setSequenceNumber(uint32_t sequenceNumber) {
     this->sequenceNumber = sequenceNumber;
+}
+
+uint32_t PIA::getSequenceNumber() const {
+    return sequenceNumber;
 }
 
 void PIA::setPayload(std::string payload) {
