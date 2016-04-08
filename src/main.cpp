@@ -8,7 +8,7 @@
 #include "../include/main.h"
 #include "../include/SendSocket.h"
 #include <arpa/inet.h>
-#include "DynamicQueue.h"
+#include "../include/DynamicQueue.h"
 
 Settings settings;
 int main(int argc, char** argv) {
@@ -61,9 +61,6 @@ int main(int argc, char** argv) {
 
     DynamicQueue dq;
     dq.addToQueue(piapacket);
-    
-    SendSocket tempSocket(&settings);
-    tempSocket.sendPacket(piapacket);
 
     return 0;
 }
