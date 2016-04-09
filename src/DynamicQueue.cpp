@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 
 DynamicQueue::DynamicQueue() {
+    pthread_mutex_init(&mutex_queue, NULL);
 }
 
 DynamicQueue::~DynamicQueue() {

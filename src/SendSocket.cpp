@@ -16,6 +16,7 @@
 
 SendSocket::SendSocket(Settings* settings, DynamicQueue* dynamicQueue) {
     this->settings = settings;
+    this->dynamicQueue = dynamicQueue;
     try {
         /**
          * Create a new datagram socket
@@ -72,6 +73,7 @@ void SendSocket::sendPacket(PIA &packet) {
     multicastSender.sin_addr.s_addr = settings->getMulticastGroup();
     multicastSender.sin_port = htons(settings->getPort());
 
+    // Create a buffer for the packet
     char buffer[1500] = {};
     
     //read a packet
