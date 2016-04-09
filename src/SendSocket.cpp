@@ -57,8 +57,8 @@ void SendSocket::run() {
     while (true) {
         sleep(1);
         PIA packet = dynamicQueue->retrievePacket();
-        std::cout << "HELP: " << packet.size() << std::endl;
-        sendPacket(packet);
+        if (packet.getDestinationAddress() > 0)
+            sendPacket(packet);
     }
 }
 
@@ -75,14 +75,14 @@ void SendSocket::sendPacket(PIA &packet) {
 
     // Create a buffer for the packet
     char buffer[1500] = {};
-    
+
     //read a packet
     packet.getData(buffer);
 
     //send a packet every 5 seconds
     if (sendto(sock, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
         perror("Sendto failed");
-    printf("Packet of size %d sent!\n", (int) packet.size());
+    //printf("Packet of size %d sent!\n", (int) packet.size());
 }
 
 
