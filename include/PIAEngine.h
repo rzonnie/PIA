@@ -29,7 +29,7 @@ public:
     void run();
 private:
     Settings* settings;
-    RoutingTable routingTable = RoutingTable(settings, 3);
+    RoutingTable routingTable = RoutingTable(settings, settings->getLocalIP());
     DynamicQueue sendQueue;
     DynamicQueue receivingQueue;
     SendSocket sendTemp = SendSocket(settings, &sendQueue);

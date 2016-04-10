@@ -36,8 +36,6 @@ void PIAEngine::run() {
         //quit = !gui.getAlive();
         sleep(1);
         sendQueue.push_back(piapacket, 0);
-        std::cout << "Receiving queue ack size: " << receivingQueue.size_ack() << std::endl;
-        std::cout << "Receiving queue default size: " << receivingQueue.size_default() << std::endl;
     }
 }
 

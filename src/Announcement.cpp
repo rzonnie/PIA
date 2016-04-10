@@ -12,7 +12,7 @@ Announcement::Announcement(Settings* settings, DynamicQueue* sendQueue, RoutingT
 
 void Announcement::run() {
     while (true) {
-        std::cout << "Announce" << std::endl;
+        //std::cout << "Announce" << std::endl;
         std::string message = stringify();
         PIA packet(settings->getMulticastGroup(), 5000, 5000, false, true, message);
         sendQueue->push_back(packet);

@@ -28,7 +28,7 @@ void serialize(Archive & ar, RoutingTableStruct & r, const unsigned int version)
 
 class RoutingTable {
 private:
-    uint8_t myIdentifier;
+    uint32_t myIdentifier;
     Settings* settings;
     vector<RoutingTableStruct> routingTable;
 public:
