@@ -39,6 +39,7 @@ public:
     void setAck(bool ack);
     bool isAck() const;
     void setNta(bool nta);
+    bool isNta() const;
 
     void printPacket(bool format);
     size_t size() const;

@@ -1,4 +1,5 @@
 #include "../include/ReceivingSocket.h"
+#include "functions.h"
 
 ReceivingSocket::ReceivingSocket(Settings *settings, DynamicQueue* receivingQueue)
 : Socket(settings, receivingQueue) {
@@ -59,10 +60,19 @@ void ReceivingSocket::receivePacket() {
 
         // Receive packet and put its contents in data, recvfrom will block until a packet for this socket has been received
         len = recvfrom(sockID, data, sizeof (data), 0, (struct sockaddr *) &peer_address, &peer_address_len);
-        std::cout << "Packet Received: " << data << std::endl;
+        //std::cout << "Packet Received: " << data << " data length: " << len << std::endl;
         //if (len > 0) {
         //    q.push(std::string(data, len));
         //}
+        
+        PIA packet;
+        packet.readData(data);
+        queue->push_back(packet);
+        
+        //std::cout << "Data: " << packet.getPayload() << std::endl;
+        //std::cout << " Destination: " << std::endl;
+        //printIP(packet.getDestinationAddress());
+        
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }

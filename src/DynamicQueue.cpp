@@ -6,8 +6,9 @@
  * Created on April 8, 2016, 9:02 AM
  */
 
+#include <algorithm>
+
 #include "../include/DynamicQueue.h"
-#include <arpa/inet.h>
 
 DynamicQueue::DynamicQueue() {
     pthread_mutex_init(&mutex_queue, NULL);
@@ -16,19 +17,23 @@ DynamicQueue::DynamicQueue() {
 DynamicQueue::~DynamicQueue() {
 }
 
-void DynamicQueue::push_back(PIA packet, bool sendState) {
+void DynamicQueue::push_back(PIA &packet, bool sendState) {
     // Locking Thread
     //std::cout << "push_back: Locking Thread" << std::endl;
     pthread_mutex_lock(&mutex_queue);
 
-    if (packet.isAck()) {
-        priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
-        priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
-        //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
+    if (packet.isAck() || packet.isNta()) {
+        if (priorityQueue.count(packet.getAcknowledgementNumber()) < 1) {
+            priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
+            priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
+            //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
+        }
     } else {
-        defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), packet));
-        defaultQueuedElements.push_back(std::make_pair(packet.getSequenceNumber(), sendState));
-        //std::cout << "Added a packet! " << "Size: " << defaultQueue.size() << std::endl;
+        if (defaultQueue.count(packet.getSequenceNumber()) < 1) {
+            defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), packet));
+            defaultQueuedElements.push_back(std::make_pair(packet.getSequenceNumber(), sendState));
+            //std::cout << "Added a packet! " << "Size: " << defaultQueue.size() << std::endl;
+        }
     }
 
     //std::cout << "push_back: unlocking mutex" << std::endl;
@@ -39,7 +44,7 @@ PIA DynamicQueue::retrievePacket() {
     PIA packet;
     //std::cout << "pop: locking mutex" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-    
+
     if (!priorityQueue.empty()) {
         packet = priorityQueue[priorityQueuedElements[0]];
         priorityQueue.erase(priorityQueuedElements[0]);
@@ -51,7 +56,7 @@ PIA DynamicQueue::retrievePacket() {
             }
         }
     }
-    
+
     //std::cout << "POP - unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
     return packet;
