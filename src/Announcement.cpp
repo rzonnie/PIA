@@ -18,15 +18,12 @@ void Announcement::run() {
 }
 
 std::string Announcement::stringify() {
-    ostringstream stream;
-    stream << routingTable;
-    std::cout << stream.str() << std::endl;
-    
-    // write class instance to archive
-    //oa << std::stringstream(routingTable);
-    // archive and stream closed when destructors are called 
+    std::ostringstream archive_stream;
+    boost::archive::text_oarchive archive(archive_stream);
+    archive << routingTable;
 
-    std::string strRoutingTable;
+    // Deprecated
+    /*std::string strRoutingTable;
 
     for (auto i : routingTable->getRoutingTable()) {
         strRoutingTable.append(std::to_string(i.to));
@@ -36,7 +33,7 @@ std::string Announcement::stringify() {
 
     }
 
-    std::cout << strRoutingTable << std::endl;
+    std::cout << strRoutingTable << std::endl;*/
 
-    return stream.str();
+    return archive_stream.str();
 }

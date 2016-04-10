@@ -40,6 +40,7 @@ public:
         ar & routingTable;
     }
     
+    RoutingTable();
     RoutingTable(Settings* settings, int ID);
     vector<RoutingTableStruct> getRoutingTable();
     RoutingTableStruct makeStruct(uint8_t to, uint8_t via, uint8_t distance);

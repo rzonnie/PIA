@@ -2,6 +2,10 @@
 
 using namespace std;
 
+RoutingTable::RoutingTable() {
+    
+}
+
 RoutingTable::RoutingTable(Settings* settings, int ID)
 : settings(settings) {
     setMyIdentifier(ID);

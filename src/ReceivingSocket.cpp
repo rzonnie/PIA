@@ -1,5 +1,9 @@
 #include "../include/ReceivingSocket.h"
 #include "functions.h"
+#include "RoutingTable.h"
+#include <sstream>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 ReceivingSocket::ReceivingSocket(Settings *settings, DynamicQueue* receivingQueue)
 : Socket(settings, receivingQueue) {
@@ -45,7 +49,6 @@ void ReceivingSocket::run() {
     }
 }
 
-
 void ReceivingSocket::receivePacket() {
     try {
         // prepare a structure to put peer data into
@@ -64,17 +67,16 @@ void ReceivingSocket::receivePacket() {
         //if (len > 0) {
         //    q.push(std::string(data, len));
         //}
-        
+
         PIA packet;
         packet.readData(data);
         queue->push_back(packet);
         
-        std::cout << packet.getPayload() << std::endl;
-        
-        //std::cout << "Data: " << packet.getPayload() << std::endl;
-        //std::cout << " Destination: " << std::endl;
-        //printIP(packet.getDestinationAddress());
-        
+        RoutingTable temp;
+        std::istringstream archive_stream(packet.getPayload());
+        boost::archive::text_iarchive archive(archive_stream);
+        archive >> temp;
+
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }
