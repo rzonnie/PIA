@@ -2,7 +2,8 @@
 
 using namespace std;
 
-RoutingTable::RoutingTable(int ID) {
+RoutingTable::RoutingTable(Settings* settings, int ID)
+: settings(settings) {
     setMyIdentifier(ID);
     uint8_t to = ID;
     uint8_t distance = 0;

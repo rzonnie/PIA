@@ -21,7 +21,8 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
     // Locking Thread
     //std::cout << "push_back: Locking Thread" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-
+    
+    // Check whether it is an ack or nta packet with high priority
     if (packet.isAck() || packet.isNta()) {
         if (priorityQueue.count(packet.getAcknowledgementNumber()) < 1) {
             priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));

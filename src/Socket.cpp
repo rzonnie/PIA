@@ -5,7 +5,7 @@ Socket::Socket() {
 }
 
 Socket::Socket(Settings* settings, DynamicQueue* queue)
-: settings(settings), queue(queue) {
+: ThreadRunner(settings), queue(queue) {
     initializeSocket();
 }
 

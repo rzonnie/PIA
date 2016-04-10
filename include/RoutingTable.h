@@ -11,15 +11,17 @@
 
 #include <vector>
 #include "RoutingTableStruct.h" 
+#include "Settings.h"
 
 using namespace std;
 
 class RoutingTable {
 private:
     uint8_t myIdentifier;
+    Settings* settings;
     vector<RoutingTableStruct> routingTable;
 public:
-    RoutingTable(int ID);
+    RoutingTable(Settings* settings, int ID);
     vector<RoutingTableStruct> getRoutingTable();
     RoutingTableStruct makeStruct(uint8_t to, uint8_t via, uint8_t distance);
     void addRoutingTableStruct(RoutingTableStruct Entry);
