@@ -46,6 +46,7 @@ public:
     RoutingTableStruct makeStruct(uint8_t to, uint8_t via, uint8_t distance);
     void addRoutingTableStruct(RoutingTableStruct Entry);
     void setMyIdentifier(int ID);
+    int getMyIdentifier() const;
     void updateRoutingTable(vector <RoutingTableStruct> NewRoutingTable);
 };
 

@@ -71,11 +71,12 @@ void ReceivingSocket::receivePacket() {
         PIA packet;
         packet.readData(data);
         queue->push_back(packet);
-        
+
         RoutingTable temp;
-        std::istringstream archive_stream(packet.getPayload());
-        boost::archive::text_iarchive archive(archive_stream);
-        archive >> temp;
+        std::istringstream archive_stream1(packet.getPayload());
+        boost::archive::text_iarchive archive1(archive_stream1);
+        archive1 >> temp;
+        std::cout << std::endl << std::endl << temp.getMyIdentifier() << std::endl << std::endl;
 
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;

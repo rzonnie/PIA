@@ -1,6 +1,9 @@
 #include "../include/Announcement.h"
 #include <sstream>
 #include <boost/serialization/vector.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <fstream>
 
 Announcement::Announcement(Settings* settings, DynamicQueue* sendQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), routingTable(routingTable) {
@@ -20,20 +23,7 @@ void Announcement::run() {
 std::string Announcement::stringify() {
     std::ostringstream archive_stream;
     boost::archive::text_oarchive archive(archive_stream);
-    archive << routingTable;
-
-    // Deprecated
-    /*std::string strRoutingTable;
-
-    for (auto i : routingTable->getRoutingTable()) {
-        strRoutingTable.append(std::to_string(i.to));
-        strRoutingTable.append(std::to_string(i.distance));
-        strRoutingTable.append(std::to_string(i.via));
-        strRoutingTable.append(std::to_string(i.from));
-
-    }
-
-    std::cout << strRoutingTable << std::endl;*/
+    archive << *routingTable;
 
     return archive_stream.str();
 }

@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     desc.add_options()
             ("help", "Prints this help message")
             ("port", po::value<int>()->default_value(14000), "Port number")
-            ("ip", po::value<std::string>()->default_value("192.168.5.2"), "Local IP address")
+            ("ip", po::value<std::string>()->default_value("192.168.5.3"), "Local IP address")
             ("mgroup", po::value<std::string>()->default_value("228.1.2.3"), "Multicast group you want to use")
             ("username", po::value<std::string>()->default_value("PIA"), "Temporary Username");
 
