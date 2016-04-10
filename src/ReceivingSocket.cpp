@@ -69,6 +69,8 @@ void ReceivingSocket::receivePacket() {
         packet.readData(data);
         queue->push_back(packet);
         
+        std::cout << packet.getPayload() << std::endl;
+        
         //std::cout << "Data: " << packet.getPayload() << std::endl;
         //std::cout << " Destination: " << std::endl;
         //printIP(packet.getDestinationAddress());

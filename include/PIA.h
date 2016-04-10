@@ -5,15 +5,15 @@
  *      Author: bart
  */
 
+#ifndef SRC_PIA_H_
+#define SRC_PIA_H_
+
 #include <string>
 #include <bitset>
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <vector>
-
-#ifndef SRC_PIA_H_
-#define SRC_PIA_H_
 
 class PIA {
 public:
@@ -35,7 +35,7 @@ public:
     uint32_t getAcknowledgementNumber() const;
     void setPayload(std::string payload);
     std::string getPayload() const;
-    
+
     void setAck(bool ack);
     bool isAck() const;
     void setNta(bool nta);

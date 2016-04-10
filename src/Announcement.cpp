@@ -1,4 +1,6 @@
 #include "../include/Announcement.h"
+#include <sstream>
+#include <boost/serialization/vector.hpp>
 
 Announcement::Announcement(Settings* settings, DynamicQueue* sendQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), routingTable(routingTable) {
@@ -16,6 +18,14 @@ void Announcement::run() {
 }
 
 std::string Announcement::stringify() {
+    ostringstream stream;
+    stream << routingTable;
+    std::cout << stream.str() << std::endl;
+    
+    // write class instance to archive
+    //oa << std::stringstream(routingTable);
+    // archive and stream closed when destructors are called 
+
     std::string strRoutingTable;
 
     for (auto i : routingTable->getRoutingTable()) {
@@ -25,8 +35,8 @@ std::string Announcement::stringify() {
         strRoutingTable.append(std::to_string(i.from));
 
     }
-    
+
     std::cout << strRoutingTable << std::endl;
-    
-    return strRoutingTable;
+
+    return stream.str();
 }
