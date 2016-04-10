@@ -16,6 +16,7 @@
 
 #include "Socket.h"
 #include "PIA.h"
+#include "Settings.h"
 
 class SendSocket : public Socket {
 public:

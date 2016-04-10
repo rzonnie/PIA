@@ -25,6 +25,9 @@ protected:
      */
     virtual void init() = 0;
     
+    /**
+     * Initialize a general datagram socket
+     */
     void initializeSocket();
 
     Settings *settings;

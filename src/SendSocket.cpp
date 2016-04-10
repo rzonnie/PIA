@@ -6,7 +6,6 @@
  */
 
 #include "../include/SendSocket.h"
-#include "../include/Settings.h"
 
 SendSocket::SendSocket(Settings* settings, DynamicQueue* dynamicQueue)
 : Socket(settings, dynamicQueue) {
