@@ -46,4 +46,4 @@ void QueueController:: queueSizeChecker()
 
 void QueueController::ackChecker(uint32_t seqNumber)
 {
-	if (dynamicQueue.getDefaultQueuedElements()->defaultQueuedElements[seqNumber] == recq->
+	if (seqNumber == ReceivingPia.readData()
