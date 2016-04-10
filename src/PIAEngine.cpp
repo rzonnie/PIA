@@ -11,6 +11,7 @@
 PIAEngine::PIAEngine(Settings* settings)
 : settings(settings) {
     sendThread.detach();
+    receivingThread.detach();
 }
 
 PIAEngine::~PIAEngine() {
@@ -30,11 +31,11 @@ void PIAEngine::run() {
             "hi there" //payload
             );
     
-    dynamicQueue.push_back(piapacket, 0);
-    
     while (!quit) {
-        gui.commandsListener();
-        quit = !gui.getAlive();
+        //gui.commandsListener();
+        //quit = !gui.getAlive();
+        sleep(1);
+        sendQueue.push_back(piapacket, 0);
     }
 }
 

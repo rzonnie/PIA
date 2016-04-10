@@ -31,6 +31,10 @@ public:
      */
     void push_back(PIA packet, bool sendState = false);
     
+    /**
+     * Retrieve a packet from one of the sending queues
+     * @return PIA packet
+     */
     PIA retrievePacket();
     
     /**
@@ -63,15 +67,15 @@ private:
     std::vector<std::pair<uint32_t, bool> > defaultQueuedElements;
     
     /**
-     * Make a seprate queue for all the acknowledgements
+     * Make a seperate queue for all the special packets like acknowledgements and announcements
      */
-    std::map<uint32_t, PIA> ackQueue;
+    std::map<uint32_t, PIA> priorityQueue;
     
     /**
      * All sequence numbers inside the queue should be saved otherwise it is unknown
      * what packets are inside the queue
      */
-    std::vector<uint32_t> ackQueuedElements;
+    std::vector<uint32_t> priorityQueuedElements;
     
     /**
      * Necessary for thread locking

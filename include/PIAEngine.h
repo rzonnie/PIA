@@ -17,6 +17,7 @@
 #include <string>
 #include "SendSocket.h"
 #include "RoutingTableStruct.h"
+#include "ReceivingSocket.h"
 #include <thread>
 
 class PIAEngine {
@@ -28,9 +29,13 @@ public:
 private:
     Settings* settings;
     RoutingTable routingTable = RoutingTable(3);
-    DynamicQueue dynamicQueue;
-    SendSocket sendTemp = SendSocket(settings, &dynamicQueue);
+    DynamicQueue sendQueue;
+    DynamicQueue receivingQueue;
+    SendSocket sendTemp = SendSocket(settings, &sendQueue);
+    ReceivingSocket receiveTemp = ReceivingSocket(settings, &receivingQueue);
+    
     std::thread sendThread = std::thread(&SendSocket::run, &sendTemp);
+    std::thread receivingThread = std::thread(&ReceivingSocket::run, &receiveTemp);
 };
 
 #endif	/* PIAENGINE_H */

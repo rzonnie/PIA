@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 
 DynamicQueue::DynamicQueue() {
+    pthread_mutex_init(&mutex_queue, NULL);
 }
 
 DynamicQueue::~DynamicQueue() {
@@ -17,15 +18,12 @@ DynamicQueue::~DynamicQueue() {
 
 void DynamicQueue::push_back(PIA packet, bool sendState) {
     // Locking Thread
-    std::cout << "push_back: Locking Thread" << std::endl;
+    //std::cout << "push_back: Locking Thread" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-    std::cout << "Inserting an item" << std::endl;
 
     if (packet.isAck()) {
-        ackQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
-        std::cout << "Before adding: " << ackQueuedElements.size() << std::endl;
-        ackQueuedElements.push_back(packet.getAcknowledgementNumber());
-        std::cout << "After adding: " << ackQueuedElements.size() << std::endl;
+        priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
+        priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
         //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
     } else {
         defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), packet));
@@ -33,29 +31,19 @@ void DynamicQueue::push_back(PIA packet, bool sendState) {
         //std::cout << "Added a packet! " << "Size: " << defaultQueue.size() << std::endl;
     }
 
-    std::cout << "push_back: unlocking mutex" << std::endl;
+    //std::cout << "push_back: unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
 }
 
 PIA DynamicQueue::retrievePacket() {
     PIA packet;
-    std::cout << "pop: locking mutex" << std::endl;
+    //std::cout << "pop: locking mutex" << std::endl;
     pthread_mutex_lock(&mutex_queue);
     
-    if (!ackQueue.empty()) {
-        std::cout << "Not going here " << ackQueuedElements.size() << std::endl;
-        //packet = ackQueue[ackQueuedElements[0]];
-         packet = PIA(
-            inet_addr("192.168.5.1"), //IPaddr
-            100, //sequencenr
-            20, //acknr
-            true, //ACK flag
-            true, //NTA flag
-            "hi there" //payload
-            );
-        
-        //ackQueue.erase(ackQueuedElements[0]);
-        //ackQueuedElements.erase(ackQueuedElements.begin());
+    if (!priorityQueue.empty()) {
+        packet = priorityQueue[priorityQueuedElements[0]];
+        priorityQueue.erase(priorityQueuedElements[0]);
+        priorityQueuedElements.erase(priorityQueuedElements.begin());
     } else if (!defaultQueuedElements.empty()) {
         for (auto element : defaultQueuedElements) {
             if (element.second) {
@@ -64,10 +52,7 @@ PIA DynamicQueue::retrievePacket() {
         }
     }
     
-    std::cout << "Ack number: " << packet.getAcknowledgementNumber() << std::endl;
-    std::cout << defaultQueuedElements.size() << std::endl;
-    
-    std::cout << "POP - unlocking mutex" << std::endl;
+    //std::cout << "POP - unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
     return packet;
 }
@@ -77,11 +62,11 @@ size_t DynamicQueue::size_default() const {
 }
 
 size_t DynamicQueue::size_ack() const {
-    return this->ackQueue.size();
+    return this->priorityQueue.size();
 }
 
 std::vector<uint32_t>* DynamicQueue::getAckQueuedElements() {
-    return &ackQueuedElements;
+    return &priorityQueuedElements;
 }
 
 std::vector<std::pair<uint32_t, bool> >* DynamicQueue::getDefaultQueuedElements() {

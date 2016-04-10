@@ -9,30 +9,29 @@
 #ifndef SENDSOCKET_H
 #define SENDSOCKET_H
 
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/socket.h>
 #include <string>
 #include <cstring>
-#include <stdio.h>
 #include <stdexcept>
 #include <iostream>
-#include "Settings.h"
-#include "PIA.h"
-#include "DynamicQueue.h"
 
-class SendSocket {
+#include "Socket.h"
+#include "PIA.h"
+#include "Settings.h"
+
+class SendSocket : public Socket {
 public:
     SendSocket(Settings* settings, DynamicQueue* dynamicQueue);
     virtual ~SendSocket();
     
-    void sendPacket(PIA &packet);
-    void run();
+    void run() override;
+    void init() override;
+
 private:
-    Settings *settings;
-    DynamicQueue* dynamicQueue;
-    int sock = -1;
-    bool quit = false;
+    /**
+     * Send an arbitrary packet
+     * @param packet PIA
+     */
+    void sendPacket(PIA &packet);
 };
 
 #endif /* SENDSOCKET_H */

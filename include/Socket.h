@@ -1,31 +1,39 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#include "BlockingQueue.h"
-
-#include <arpa/inet.h>
+#include <exception>
 #include <unistd.h>
-#include <sys/socket.h>
-#include <string>
-#include <cstring>
-#include <stdio.h>
-#include <stdexcept>
-#include <iostream>
-#include <sys/types.h>
-#include <stdlib.h>
 
-class Socket
-{
-    public:
-        Socket(bool sendingSocket, std::string ip, int port, std::string group);
-        ~Socket();
-    protected:
-        void makeSendingSocket(std::string ip, int port, std::string group);
-        void sendPacket(std::string message);
-        void makeReceivingSocket(std::string ip, int port, std::string group);
-        void receivePacket(std::string ip, int port, std::string group, BlockingQueue<std::string> &q);
-        struct sockaddr_in multicastSender;
-        int sock;
+
+#include "DynamicQueue.h"
+#include "Settings.h"
+
+class Socket {
+public:
+    Socket();
+    Socket(Settings *settings, DynamicQueue *queue);
+    ~Socket();
+
+    /**
+     * Every subclass should implement its own thread runner. This run function will
+     * run during the entire thread life span.
+     */
+    virtual void run() = 0;
+protected:
+    /**
+     * A specific initializer for every specific socket.
+     */
+    virtual void init() = 0;
+    
+    /**
+     * Initialize a general datagram socket
+     */
+    void initializeSocket();
+
+    Settings *settings;
+    DynamicQueue* queue;
+    int sockID = -1;
+    bool quit = false;
 };
 
 #endif // SOCKET_H

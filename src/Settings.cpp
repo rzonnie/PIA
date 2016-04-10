@@ -22,9 +22,7 @@ Settings::Settings(std::string username, int port, std::string localIP, std::str
 Settings::~Settings() {
 }
 
-/**
- * Below here are only getters and setters
- */
+// Below here are only getters and setters
 void Settings::setMulticastGroup(std::string multicastGroup) {
     this->multicastGroup = inet_addr(multicastGroup.c_str());
 }
