@@ -1,4 +1,5 @@
 #include "../include/RoutingTable.h"
+#include "../include/functions.h"
 
 using namespace std;
 
@@ -6,11 +7,12 @@ RoutingTable::RoutingTable() {
     
 }
 
-RoutingTable::RoutingTable(Settings* settings, int ID)
+RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
 : settings(settings), myIdentifier(ID) {
-    uint8_t to = ID;
+    uint32_t to = ID;
     uint8_t distance = 0;
-    uint8_t via = ID;
+    uint32_t via = ID;
+    uint32_t from = ID;
     addRoutingTableStruct(makeStruct(to, via, distance));
 }
 
@@ -31,7 +33,7 @@ int RoutingTable::getMyIdentifier() const {
 }
 
 
-RoutingTableStruct RoutingTable::makeStruct(uint8_t to, uint8_t via, uint8_t distance) {
+RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint32_t distance) {
     RoutingTableStruct NewEntry;
     NewEntry.to = to;
     NewEntry.via = via;
@@ -73,9 +75,9 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
 }
 
 void RoutingTable::printRoutingTable() const {
-    std::cout << "| TO\t\t\t" << "| FROM\t\t\t" << "| VIA\t\t\t" << "| FROM |" << std::endl;
-    std::cout << "-----------------------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "| TO\t\t\t" << "| FROM\t\t\t" << "| VIA\t\t\t|" << std::endl;
+    std::cout << "-------------------------------------------------------------------------" << std::endl;
     for (auto element : routingTable) {
-        std::cout << "| " << element.to << "\t\t\t| " << element.distance << "\t\t\t| " << element.via << "\t\t\t| " << element.from << "|" << std::endl;
+        std::cout << "| " << printIP(element.to) << "\t\t| " << element.distance << "\t\t\t| " << printIP(element.via) << "\t\t| " << std::endl;
     }
 }

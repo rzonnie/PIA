@@ -7,7 +7,7 @@
  */
 
 #ifndef ROUTINGTABLE_
-#define	ROUTINGTABLE_
+#define ROUTINGTABLE_
 
 #include <vector>
 #include "RoutingTableStruct.h" 
@@ -18,11 +18,9 @@
 using namespace std;
 
 template<class Archive>
-void serialize(Archive & ar, RoutingTableStruct & r, const unsigned int version)
-{
-    ar & r.distance;
-    ar & r.from;
+void serialize(Archive & ar, RoutingTableStruct & r, const unsigned int version) {
     ar & r.to;
+    ar & r.distance;
     ar & r.via;
 }
 
@@ -34,16 +32,16 @@ private:
 public:
     // Give boost access to the member functions and variables
     friend class boost::serialization::access;
-    
+
     template<class Archive> void serialize(Archive & ar, const unsigned int version) {
         ar & myIdentifier;
         ar & routingTable;
     }
-    
+
     RoutingTable();
-    RoutingTable(Settings* settings, int ID);
+    RoutingTable(Settings* settings, uint32_t ID);
     vector<RoutingTableStruct> getRoutingTable();
-    RoutingTableStruct makeStruct(uint8_t to, uint8_t via, uint8_t distance);
+    RoutingTableStruct makeStruct(uint32_t to, uint32_t via, uint32_t distance);
     void addRoutingTableStruct(RoutingTableStruct Entry);
     void setMyIdentifier(int ID);
     int getMyIdentifier() const;
@@ -51,4 +49,4 @@ public:
     void printRoutingTable() const;
 };
 
-#endif	/* ROUTINGTABLE_ */
+#endif /* ROUTINGTABLE_ */
