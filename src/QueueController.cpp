@@ -11,13 +11,12 @@ QueueController::~QueueController() {
 
 void QueueController::run() {
     while (true) {
-        routingTable->printRoutingTable();
+        //routingTable->printRoutingTable();
         std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
         if (packet.isNta()){
             ntaChecker(packet);
-        	ackChecker(packet);
         }
         
         std::cout << "Queue controller: sleep 1 second" << std::endl;
@@ -39,8 +38,8 @@ void QueueController::ntaChecker(PIA &packet) {
     // Stream the archive to the temporary routing table
     archive >> temp;
 
+    temp.printRoutingTable();
     // Now update the actual routing table
-    std::cout << "Temp Check: " << routingTable->getRoutingTable().size() << std::endl;
     routingTable->updateRoutingTable(temp);
 
     //std::cout << "Routing table updated by host: ";

@@ -16,8 +16,8 @@ RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
     addRoutingTableStruct(makeStruct(to, via, distance));
 }
 
-vector<RoutingTableStruct> RoutingTable::getRoutingTable() {
-    return routingTable;
+vector<RoutingTableStruct>* RoutingTable::getRoutingTable() {
+    return &routingTable;
 }
 
 void RoutingTable::addRoutingTableStruct(RoutingTableStruct Entry) {
@@ -44,7 +44,8 @@ RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint32_t 
 void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
     int k = 0; //Solution to the accessing specific 
     bool newElement = false;
-    for (auto i : newRoutingTable.getRoutingTable()) //Loop over all routing table entries
+    
+    for (auto i : *(newRoutingTable.getRoutingTable())) //Loop over all routing table entries
     {
         if (i.via != myIdentifier) //This checks if this entry is not measured from me as a point to prevent loops
         {
@@ -56,7 +57,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                     {
                         cout << "Ik kom hier 1x " << i.distance + 1 << endl;
                         routingTable.erase(routingTable.begin() + k - 1); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                        addRoutingTableStruct(makeStruct(i.to, (newRoutingTable.getRoutingTable())[0].via, i.distance + 1));
+                        addRoutingTableStruct(makeStruct(i.to, (*(newRoutingTable.getRoutingTable()))[0].via, i.distance + 1));
                         printf("%u\n", j.distance);
                         printf("%u\n", j.via);
                     }
@@ -66,7 +67,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             }
             if (!newElement) //If j looped over the full routing table I already had, and the destination was not found there:
             {
-                addRoutingTableStruct(makeStruct(i.to, (newRoutingTable.getRoutingTable())[0].via, i.distance + 1)); //Add it to my routing table
+                addRoutingTableStruct(makeStruct(i.to, (*(newRoutingTable.getRoutingTable()))[0].via, i.distance + 1)); //Add it to my routing table
             }
         }
         newElement = false;
@@ -75,7 +76,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
 }
 
 void RoutingTable::printRoutingTable() const {
-    std::cout << "| TO\t\t\t" << "| FROM\t\t\t" << "| VIA\t\t\t|" << std::endl;
+    std::cout << "| TO\t\t\t" << "| DISTANCE\t\t\t" << "| VIA\t\t\t|" << std::endl;
     std::cout << "-------------------------------------------------------------------------" << std::endl;
     for (auto element : routingTable) {
         std::cout << "| " << printIP(element.to) << "\t\t| " << element.distance << "\t\t\t| " << printIP(element.via) << "\t\t| " << std::endl;
