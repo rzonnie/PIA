@@ -86,13 +86,13 @@ void RoutingTable::tagFallouts() {
 
         // When was the last update?
         if (routingTable[i].to != myIdentifier) {
-            std::cout << timeElapsed.count() << std::endl;
             if (timeElapsed.count() > 12 && routingTable[i].distance == 0) {
                 //auto it = std::find(routingTable.begin(), routingTable.end(), element);
-                routingTable.erase((int) i);
+                routingTable.erase(routingTable.begin() + i);
                 std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
+                printRoutingTable();
             } else if (timeElapsed.count() > 8) {
-                std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
+                //std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
                 routingTable[i].distance = 0;
             }
         }
