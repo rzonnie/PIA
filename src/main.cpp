@@ -1,18 +1,18 @@
-/* 
- * File:   main.cpp
- * Author: Remi jonkman
- * Group: 9
- * Created on April 6, 2016, 10:40 AM
- */
+//#include <QApplication>
+#include <arpa/inet.h>
 
 #include "../include/main.h"
 #include "../include/SendSocket.h"
-#include <arpa/inet.h>
 #include "../include/DynamicQueue.h"
+#include "../include/mainwindow.h"
+#include "../include/Settings.h"
+#include "../include/guicontroller.h"
 
 Settings settings;
 
-int main(int argc, char** argv) {
+int main(int argc, char *argv[])
+{
+    GUIController myController(argc, argv);
     // Create a namespace alias
     namespace po = boost::program_options;
 
@@ -44,4 +44,3 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
-

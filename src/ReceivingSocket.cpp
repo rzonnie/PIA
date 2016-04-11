@@ -39,7 +39,7 @@ void ReceivingSocket::init() {
 
 void ReceivingSocket::run() {
     while (!quit) {
-        sleep(1);
+        usleep(50);
         receivePacket();
     }
 }

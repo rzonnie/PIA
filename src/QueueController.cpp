@@ -1,5 +1,6 @@
 #include "../include/QueueController.h"
 
+
 QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
     //MaxQueueSize = MQZ;
@@ -34,8 +35,10 @@ void QueueController::run() {
         	sendAck(packet);
         }
 
-        std::cout << "Queue controller: sleep 1 second" << std::endl;
-        sleep(1);
+        routingTable->tagFallouts();
+
+        //std::cout << "Queue controller: sleep 1 second" << std::endl;
+        usleep(50);
     }
 }
 
@@ -67,8 +70,8 @@ void QueueController::ntaChecker(PIA &packet) {
     //std::cout << temp.getMyIdentifier() << std::endl;
 }
 
-void QueueController::ackChecker(PIA &packet){
-	uint32_t ackNumber = packet.getAcknowledgementNumber();
-	//remove the entry from sending queue, because it is successfully received
-	sendQueue->defaultQueueAck(ackNumber);
+void QueueController::ackChecker(PIA &packet) {
+    uint32_t ackNumber = packet.getAcknowledgementNumber();
+    //remove the entry from sending queue, because it is successfully received
+    sendQueue->defaultQueueAck(ackNumber);
 }
