@@ -4,7 +4,7 @@
 using namespace std;
 
 RoutingTable::RoutingTable() {
-    
+
 }
 
 RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
@@ -31,7 +31,6 @@ int RoutingTable::getMyIdentifier() const {
     return myIdentifier;
 }
 
-
 RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint8_t distance) {
     RoutingTableStruct NewEntry;
     NewEntry.to = to;
@@ -44,7 +43,7 @@ RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint8_t d
 void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
     int k = 0; //Solution to the accessing specific 
     bool newElement = true;
-    
+
     for (auto i : *(newRoutingTable.getRoutingTable())) //Loop over all routing table entries
     {
         if (i.via != myIdentifier) //This checks if this entry is not measured from me as a point to prevent loops
@@ -81,13 +80,24 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
 void RoutingTable::tagFallouts() {
     std::chrono::time_point<std::chrono::system_clock> now;
     now = std::chrono::system_clock::now();
-    
-    for (auto element : routingTable) {
-        std::chrono::duration<double> timeElapsed = element.stamp - now;
-        std::cout << "Time elapsed: " << timeElapsed.count() << std::endl;
+
+    for (size_t i = 0; i < routingTable.size(); i++) {
+        std::chrono::duration<double> timeElapsed = now - routingTable[i].stamp;
+
+        // When was the last update?
+        if (routingTable[i].to != myIdentifier) {
+            std::cout << timeElapsed.count() << std::endl;
+            if (timeElapsed.count() > 12 && routingTable[i].distance == 0) {
+                //auto it = std::find(routingTable.begin(), routingTable.end(), element);
+                routingTable.erase((int) i);
+                std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
+            } else if (timeElapsed.count() > 8) {
+                std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
+                routingTable[i].distance = 0;
+            }
+        }
     }
 }
-
 
 void RoutingTable::printRoutingTable() const {
     printf("| TO \t\t\t | DIS \t\t\t | VIA \t\t\t |\n");

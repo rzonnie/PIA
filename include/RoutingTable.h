@@ -13,6 +13,7 @@
 #include "RoutingTableStruct.h" 
 #include "Settings.h"
 #include <chrono>
+#include <algorithm>
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
