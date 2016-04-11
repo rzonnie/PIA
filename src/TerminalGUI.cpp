@@ -38,7 +38,7 @@ void TerminalGUI::commandsListener() {
     if (userInput == "help" || userInput == "1") {
         help();
     } else if (userInput == "list-devices" || userInput == "2") {
-        for (auto element : *(routingTablePtr->getRoutingTable())) {
+        for (auto element : routingTablePtr->getRoutingTable()) {
             printf("%u\n", element.to);
         }
     } else if (userInput == "list-config" || userInput == "3") {
