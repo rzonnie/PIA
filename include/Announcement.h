@@ -1,21 +1,19 @@
 #ifndef ANNOUNCEMENT_H
 #define ANNOUNCEMENT_H
 
-#include "RoutingTableStruct.h"
 #include "DynamicQueue.h"
 #include "Settings.h"
 #include "ThreadRunner.h"
 #include "RoutingTable.h"
 
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/socket.h>
 #include <string>
-#include <cstring>
-#include <stdio.h>
-#include <stdexcept>
 #include <iostream>
 #include <vector>
+
+// Required for serialization
+#include <sstream>
+#include <boost/serialization/vector.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 class Announcement : public ThreadRunner {
 public:
