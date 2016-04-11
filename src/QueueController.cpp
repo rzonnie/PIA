@@ -49,5 +49,5 @@ void QueueController::ntaChecker(PIA &packet) {
 
 void QueueController::ackChecker(PIA &packet){
 	uint32_t seqNumber = packet.getAcknowledgementNumber();
-	//std::cout <<"hi \n"<< sendQueue->getDefaultQueuedElements();
+	sendQueue->defaultQueueAck(seqNumber);
 }
