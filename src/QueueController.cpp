@@ -19,6 +19,10 @@ void QueueController::run() {
             ntaChecker(packet);
         }
         
+        if(packet.isAck()){
+        	ackChecker(packet);
+        }
+
         std::cout << "Queue controller: sleep 1 second" << std::endl;
         sleep(1);
     }
@@ -50,5 +54,6 @@ void QueueController::ntaChecker(PIA &packet) {
 
 void QueueController::ackChecker(PIA &packet){
 	uint32_t ackNumber = packet.getAcknowledgementNumber();
+	//remove the entry from sending queue, because it is successfully received
 	sendQueue->defaultQueueAck(ackNumber);
 }
