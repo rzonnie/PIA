@@ -42,7 +42,7 @@ private:
     std::thread sendThread = std::thread(&SendSocket::run, &sendTemp);
     std::thread receivingThread = std::thread(&ReceivingSocket::run, &receiveTemp);
     std::thread announceThread = std::thread(&Announcement::run, &announcement);
-    //std::thread queueControllerThread = std::thread(&queueController::run, &queueController);
+    std::thread queueControllerThread = std::thread(&QueueController::run, &queueController);
 };
 
 #endif	/* PIAENGINE_H */

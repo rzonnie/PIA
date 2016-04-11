@@ -4,6 +4,7 @@
 #include "ReceivingSocket.h"
 #include "DynamicQueue.h"
 #include "PIA.h"
+#include "functions.h"
 
 class QueueController : public ThreadRunner {
 public:
@@ -11,8 +12,6 @@ public:
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
-    int getMaxQueueSize();
-    int getMaxPacketLength();
     void discardPacket();
     void run() override;
 
