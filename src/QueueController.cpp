@@ -1,9 +1,7 @@
-#include "../QueueController.h"
+#include "../include/QueueController.h"
 
-QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue sendQueue, DynamicQueue receivingQueue);
+QueueController::QueueController(int MQZ, int MPL, DynamicQueue sendQueue, DynamicQueue receivingQueue)
 {
-	//Hope I don't have to assign the
-	recq = recqin;
 	this->sendQueue = sendQueue;
 	this->receivingQueue = receivingQueue;
 	MaxQueueSize = MQZ;
@@ -11,15 +9,9 @@ QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, in
 }
 
 QueueController::~QueueController() {};
-	
-BlockingQueue<std::string> * getReceivingQueue() 
-{
-	return recq;
-}
-	
-DynamicQueue QueueController::getDynamicQueue()
-{
-	return dynamicQueue;
+
+void QueueController::run(){
+
 }
 	
 int QueueController::getMaxQueueSize() 
@@ -29,23 +21,21 @@ int QueueController::getMaxQueueSize()
 	
 int QueueController::getMaxPacketLength() 
 {
-	return MaxPacketLength
+	return MaxPacketLength;
 }
 	
 uint32_t QueueController::pollDefaultQueue() 
 {
-	return (dynamicQueue.getFirstDefaultQueueElement);
+	//return (sendQueue.getDefaultQueuedElements());
 }
 	
-void QueueController:: queueSizeChecker()
+void QueueController::queueSizeChecker()
 {
-	if (dynamicQueue.getDefaultQueuedElements()->defaultQueuedElements.size() > MaxQueueSize)
+	/*
+
+	if (sendQueue.getDefaultQueuedElements()->defaultQueuedElements.size() > MaxQueueSize)
 	{
 		//Get number of top packet, then destroy that one. Call queueSizeChecker() again.
 	}
-}
-
-void QueueController::ackChecker(uint32_t seqNumber)
-{
-
+	*/
 }

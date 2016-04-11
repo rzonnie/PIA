@@ -3,28 +3,28 @@
 
 #include "../include/ReceivingSocket.h"
 #include "../include/DynamicQueue.h"
-#include "../include/Pia.h" 
+#include "../include/PIA.h"
 
-class QueueController
+
+class QueueController : public ThreadRunner
 {
 	public:
-		QueueController(BlockingQueue<std::string> *recq, std::map<uint32_t, std::pair<bool, char[1500]> > *defaultQueue, std::map<uint32_t, char[1500]> *ackQueue, int MQZ, int MPL); 
+		QueueController(int MQZ, int MPL, DynamicQueue sendQueue, DynamicQueue receivingQueue);
 		//Input: pointer to receiving, ack and default queues
 		virtual ~QueueController();
-		BlockingQueue<std::string> * getReceivingQueue();
-		DynamicQueue getDynamicQueue();
 		int getMaxQueueSize();
 		int getMaxPacketLength();
-		void pollDefaultQueue();
+		uint32_t pollDefaultQueue();
 		void discardPacket();
+		void queueSizeChecker();
+		void run() override;
+
 	private:
-		//pointer to receivingQueue
-		BlockingQueue<std::string> *recq;
 		DynamicQueue sendQueue;
-		DynamicQueue recievingQueue;
-		Pia ReceivingPia(); //There are two instantiations of class PIA. This one is only used for receiving, the sending one is used in some other files.
+		DynamicQueue receivingQueue;
 		int MaxQueueSize;
 		int MaxPacketLength;
+		RoutingTable* routingTable;
 };
 
 #endif /* QUEUECONTROLLER_H */
