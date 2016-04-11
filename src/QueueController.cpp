@@ -14,8 +14,10 @@ void QueueController::run() {
         std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
-        if (packet.isNta())
+        if (packet.isNta()){
             ntaChecker(packet);
+        	ackChecker(packet);
+        }
         
         std::cout << "Queue controller: sleep 1 second" << std::endl;
         sleep(1);
@@ -47,5 +49,5 @@ void QueueController::ntaChecker(PIA &packet) {
 
 void QueueController::ackChecker(PIA &packet){
 	uint32_t seqNumber = packet.getAcknowledgementNumber();
-	//sendQueue->
+	//std::cout <<"hi \n"<< sendQueue->getDefaultQueuedElements();
 }
