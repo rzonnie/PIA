@@ -42,7 +42,7 @@ RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint8_t d
 
 void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
     int k = 0; //Solution to the accessing specific 
-    bool newElement = false;
+    bool newElement = true;
     
     for (auto i : *(newRoutingTable.getRoutingTable())) //Loop over all routing table entries
     {
@@ -54,22 +54,23 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 {
                     if (j.distance > i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
-                        //cout << "Ik kom hier 1x " << i.distance + 1 << endl;
+                        cout << "Ik kom hier 1x " << i.distance + 1 << endl;
                         routingTable.erase(routingTable.begin() + k - 1); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                        addRoutingTableStruct(makeStruct(i.to, (*(newRoutingTable.getRoutingTable()))[0].via, i.distance + 1));
+                        addRoutingTableStruct(makeStruct(i.to, i.via, i.distance + 1));
                         printf("%u\n", j.distance);
                         //printf("%u\n", j.via);
                     }
-                    newElement = true;
+                    newElement = false;
                 }
                 k++; //Increase k to still be able to access the k'th element of the vector
             }
-            if (!newElement) //If j looped over the full routing table I already had, and the destination was not found there:
+            if (newElement) //If j looped over the full routing table I already had, and the destination was not found there:
             {
-                addRoutingTableStruct(makeStruct(i.to, (*(newRoutingTable.getRoutingTable()))[0].via, i.distance + 1)); //Add it to my routing table
+                std::cout << "New Entry" << std::endl;
+                addRoutingTableStruct(makeStruct(i.to, i.via, i.distance + 1)); //Add it to my routing table
             }
         }
-        newElement = false;
+        newElement = true;
         k = 0;
     }
 }
