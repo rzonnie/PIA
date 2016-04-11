@@ -12,15 +12,17 @@ QueueController::~QueueController() {
 void QueueController::run() {
     while (true) {
         //routingTable->printRoutingTable();
-        std::cout << "Queue controller: retrieving packets" << std::endl;
+        //std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
         if (packet.isNta()){
             ntaChecker(packet);
         }
         
-        std::cout << "Queue controller: sleep 1 second" << std::endl;
-        sleep(1);
+        routingTable->tagFallouts();
+        
+        //std::cout << "Queue controller: sleep 1 second" << std::endl;
+        usleep(50);
     }
 }
 

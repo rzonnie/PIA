@@ -37,6 +37,7 @@ RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint8_t d
     NewEntry.to = to;
     NewEntry.via = via;
     NewEntry.distance = distance;
+    NewEntry.stamp = std::chrono::system_clock::now();
     return NewEntry;
 }
 
@@ -52,7 +53,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             {
                 if (j.to == i.to) //Check if the destination is already in your list
                 {
-                    if (j.distance > i.distance + 1) //Is the distance smaller than at least the step to the node?
+                    if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
                         cout << "Ik kom hier 1x " << i.distance + 1 << endl;
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
@@ -76,6 +77,17 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
         k = 0;
     }
 }
+
+void RoutingTable::tagFallouts() {
+    std::chrono::time_point<std::chrono::system_clock> now;
+    now = std::chrono::system_clock::now();
+    
+    for (auto element : routingTable) {
+        std::chrono::duration<double> timeElapsed = element.stamp - now;
+        std::cout << "Time elapsed: " << timeElapsed.count() << std::endl;
+    }
+}
+
 
 void RoutingTable::printRoutingTable() const {
     printf("| TO \t\t\t | DIS \t\t\t | VIA \t\t\t |\n");
