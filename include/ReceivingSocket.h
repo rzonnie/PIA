@@ -9,7 +9,6 @@
 #include "Socket.h"
 #include "PIA.h"
 #include "Settings.h"
-#include "functions.h"
 #include "RoutingTable.h"
 
 #include <sstream>

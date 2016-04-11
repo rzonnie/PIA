@@ -1,32 +1,28 @@
 #ifndef QUEUECONTROLLER_H
 #define QUEUECONTROLLER_H
 
-#include "../include/ReceivingSocket.h"
-#include "../include/DynamicQueue.h"
-#include "../include/PIA.h"
+#include "ReceivingSocket.h"
+#include "DynamicQueue.h"
+#include "PIA.h"
 
+class QueueController : public ThreadRunner {
+public:
+    QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue);
+    //Input: pointer to receiving, ack and default queues
+    virtual ~QueueController();
+    
+    int getMaxQueueSize();
+    int getMaxPacketLength();
+    void discardPacket();
+    void run() override;
+    void ackChecker();
 
-class QueueController : public ThreadRunner
-{
-	public:
-		QueueController(int MQZ, int MPL, DynamicQueue sendQueue, DynamicQueue receivingQueue);
-		//Input: pointer to receiving, ack and default queues
-		virtual ~QueueController();
-		int getMaxQueueSize();
-		int getMaxPacketLength();
-		uint32_t pollDefaultQueue();
-		void discardPacket();
-		void queueSizeChecker();
-		void run() override;
-		void ntaChecker(PIA &packet);
-		void ackChecker();
-
-	private:
-		DynamicQueue sendQueue;
-		DynamicQueue receivingQueue;
-		int MaxQueueSize;
-		int MaxPacketLength;
-		RoutingTable* routingTable;
+private:
+    void ntaChecker(PIA &packet);
+    
+    DynamicQueue* sendQueue;
+    DynamicQueue* receivingQueue;
+    RoutingTable* routingTable;
 };
 
 #endif /* QUEUECONTROLLER_H */
