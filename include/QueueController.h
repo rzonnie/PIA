@@ -1,29 +1,32 @@
 #ifndef QUEUECONTROLLER_H
 #define QUEUECONTROLLER_H
 
-#include "../include/ReceivingSocket.h"
-#include "../include/DynamicQueue.h"
-#include "../include/PIA.h"
 
-class QueueController
-{
-	public:
-		QueueController(BlockingQueue<std::string> *recq, std::map<uint32_t, std::pair<bool, char[1500]> > *defaultQueue, std::map<uint32_t, char[1500]> *ackQueue, int MQZ, int MPL); 
-		//Input: pointer to receiving, ack and default queues
-		virtual ~QueueController();
-		BlockingQueue<std::string> * getReceivingQueue();
-		DynamicQueue getDynamicQueue();
-		int getMaxQueueSize();
-		int getMaxPacketLength();
-		void pollDefaultQueue();
-		void discardPacket();
-	private:
-		//pointer to receivingQueue
-		BlockingQueue<std::string> *recq;
-		DynamicQueue dynamicQueue;
-		Pia ReceivingPia(); //There are two instantiations of class PIA. This one is only used for receiving, the sending one is used in some other files.
-		int MaxQueueSize;
-		int MaxPacketLength;
+#include "ReceivingSocket.h"
+#include "DynamicQueue.h"
+#include "PIA.h"
+
+
+#include <sstream>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
+
+class QueueController : public ThreadRunner {
+public:
+    QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable);
+    //Input: pointer to receiving, ack and default queues
+    virtual ~QueueController();
+    
+    void discardPacket();
+    void run() override;
+    void ackChecker(PIA &packet);
+
+private:
+    void ntaChecker(PIA &packet);
+    
+    DynamicQueue* sendQueue;
+    DynamicQueue* receivingQueue;
+    RoutingTable* routingTable;
 };
 
 #endif /* QUEUECONTROLLER_H */

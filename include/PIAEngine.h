@@ -20,6 +20,7 @@
 #include "ReceivingSocket.h"
 #include "Announcement.h"
 #include <thread>
+#include "QueueController.h"
 
 class PIAEngine {
 public:
@@ -32,13 +33,16 @@ private:
     RoutingTable routingTable = RoutingTable(settings, settings->getLocalIP());
     DynamicQueue sendQueue;
     DynamicQueue receivingQueue;
+    
     SendSocket sendTemp = SendSocket(settings, &sendQueue);
     ReceivingSocket receiveTemp = ReceivingSocket(settings, &receivingQueue);
     Announcement announcement = Announcement(settings, &sendQueue, &routingTable);
+    QueueController queueController = QueueController(settings , &sendQueue, &receivingQueue, &routingTable);
     
     std::thread sendThread = std::thread(&SendSocket::run, &sendTemp);
     std::thread receivingThread = std::thread(&ReceivingSocket::run, &receiveTemp);
     std::thread announceThread = std::thread(&Announcement::run, &announcement);
+    std::thread queueControllerThread = std::thread(&QueueController::run, &queueController);
 };
 
 #endif	/* PIAENGINE_H */

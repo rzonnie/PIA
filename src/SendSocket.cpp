@@ -42,7 +42,7 @@ SendSocket::~SendSocket() {
 
 void SendSocket::run() {
     while (true) {
-        sleep(1);
+        usleep(50);
         PIA packet = queue->retrievePacket();
         if (packet.getDestinationAddress() > 0)
             sendPacket(packet);

@@ -11,7 +11,7 @@ void Announcement::run() {
         std::string message = stringify();
         PIA packet(settings->getMulticastGroup(), 5000, 5000, false, true, message);
         sendQueue->push_back(packet);
-        sleep(2);
+        sleep(1);
     }
 }
 

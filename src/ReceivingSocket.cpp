@@ -39,7 +39,7 @@ void ReceivingSocket::init() {
 
 void ReceivingSocket::run() {
     while (!quit) {
-        sleep(1);
+        usleep(50);
         receivePacket();
     }
 }
@@ -66,13 +66,6 @@ void ReceivingSocket::receivePacket() {
         PIA packet;
         packet.readData(data);
         queue->push_back(packet);
-
-        RoutingTable temp;
-        std::istringstream archive_stream1(packet.getPayload());
-        boost::archive::text_iarchive archive1(archive_stream1);
-        archive1 >> temp;
-        std::cout << "Other Host IP: ";
-        printIP(temp.getMyIdentifier());
 
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;

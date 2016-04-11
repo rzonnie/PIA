@@ -1,49 +1,62 @@
 #include "../include/QueueController.h"
 
-QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue DynamicQueueIn);
-{
-	//Hope I don't have to assign the
-	recq = recqin;
-	dynamicQueue = DynamicQueueIn;s
-	MaxQueueSize = MQZ;
-	MaxPacketLength = MPL;
+
+QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
+: ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
+    //MaxQueueSize = MQZ;
+    //MaxPacketLength = MPL;
 }
 
-QueueController::~QueueController() {};
-	
-BlockingQueue<std::string> * getReceivingQueue() 
-{
-	return recq;
-}
-	
-DynamicQueue QueueController::getDynamicQueue()
-{
-	return dynamicQueue;
-}
-	
-int QueueController::getMaxQueueSize() 
-{
-	return MaxQueueSize;
-}
-	
-int QueueController::getMaxPacketLength() 
-{
-	return MaxPacketLength
-}
-	
-uint32_t QueueController::pollDefaultQueue() 
-{
-	return (dynamicQueue.getFirstDefaultQueueElement);
-}
-	
-void QueueController:: queueSizeChecker()
-{
-	if (dynamicQueue.getDefaultQueuedElements()->defaultQueuedElements.size() > MaxQueueSize)
-	{
-		//Get number of top packet, then destroy that one. Call queueSizeChecker() again.
-	}
+QueueController::~QueueController() {
+};
+
+void QueueController::run() {
+    while (true) {
+        //routingTable->printRoutingTable();
+        //std::cout << "Queue controller: retrieving packets" << std::endl;
+        PIA packet = receivingQueue->retrievePacket();
+
+        if (packet.isNta()) {
+            ntaChecker(packet);
+        }
+
+        if (packet.isAck()) {
+            ackChecker(packet);
+        }
+
+        routingTable->tagFallouts();
+
+        //std::cout << "Queue controller: sleep 1 second" << std::endl;
+        usleep(50);
+    }
 }
 
-void QueueController::ackChecker(uint32_t seqNumber)
-{
-	if (seqNumber == ReceivingPia.readData()
+void QueueController::ntaChecker(PIA &packet) {
+    std::cout << "Still alive" << std::endl;
+    // Create a temporary RoutingTable
+    RoutingTable temp;
+
+    // Open an input stringstream
+    std::istringstream payload(packet.getPayload());
+
+    // Interpret the archive information inside the stream
+    boost::archive::text_iarchive archive(payload);
+
+    // Stream the archive to the temporary routing table
+    archive >> temp;
+
+    //temp.printRoutingTable();
+    // Now update the actual routing table
+    routingTable->updateRoutingTable(temp);
+    routingTable->printRoutingTable();
+
+    //std::cout << "Routing table updated by host: ";
+    //printIP(temp.getMyIdentifier());
+    //std::cout << temp.getMyIdentifier() << std::endl;
+}
+
+void QueueController::ackChecker(PIA &packet) {
+    uint32_t ackNumber = packet.getAcknowledgementNumber();
+    //remove the entry from sending queue, because it is successfully received
+    sendQueue->defaultQueueAck(ackNumber);
+}
