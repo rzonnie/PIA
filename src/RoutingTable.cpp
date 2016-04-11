@@ -56,7 +56,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                     {
                         cout << "Ik kom hier 1x " << i.distance + 1 << endl;
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                        RoutingTableStruct temp = makeStruct(i.to, i.via, i.distance + 1);
+                        RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1);
                         //routingTable[k - 1] = temp;
                         addRoutingTableStruct(temp);
                         printf("%u\n", j.distance);
@@ -69,7 +69,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             if (newElement) //If j looped over the full routing table I already had, and the destination was not found there:
             {
                 std::cout << "New Entry" << std::endl;
-                addRoutingTableStruct(makeStruct(i.to, i.via, i.distance + 1)); //Add it to my routing table
+                addRoutingTableStruct(makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1)); //Add it to my routing table
             }
         }
         newElement = true;
