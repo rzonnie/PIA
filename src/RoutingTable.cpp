@@ -12,7 +12,6 @@ RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
     uint32_t to = ID;
     uint8_t distance = 0;
     uint32_t via = ID;
-    uint32_t from = ID;
     addRoutingTableStruct(makeStruct(to, via, distance));
 }
 
@@ -33,7 +32,7 @@ int RoutingTable::getMyIdentifier() const {
 }
 
 
-RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint32_t distance) {
+RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint8_t distance) {
     RoutingTableStruct NewEntry;
     NewEntry.to = to;
     NewEntry.via = via;
@@ -55,11 +54,11 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 {
                     if (j.distance > i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
-                        cout << "Ik kom hier 1x " << i.distance + 1 << endl;
+                        //cout << "Ik kom hier 1x " << i.distance + 1 << endl;
                         routingTable.erase(routingTable.begin() + k - 1); //Use k instead of auto, otherwise .begin and.erase are not possible.
                         addRoutingTableStruct(makeStruct(i.to, (*(newRoutingTable.getRoutingTable()))[0].via, i.distance + 1));
                         printf("%u\n", j.distance);
-                        printf("%u\n", j.via);
+                        //printf("%u\n", j.via);
                     }
                     newElement = true;
                 }
@@ -76,9 +75,11 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
 }
 
 void RoutingTable::printRoutingTable() const {
-    std::cout << "| TO\t\t\t" << "| DISTANCE\t\t\t" << "| VIA\t\t\t|" << std::endl;
-    std::cout << "-------------------------------------------------------------------------" << std::endl;
+    printf("| TO \t\t\t | DIS \t\t\t | VIA \t\t\t |\n");
+    printf("----------------------------------------------------------------------\n");
     for (auto element : routingTable) {
-        std::cout << "| " << printIP(element.to) << "\t\t| " << element.distance << "\t\t\t| " << printIP(element.via) << "\t\t| " << std::endl;
+        std::string to = printIP(element.to);
+        std::string via = printIP(element.via);
+        printf("| %s \t\t| %u \t\t\t | %s \t |\n", to.c_str(), element.distance, via.c_str());
     }
 }
