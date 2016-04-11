@@ -64,11 +64,13 @@ PIA DynamicQueue::retrievePacket() {
 }
 
 void DynamicQueue::defaultQueueAck(uint32_t sequence){
-	for (auto element : defaultQueue) {
-	            if (element.first == sequence) {
-	            	//defaultQueue.erase(element);
-	            }
-	        }
+	defaultQueue.erase(sequence);
+	std::pair<uint32_t, bool> temp(sequence,false);
+	std::pair<uint32_t, bool> temp2(sequence,true);
+	auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
+	auto it2 = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp2);
+	if(it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
+	if(it2 != defaultQueuedElements.end()) defaultQueuedElements.erase(it2);
 }
 
 size_t DynamicQueue::size_default() const {
