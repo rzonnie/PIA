@@ -5,7 +5,7 @@
  * Created on April 10, 2016, 1:38 PM
  */
 
-#include "ThreadRunner.h"
+#include "../include/ThreadRunner.h"
 
 ThreadRunner::ThreadRunner() {
 }
