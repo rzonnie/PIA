@@ -52,6 +52,8 @@ public:
     std::vector<uint32_t>* getAckQueuedElements();
     std::vector<std::pair<uint32_t, bool> >* getDefaultQueuedElements();
     
+    void defaultQueuePop(uint32_t sequence);
+
 private:
     /**
      * This queue will queue all default packets, except from ack's. If the 
