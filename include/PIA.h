@@ -18,8 +18,8 @@
 class PIA {
 public:
     PIA();
-    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA);
-    PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA, std::string payload);
+    PIA(uint32_t sourceAddress, uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA);
+    PIA(uint32_t sourceAddress, uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA, std::string payload);
     virtual ~PIA();
 
     //returns the complete PIA protocol data
@@ -29,6 +29,8 @@ public:
     //set properties
     void setDestinationAddress(uint32_t destinationAddress);
     uint32_t getDestinationAddress() const;
+    void setSourceAddress(uint32_t sourceAddress);
+    uint32_t getSourceAddress() const;
     void setSequenceNumber(uint32_t sequenceNumber);
     uint32_t getSequenceNumber() const;
     void setAcknowledgementNumber(uint32_t acknowledgementNumber);
@@ -46,14 +48,15 @@ public:
 
 private:
     //Packet contents
+    uint32_t sourceAddress = 0;
     uint32_t destinationAddress = 0; //0 - 31
     uint32_t sequenceNumber = 0; //32 -63
     uint32_t acknowledgementNumber = 0; //64 - 95
     uint32_t flagsAndHeader = 0; // 96 - 127
     std::string payload = ""; // 128 - ...
 
-    uint headerLength = 16;
-    uint maxSize = 1472;
+    uint headerLength = 20;
+    uint maxSize = 1468;
 };
 
 #endif /* SRC_PIA_H_ */

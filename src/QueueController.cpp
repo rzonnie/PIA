@@ -12,20 +12,35 @@ QueueController::~QueueController() {
 void QueueController::run() {
     while (true) {
         //routingTable->printRoutingTable();
+    	//std::cout<< "Queue controller: sending packets\n";
+
         std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
+        //Check for NTA
         if (packet.isNta()){
             ntaChecker(packet);
         }
-        
-        if(packet.isAck()){
+        //Check for ACK
+        else if(packet.isAck()){
         	ackChecker(packet);
+        }
+        else{
+        	//It is probably a data packet
+
+        	//1. Interpret it
+
+        	//2. Send an ACK
+        	sendAck(packet);
         }
 
         std::cout << "Queue controller: sleep 1 second" << std::endl;
         sleep(1);
     }
+}
+
+void QueueController::sendAck(PIA &packet) {
+	//packet.getSourceAddress();
 }
 
 void QueueController::ntaChecker(PIA &packet) {

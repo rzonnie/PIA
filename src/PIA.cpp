@@ -11,17 +11,19 @@ PIA::PIA() {
     // empty constructor ^^
 }
 
-PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA) {
+PIA::PIA(uint32_t sourceAddress,uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA) {
     //constructor with arguments
-    this->destinationAddress = destinationAddress;
+	this->sourceAddress = sourceAddress;
+	this->destinationAddress = destinationAddress;
     this->sequenceNumber = sequenceNumber;
     this->acknowledgementNumber = acknowledgementNumber;
     setAck(ACK);
     setNta(NTA);
 }
 
-PIA::PIA(uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA, std::string payload) {
+PIA::PIA(uint32_t sourceAddress,uint32_t destinationAddress, uint32_t sequenceNumber, uint32_t acknowledgementNumber, bool ACK, bool NTA, std::string payload) {
     //constructor with arguments (and payload)
+	this->sourceAddress = sourceAddress;
     this->destinationAddress = destinationAddress;
     this->sequenceNumber = sequenceNumber;
     this->acknowledgementNumber = acknowledgementNumber;
@@ -84,12 +86,12 @@ void PIA::setPayload(std::string payload) {
 }
 
 void PIA::readData(char buffer[]) {
-
     //read the packet header
-    destinationAddress = ((buffer[0]&0xff)) | ((buffer[1]&0xff) << 8) | ((buffer[2]&0xff) << 16) | ((buffer[3]&0xff) << 24);
-    sequenceNumber = ((buffer[7]&0xff)) | ((buffer[6]&0xff) << 8) | ((buffer[5]&0xff) << 16) | ((buffer[4]&0xff) << 24);
-    acknowledgementNumber = ((buffer[11]&0xff)) | ((buffer[10]&0xff) << 8) | ((buffer[9]&0xff) << 16) | ((buffer[8]&0xff) << 24);
-    flagsAndHeader = ((buffer[15]&0xff)) | ((buffer[14]&0xff) << 8) | ((buffer[13]&0xff) << 16) | ((buffer[12]&0xff) << 24);
+	sourceAddress = ((buffer[0]&0xff)) | ((buffer[1]&0xff) << 8) | ((buffer[2]&0xff) << 16) | ((buffer[3]&0xff) << 24);
+    destinationAddress = ((buffer[4]&0xff)) | ((buffer[5]&0xff) << 8) | ((buffer[6]&0xff) << 16) | ((buffer[7]&0xff) << 24);
+    sequenceNumber = ((buffer[11]&0xff)) | ((buffer[10]&0xff) << 8) | ((buffer[9]&0xff) << 16) | ((buffer[8]&0xff) << 24);
+    acknowledgementNumber = ((buffer[15]&0xff)) | ((buffer[14]&0xff) << 8) | ((buffer[13]&0xff) << 16) | ((buffer[12]&0xff) << 24);
+    flagsAndHeader = ((buffer[19]&0xff)) | ((buffer[18]&0xff) << 8) | ((buffer[17]&0xff) << 16) | ((buffer[16]&0xff) << 24);
 
     //read the payload
     payload.clear();
@@ -103,26 +105,30 @@ void PIA::readData(char buffer[]) {
 
 void PIA::getData(char buffer[]) {
     //Complete packet
-
     buffer[0] = (destinationAddress >> 24) & 0xff;
     buffer[1] = (destinationAddress >> 16) & 0xff;
     buffer[2] = (destinationAddress >> 8) & 0xff;
     buffer[3] = destinationAddress & 0xff;
 
-    buffer[4] = (sequenceNumber >> 24) & 0xff;
-    buffer[5] = (sequenceNumber >> 16) & 0xff;
-    buffer[6] = (sequenceNumber >> 8) & 0xff;
-    buffer[7] = sequenceNumber & 0xff;
+    buffer[4] = (destinationAddress >> 24) & 0xff;
+    buffer[5] = (destinationAddress >> 16) & 0xff;
+    buffer[6] = (destinationAddress >> 8) & 0xff;
+    buffer[7] = destinationAddress & 0xff;
 
-    buffer[8] = (acknowledgementNumber >> 24) & 0xff;
-    buffer[9] = (acknowledgementNumber >> 16) & 0xff;
-    buffer[10] = (acknowledgementNumber >> 8) & 0xff;
-    buffer[11] = acknowledgementNumber & 0xff;
+    buffer[8] = (sequenceNumber >> 24) & 0xff;
+    buffer[9] = (sequenceNumber >> 16) & 0xff;
+    buffer[10] = (sequenceNumber >> 8) & 0xff;
+    buffer[11] = sequenceNumber & 0xff;
 
-    buffer[12] = (flagsAndHeader >> 24) & 0xff;
-    buffer[13] = (flagsAndHeader >> 16) & 0xff;
-    buffer[14] = (flagsAndHeader >> 8) & 0xff;
-    buffer[15] = flagsAndHeader & 0xff;
+    buffer[12] = (acknowledgementNumber >> 24) & 0xff;
+    buffer[13] = (acknowledgementNumber >> 16) & 0xff;
+    buffer[14] = (acknowledgementNumber >> 8) & 0xff;
+    buffer[15] = acknowledgementNumber & 0xff;
+
+    buffer[16] = (flagsAndHeader >> 24) & 0xff;
+    buffer[17] = (flagsAndHeader >> 16) & 0xff;
+    buffer[18] = (flagsAndHeader >> 8) & 0xff;
+    buffer[19] = flagsAndHeader & 0xff;
 
     // Put the payload inside the packet
     strncpy(buffer + headerLength, payload.c_str(), maxSize);
@@ -135,13 +141,20 @@ size_t PIA::size() const {
 void PIA::printPacket(bool format) {
     //Print readable data
     if (format) {
-        std::cout << "\n*Destination Address\t: ";
+        std::cout << "\n*Source Address\t\t: ";
         char ipAddr[16];
-        snprintf(ipAddr, sizeof ipAddr, "%u.%u.%u.%u", (destinationAddress & 0xff000000) >> 24
+        snprintf(ipAddr, sizeof ipAddr, "%u.%u.%u.%u", (sourceAddress & 0xff000000) >> 24
+                , (sourceAddress & 0x00ff0000) >> 16
+                , (sourceAddress & 0x0000ff00) >> 8
+                , (sourceAddress & 0x000000ff));
+        std::cout << ipAddr;
+        std::cout << "\n*Destination Address\t: ";
+        char ipAddr2[16];
+        snprintf(ipAddr2, sizeof ipAddr2, "%u.%u.%u.%u", (destinationAddress & 0xff000000) >> 24
                 , (destinationAddress & 0x00ff0000) >> 16
                 , (destinationAddress & 0x0000ff00) >> 8
                 , (destinationAddress & 0x000000ff));
-        std::cout << ipAddr;
+        std::cout << ipAddr2;
         std::cout << "\n*Sequence Number\t: " << sequenceNumber
                 << "\n*Acknowledgement Number\t: " << acknowledgementNumber
                 << "\n*Flags & Header\t\t: " << std::bitset<32>(flagsAndHeader)
@@ -149,7 +162,7 @@ void PIA::printPacket(bool format) {
                 << std::endl;
     }        //Print raw bytes
     else {
-        char buffer[1488] = {};
+        char buffer[1484] = {};
         this->getData(buffer);
 
         uint max = this->size();
@@ -170,4 +183,12 @@ uint32_t PIA::getDestinationAddress() const {
 
 std::string PIA::getPayload() const {
     return payload;
+}
+
+void PIA::setSourceAddress(uint32_t sourceAddress) {
+	this->sourceAddress = sourceAddress;
+}
+
+uint32_t PIA::getSourceAddress() const {
+	return sourceAddress;
 }
