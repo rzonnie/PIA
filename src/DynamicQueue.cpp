@@ -64,7 +64,11 @@ PIA DynamicQueue::retrievePacket() {
 }
 
 void DynamicQueue::defaultQueuePop(uint32_t sequence){
+	for (auto element : defaultQueuedElements) {
+	            if (element.second) {
 
+	            }
+	        }
 }
 
 size_t DynamicQueue::size_default() const {
