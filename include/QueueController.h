@@ -11,7 +11,7 @@
 
 class QueueController : public ThreadRunner {
 public:
-    QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue);
+    QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable);
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
