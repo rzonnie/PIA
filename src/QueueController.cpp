@@ -1,4 +1,4 @@
-#include "../QueueController.h"
+#include "../include/QueueController.h"
 
 QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue DynamicQueueIn);
 {
