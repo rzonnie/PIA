@@ -46,7 +46,7 @@ void QueueController::ntaChecker(PIA &packet) {
     routingTable->printRoutingTable();
 }
 
-void QueueController::ackChecker(){
-
-	//receivingQueue.
+void QueueController::ackChecker(PIA &packet){
+	uint32_t seqNumber = packet.getAcknowledgementNumber();
+	//sendQueue->
 }

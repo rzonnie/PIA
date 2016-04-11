@@ -63,6 +63,10 @@ PIA DynamicQueue::retrievePacket() {
     return packet;
 }
 
+void DynamicQueue::defaultQueuePop(uint32_t sequence){
+
+}
+
 size_t DynamicQueue::size_default() const {
     return this->defaultQueue.size();
 }
