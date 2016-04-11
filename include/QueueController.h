@@ -18,6 +18,8 @@ class QueueController : public ThreadRunner
 		void discardPacket();
 		void queueSizeChecker();
 		void run() override;
+		void ntaChecker(PIA &packet);
+		void ackChecker();
 
 	private:
 		DynamicQueue sendQueue;
