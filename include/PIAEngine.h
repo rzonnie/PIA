@@ -33,6 +33,7 @@ private:
     RoutingTable routingTable = RoutingTable(settings, settings->getLocalIP());
     DynamicQueue sendQueue;
     DynamicQueue receivingQueue;
+    
     SendSocket sendTemp = SendSocket(settings, &sendQueue);
     ReceivingSocket receiveTemp = ReceivingSocket(settings, &receivingQueue);
     Announcement announcement = Announcement(settings, &sendQueue, &routingTable);
