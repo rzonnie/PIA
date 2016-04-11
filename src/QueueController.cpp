@@ -39,12 +39,13 @@ void QueueController::ntaChecker(PIA &packet) {
     archive >> temp;
 
     // Now update the actual routing table
-    std::cout << "Temp Check: " << routingTable->getRoutingTable()->size() << std::endl;
+    std::cout << "Temp Check: " << routingTable->getRoutingTable().size() << std::endl;
     routingTable->updateRoutingTable(temp);
 
-    std::cout << "Routing table updated by host: ";
+    //std::cout << "Routing table updated by host: ";
     //printIP(temp.getMyIdentifier());
-    std::cout << temp.getMyIdentifier() << std::endl;
+    //std::cout << temp.getMyIdentifier() << std::endl;
+    routingTable->printRoutingTable();
 }
 
 void QueueController::ackChecker(PIA &packet){
