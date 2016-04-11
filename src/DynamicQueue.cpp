@@ -63,10 +63,10 @@ PIA DynamicQueue::retrievePacket() {
     return packet;
 }
 
-void DynamicQueue::defaultQueuePop(uint32_t sequence){
-	for (auto element : defaultQueuedElements) {
-	            if (element.second) {
-
+void DynamicQueue::defaultQueueAck(uint32_t sequence){
+	for (auto element : defaultQueue) {
+	            if (element.first == sequence) {
+	            	//defaultQueue.erase(element);
 	            }
 	        }
 }

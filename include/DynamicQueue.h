@@ -52,7 +52,7 @@ public:
     std::vector<uint32_t>* getAckQueuedElements();
     std::vector<std::pair<uint32_t, bool> >* getDefaultQueuedElements();
     
-    void defaultQueuePop(uint32_t sequence);
+    void defaultQueueAck(uint32_t sequence);
 
 private:
     /**
