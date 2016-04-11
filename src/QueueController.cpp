@@ -38,8 +38,8 @@ void QueueController::ntaChecker(PIA &packet) {
     // Now update the actual routing table
     routingTable->updateRoutingTable(temp);
 
-    std::cout << "Routing table updated by host: ";
-    printIP(temp.getMyIdentifier());
+    //std::cout << "Routing table updated by host: ";
+    //printIP(temp.getMyIdentifier());
 }
 
 void QueueController::ackChecker(){

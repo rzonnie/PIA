@@ -12,6 +12,7 @@ PIAEngine::PIAEngine(Settings* settings)
 : settings(settings) {
     sendThread.detach();
     receivingThread.detach();
+    queueControllerThread.detach();
 }
 
 PIAEngine::~PIAEngine() {
