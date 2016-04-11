@@ -4,15 +4,15 @@
 #include "../include/main.h"
 #include "../include/SendSocket.h"
 #include "../include/DynamicQueue.h"
-#include "../include/mainwindow.h"
+//#include "../include/mainwindow.h"
 #include "../include/Settings.h"
-#include "../include/guicontroller.h"
+//#include "../include/guicontroller.h"
 
 Settings settings;
 
 int main(int argc, char *argv[])
 {
-    GUIController myController(argc, argv);
+    //GUIController myController(argc, argv);
     // Create a namespace alias
     namespace po = boost::program_options;
 
