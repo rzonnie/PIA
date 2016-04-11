@@ -11,10 +11,6 @@
 #include "Settings.h"
 #include "RoutingTable.h"
 
-#include <sstream>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
-
 class ReceivingSocket : public Socket {
 public:
     ReceivingSocket(Settings* settings, DynamicQueue* receivingQueue);

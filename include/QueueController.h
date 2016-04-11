@@ -5,6 +5,10 @@
 #include "DynamicQueue.h"
 #include "PIA.h"
 
+#include <sstream>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
+
 class QueueController : public ThreadRunner {
 public:
     QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue);
