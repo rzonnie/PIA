@@ -2,7 +2,12 @@
 
 using namespace std;
 
-RoutingTable::RoutingTable(int ID) {
+RoutingTable::RoutingTable() {
+    
+}
+
+RoutingTable::RoutingTable(Settings* settings, int ID)
+: settings(settings) {
     setMyIdentifier(ID);
     uint8_t to = ID;
     uint8_t distance = 0;
@@ -21,6 +26,11 @@ void RoutingTable::addRoutingTableStruct(RoutingTableStruct Entry) {
 void RoutingTable::setMyIdentifier(int ID) {
     myIdentifier = ID;
 }
+
+int RoutingTable::getMyIdentifier() const {
+    return myIdentifier;
+}
+
 
 RoutingTableStruct RoutingTable::makeStruct(uint8_t to, uint8_t via, uint8_t distance) {
     RoutingTableStruct NewEntry;
@@ -62,12 +72,3 @@ void RoutingTable::updateRoutingTable(vector <RoutingTableStruct> NewRoutingTabl
         k = 0;
     }
 }
-
-/*
-void routingTable::printRoutingTable(){
-        for (auto element : RoutingTable) {
-                for (auto element2 : element) {
-                        cout << "Temp" << element.to << endl;
-                }
-        }
-}*/

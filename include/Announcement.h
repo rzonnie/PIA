@@ -2,6 +2,10 @@
 #define ANNOUNCEMENT_H
 
 #include "RoutingTableStruct.h"
+#include "DynamicQueue.h"
+#include "Settings.h"
+#include "ThreadRunner.h"
+#include "RoutingTable.h"
 
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -13,16 +17,15 @@
 #include <iostream>
 #include <vector>
 
-class Announcement
-{
-    public:
-        Announcement(std::string ip, int port, std::string group, std::vector<struct RoutingTableStruct> routingTable);
-    protected:
-        bool quit;
-        void constantAnnounce(std::string ip, int port, std::string group, std::vector<struct RoutingTableStruct> routingTable);
-        void quitAnnounce();
-        std::string stringify (std::vector<struct RoutingTableStruct> routingTableIn);
+class Announcement : public ThreadRunner {
+public:
+    Announcement(Settings* settings, DynamicQueue* sendQueue, RoutingTable* routingTable);
+    void run() override;
 
+protected:
+    RoutingTable* routingTable;
+    DynamicQueue* sendQueue;
+    std::string stringify();
 };
 
 #endif // ANNOUNCEMENT_H

@@ -29,7 +29,7 @@ public:
      * @param packet PIA
      * @param sendState bool
      */
-    void push_back(PIA packet, bool sendState = false);
+    void push_back(PIA &packet, bool sendState = false);
     
     /**
      * Retrieve a packet from one of the sending queues

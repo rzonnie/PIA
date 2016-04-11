@@ -19,7 +19,7 @@ PIAEngine::~PIAEngine() {
 
 void PIAEngine::run() {
 
-    TerminalGUI gui(settings, &routingTable);
+    //TerminalGUI gui(settings, &routingTable);
     bool quit = false;
     
     PIA piapacket(

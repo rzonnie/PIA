@@ -1,4 +1,9 @@
 #include "../include/ReceivingSocket.h"
+#include "functions.h"
+#include "RoutingTable.h"
+#include <sstream>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 ReceivingSocket::ReceivingSocket(Settings *settings, DynamicQueue* receivingQueue)
 : Socket(settings, receivingQueue) {
@@ -44,7 +49,6 @@ void ReceivingSocket::run() {
     }
 }
 
-
 void ReceivingSocket::receivePacket() {
     try {
         // prepare a structure to put peer data into
@@ -59,10 +63,22 @@ void ReceivingSocket::receivePacket() {
 
         // Receive packet and put its contents in data, recvfrom will block until a packet for this socket has been received
         len = recvfrom(sockID, data, sizeof (data), 0, (struct sockaddr *) &peer_address, &peer_address_len);
-        std::cout << "Packet Received: " << data << std::endl;
+        //std::cout << "Packet Received: " << data << " data length: " << len << std::endl;
         //if (len > 0) {
         //    q.push(std::string(data, len));
         //}
+
+        PIA packet;
+        packet.readData(data);
+        queue->push_back(packet);
+
+        RoutingTable temp;
+        std::istringstream archive_stream1(packet.getPayload());
+        boost::archive::text_iarchive archive1(archive_stream1);
+        archive1 >> temp;
+        std::cout << "Other Host IP: ";
+        printIP(temp.getMyIdentifier());
+
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }

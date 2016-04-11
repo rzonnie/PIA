@@ -67,6 +67,10 @@ bool PIA::isAck() const {
     return (flagsAndHeader >> 30 & 1);
 }
 
+bool PIA::isNta() const {
+    return (flagsAndHeader >> 31 & 1);
+}
+
 void PIA::setSequenceNumber(uint32_t sequenceNumber) {
     this->sequenceNumber = sequenceNumber;
 }
