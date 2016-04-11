@@ -14,6 +14,7 @@ public:
     
     void discardPacket();
     void run() override;
+    void ackChecker();
 
 private:
     void ntaChecker(PIA &packet);
