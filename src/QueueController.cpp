@@ -11,6 +11,7 @@ QueueController::~QueueController() {
 
 void QueueController::run() {
     while (true) {
+        routingTable->printRoutingTable();
         std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
@@ -45,7 +46,6 @@ void QueueController::ntaChecker(PIA &packet) {
     //std::cout << "Routing table updated by host: ";
     //printIP(temp.getMyIdentifier());
     //std::cout << temp.getMyIdentifier() << std::endl;
-    routingTable->printRoutingTable();
 }
 
 void QueueController::ackChecker(PIA &packet){
