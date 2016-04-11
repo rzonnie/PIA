@@ -1,13 +1,13 @@
 #include "../include/QueueController.h"
 
-QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue DynamicQueueIn);
+QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue sendQueue, DynamicQueue receivingQueue);
 {
-    //Hope I don't have to assign the
-    recq = recqin;
-    dynamicQueue = DynamicQueueIn;
-    s
-    MaxQueueSize = MQZ;
-    MaxPacketLength = MPL;
+	//Hope I don't have to assign the
+	recq = recqin;
+	this->sendQueue = sendQueue;
+	this->receivingQueue = receivingQueue;
+	MaxQueueSize = MQZ;
+	MaxPacketLength = MPL;
 }
 
 QueueController::~QueueController() {
@@ -39,10 +39,27 @@ void QueueController::queueSizeChecker() {
     }
 }
 
-void QueueController::ackChecker(uint32_t seqNumber) {
-    
+void QueueController::ackChecker(uint32_t seqNumber)
+{
+
 }
 
-void QueueController::ntaChecker() {
-    
+void QueueController::ntaChecker(PIA &packet) {
+        // Create a temporary RoutingTable
+        RoutingTable temp;
+        
+        // Open an input stringstream
+        std::istringstream payload(packet.getPayload());
+        
+        // Interpret the archive information inside the stream
+        boost::archive::text_iarchive archive(payload);
+        
+        // Stream the archive to the temporary routing table
+        archive >> temp;
+        
+        // Now update the actual routing table
+        routingTable->updateRoutingTable(temp);
+        
+        std::cout << "Routing table updated by host: ";
+        printIP(temp.getMyIdentifier());
 }

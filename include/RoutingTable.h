@@ -47,7 +47,7 @@ public:
     void addRoutingTableStruct(RoutingTableStruct Entry);
     void setMyIdentifier(int ID);
     int getMyIdentifier() const;
-    void updateRoutingTable(vector <RoutingTableStruct> NewRoutingTable);
+    void updateRoutingTable(RoutingTable &newRoutingTable);
 };
 
 #endif	/* ROUTINGTABLE_ */
