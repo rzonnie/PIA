@@ -30,7 +30,7 @@ class RoutingTable {
 private:
     uint32_t myIdentifier;
     Settings* settings;
-    vector<RoutingTableStruct> routingTable;
+    vector<RoutingTableStruct> routingTable = {};
 public:
     // Give boost access to the member functions and variables
     friend class boost::serialization::access;
@@ -42,7 +42,7 @@ public:
     
     RoutingTable();
     RoutingTable(Settings* settings, int ID);
-    vector<RoutingTableStruct> getRoutingTable();
+    vector<RoutingTableStruct>* getRoutingTable();
     RoutingTableStruct makeStruct(uint8_t to, uint8_t via, uint8_t distance);
     void addRoutingTableStruct(RoutingTableStruct Entry);
     void setMyIdentifier(int ID);

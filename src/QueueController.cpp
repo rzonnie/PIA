@@ -1,7 +1,7 @@
 #include "../include/QueueController.h"
 
-QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue)
-: ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue) {
+QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
+: ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
     //MaxQueueSize = MQZ;
     //MaxPacketLength = MPL;
 }
@@ -23,6 +23,7 @@ void QueueController::run() {
 }
 
 void QueueController::ntaChecker(PIA &packet) {
+    std::cout << "Still alive" << std::endl;
     // Create a temporary RoutingTable
     RoutingTable temp;
 
@@ -36,10 +37,12 @@ void QueueController::ntaChecker(PIA &packet) {
     archive >> temp;
 
     // Now update the actual routing table
+    std::cout << "Temp Check: " << routingTable->getRoutingTable()->size() << std::endl;
     routingTable->updateRoutingTable(temp);
 
-    //std::cout << "Routing table updated by host: ";
+    std::cout << "Routing table updated by host: ";
     //printIP(temp.getMyIdentifier());
+    std::cout << temp.getMyIdentifier() << std::endl;
 }
 
 void QueueController::ackChecker(PIA &packet){
