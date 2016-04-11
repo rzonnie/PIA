@@ -55,8 +55,9 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                     if (j.distance > i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
                         cout << "Ik kom hier 1x " << i.distance + 1 << endl;
-                        routingTable.erase(routingTable.begin() + k - 1); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                        addRoutingTableStruct(makeStruct(i.to, i.via, i.distance + 1));
+                        //routingTable.erase(routingTable.begin() + k - 1); //Use k instead of auto, otherwise .begin and.erase are not possible.
+                        RoutingTableStruct temp = makeStruct(i.to, i.via, i.distance + 1);
+                        routingTable[k - 1] = temp;
                         printf("%u\n", j.distance);
                         //printf("%u\n", j.via);
                     }
