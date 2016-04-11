@@ -38,9 +38,10 @@ void QueueController::ntaChecker(PIA &packet) {
     // Stream the archive to the temporary routing table
     archive >> temp;
 
-    temp.printRoutingTable();
+    //temp.printRoutingTable();
     // Now update the actual routing table
     routingTable->updateRoutingTable(temp);
+    routingTable->printRoutingTable();
 
     //std::cout << "Routing table updated by host: ";
     //printIP(temp.getMyIdentifier());
