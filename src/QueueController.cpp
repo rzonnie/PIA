@@ -15,12 +15,16 @@ void QueueController::run() {
         //std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
-        if (packet.isNta()){
+        if (packet.isNta()) {
             ntaChecker(packet);
         }
-        
+
+        if (packet.isAck()) {
+            ackChecker(packet);
+        }
+
         routingTable->tagFallouts();
-        
+
         //std::cout << "Queue controller: sleep 1 second" << std::endl;
         usleep(50);
     }
@@ -50,7 +54,8 @@ void QueueController::ntaChecker(PIA &packet) {
     //std::cout << temp.getMyIdentifier() << std::endl;
 }
 
-void QueueController::ackChecker(PIA &packet){
-	uint32_t ackNumber = packet.getAcknowledgementNumber();
-	sendQueue->defaultQueueAck(ackNumber);
+void QueueController::ackChecker(PIA &packet) {
+    uint32_t ackNumber = packet.getAcknowledgementNumber();
+    //remove the entry from sending queue, because it is successfully received
+    sendQueue->defaultQueueAck(ackNumber);
 }
