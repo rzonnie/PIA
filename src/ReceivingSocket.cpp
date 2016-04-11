@@ -1,9 +1,4 @@
 #include "../include/ReceivingSocket.h"
-#include "../include/functions.h"
-#include "../include/RoutingTable.h"
-#include <sstream>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 
 ReceivingSocket::ReceivingSocket(Settings *settings, DynamicQueue* receivingQueue)
 : Socket(settings, receivingQueue) {
