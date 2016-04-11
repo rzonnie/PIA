@@ -20,7 +20,8 @@ class QueueController
 	private:
 		//pointer to receivingQueue
 		BlockingQueue<std::string> *recq;
-		DynamicQueue dynamicQueue;
+		DynamicQueue sendQueue;
+		DynamicQueue recievingQueue;
 		Pia ReceivingPia(); //There are two instantiations of class PIA. This one is only used for receiving, the sending one is used in some other files.
 		int MaxQueueSize;
 		int MaxPacketLength;

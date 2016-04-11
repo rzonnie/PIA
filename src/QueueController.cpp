@@ -1,10 +1,11 @@
 #include "../QueueController.h"
 
-QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue DynamicQueueIn);
+QueueController::QueueController(BlockingQueue<std::string> *recqin, int MQZ, int MPL, DynamicQueue sendQueue, DynamicQueue receivingQueue);
 {
 	//Hope I don't have to assign the
 	recq = recqin;
-	dynamicQueue = DynamicQueueIn;s
+	this->sendQueue = sendQueue;
+	this->receivingQueue = receivingQueue;
 	MaxQueueSize = MQZ;
 	MaxPacketLength = MPL;
 }
@@ -46,4 +47,5 @@ void QueueController:: queueSizeChecker()
 
 void QueueController::ackChecker(uint32_t seqNumber)
 {
-	if (seqNumber == ReceivingPia.readData()
+
+}
