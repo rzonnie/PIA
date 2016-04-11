@@ -37,7 +37,7 @@ private:
     SendSocket sendTemp = SendSocket(settings, &sendQueue);
     ReceivingSocket receiveTemp = ReceivingSocket(settings, &receivingQueue);
     Announcement announcement = Announcement(settings, &sendQueue, &routingTable);
-    QueueController queueController = QueueController(10,10,sendQueue,receivingQueue);
+    QueueController queueController = QueueController(settings , &sendQueue, &receivingQueue);
     
     std::thread sendThread = std::thread(&SendSocket::run, &sendTemp);
     std::thread receivingThread = std::thread(&ReceivingSocket::run, &receiveTemp);

@@ -1,15 +1,8 @@
-#ifndef PIAENGINE_H
-#define	PIAENGINE_H
+#ifndef FUNCTIONSOWN_H
+#define	FUNCTIONSOWN_H
 
 #include <string>
-#include <cstdlib>
-#include <vector>
-#include <cmath>
 #include <iostream>
-#include <algorithm>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <sstream>
 
 void printIP(long int inetaddr) {
@@ -21,4 +14,4 @@ void printIP(long int inetaddr) {
     std::cout << output.str() << std::endl;
 }
 
-#endif /*  */
+#endif /* FUNCTIONS_H */
