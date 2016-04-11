@@ -42,7 +42,7 @@ void QueueController::ntaChecker(PIA &packet) {
     //printIP(temp.getMyIdentifier());
 }
 
-void QueueController::ackChecker(){
-
+void QueueController::ackChecker(PIA &packet){
+	uint32_t seqNumber = packet.getAcknowledgementNumber();
 	//receivingQueue.
 }
