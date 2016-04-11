@@ -1,5 +1,6 @@
 #include "../include/QueueController.h"
 
+
 QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
     //MaxQueueSize = MQZ;
