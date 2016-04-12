@@ -105,15 +105,15 @@ void PIA::readData(char buffer[]) {
 
 void PIA::getData(char buffer[]) {
     //Complete packet
-    buffer[0] = (destinationAddress >> 24) & 0xff;
-    buffer[1] = (destinationAddress >> 16) & 0xff;
-    buffer[2] = (destinationAddress >> 8) & 0xff;
-    buffer[3] = destinationAddress & 0xff;
+    buffer[3] = (destinationAddress >> 24) & 0xff;
+    buffer[2] = (destinationAddress >> 16) & 0xff;
+    buffer[1] = (destinationAddress >> 8) & 0xff;
+    buffer[0] = destinationAddress & 0xff;
 
-    buffer[4] = (destinationAddress >> 24) & 0xff;
-    buffer[5] = (destinationAddress >> 16) & 0xff;
-    buffer[6] = (destinationAddress >> 8) & 0xff;
-    buffer[7] = destinationAddress & 0xff;
+    buffer[7] = (destinationAddress >> 24) & 0xff;
+    buffer[6] = (destinationAddress >> 16) & 0xff;
+    buffer[5] = (destinationAddress >> 8) & 0xff;
+    buffer[4] = destinationAddress & 0xff;
 
     buffer[8] = (sequenceNumber >> 24) & 0xff;
     buffer[9] = (sequenceNumber >> 16) & 0xff;
@@ -142,19 +142,21 @@ void PIA::printPacket(bool format) {
     //Print readable data
     if (format) {
         std::cout << "\n*Source Address\t\t: ";
-        char ipAddr[16];
+        /*char ipAddr[16];
         snprintf(ipAddr, sizeof ipAddr, "%u.%u.%u.%u", (sourceAddress & 0xff000000) >> 24
                 , (sourceAddress & 0x00ff0000) >> 16
                 , (sourceAddress & 0x0000ff00) >> 8
                 , (sourceAddress & 0x000000ff));
-        std::cout << ipAddr;
+        std::cout << ipAddr;*/
+        std::cout<<printIP(sourceAddress);
         std::cout << "\n*Destination Address\t: ";
-        char ipAddr2[16];
+        /*char ipAddr2[16];
         snprintf(ipAddr2, sizeof ipAddr2, "%u.%u.%u.%u", (destinationAddress & 0xff000000) >> 24
                 , (destinationAddress & 0x00ff0000) >> 16
                 , (destinationAddress & 0x0000ff00) >> 8
                 , (destinationAddress & 0x000000ff));
-        std::cout << ipAddr2;
+        std::cout << ipAddr2;*/
+        std::cout<<printIP(destinationAddress);
         std::cout << "\n*Sequence Number\t: " << sequenceNumber
                 << "\n*Acknowledgement Number\t: " << acknowledgementNumber
                 << "\n*Flags & Header\t\t: " << std::bitset<32>(flagsAndHeader)

@@ -14,6 +14,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include "functions.h"
 
 class PIA {
 public:

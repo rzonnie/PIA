@@ -5,6 +5,7 @@
 #include "ReceivingSocket.h"
 #include "DynamicQueue.h"
 #include "PIA.h"
+#include "functions.h"
 
 #include <sstream>
 #include <boost/archive/text_iarchive.hpp>

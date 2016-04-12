@@ -20,6 +20,7 @@ public:
 	void setNewCurrentUser(int set);
 	bool getNewMessage();
 	int getNewCurrentUser();
+    void toDisplay(QString QStringIn);
 
 private slots:
     void on_lineEdit_returnPressed();
