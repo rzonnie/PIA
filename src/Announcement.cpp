@@ -9,9 +9,9 @@ void Announcement::run() {
     while (true) {
         //std::cout << "Announce" << std::endl;
         std::string message = stringify();
-        PIA packet(settings->getMulticastGroup(), 5000, 5000, false, true, message);
+        PIA packet(settings->getLocalIP(),settings->getMulticastGroup(), 5000, 5000, false, true, message);
         sendQueue->push_back(packet);
-        sleep(2);
+        sleep(1);
     }
 }
 

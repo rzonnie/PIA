@@ -12,6 +12,9 @@
 #include <vector>
 #include "RoutingTableStruct.h" 
 #include "Settings.h"
+#include <chrono>
+#include <algorithm>
+
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
@@ -42,6 +45,8 @@ public:
     RoutingTable(Settings* settings, uint32_t ID);
     vector<RoutingTableStruct>* getRoutingTable();
     RoutingTableStruct makeStruct(uint32_t to, uint32_t via, uint8_t distance);
+    void tagFallouts();
+    
     void addRoutingTableStruct(RoutingTableStruct Entry);
     void setMyIdentifier(int ID);
     int getMyIdentifier() const;

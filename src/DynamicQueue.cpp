@@ -73,6 +73,14 @@ void DynamicQueue::defaultQueueAck(uint32_t sequence){
 	if(it2 != defaultQueuedElements.end()) defaultQueuedElements.erase(it2);
 }
 
+void DynamicQueue::removeDefaultPacket(PIA& packet) {
+    std::pair<uint32_t, bool> temp(packet.getSequenceNumber(), true);
+    defaultQueue.erase(packet.getSequenceNumber());
+    auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
+    if (it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
+    std::cout << "Removed an element!" << std::endl;
+}
+
 size_t DynamicQueue::size_default() const {
     return this->defaultQueue.size();
 }
