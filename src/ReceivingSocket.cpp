@@ -65,7 +65,7 @@ void ReceivingSocket::receivePacket() {
 
         PIA packet;
         packet.readData(data);
-        queue->push_back(packet);
+        queue->push_back(packet, true);
 
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
