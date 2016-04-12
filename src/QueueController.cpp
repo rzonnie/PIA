@@ -27,7 +27,7 @@ void QueueController::run() {
         }            //Check for ACK
         else if (packet.isAck()) {
             ackChecker(packet);
-        } else {
+        } else if (!packet.isAck() && !packet.isNta()) {
             //It is probably a data packet
 
             //1. Interpret it
