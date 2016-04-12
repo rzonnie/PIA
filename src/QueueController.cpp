@@ -11,10 +11,6 @@ QueueController::~QueueController() {
 
 void QueueController::run() {
     int cnt = 0;
-
-    std::cout << "Choose option";
-
-
     while (true) {
         if (receivingQueue->size_ack() > 0 || receivingQueue->size_default() > 0) {
             PIA packet = receivingQueue->retrievePacket();
