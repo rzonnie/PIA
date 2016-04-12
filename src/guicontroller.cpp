@@ -31,13 +31,8 @@ void GUIController::monitorGui()
 			}
 			if (ptrWindow->getNewCurrentUser() != currentUser)
 			{
-				//clear the chatwindow
-				
-				//ask for a new chathistory
-                currentUser = ptrWindow->getNewCurrentUser();
-				
-				//display it in the chatwindow
-                //  ... (toDisplay);
+				currentUser = ptrWindow->getNewCurrentUser();
+				toDisplay()
 			}
 		}
 }
