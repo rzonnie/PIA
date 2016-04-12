@@ -24,6 +24,47 @@ void QueueController::run() {
     }
 }
 
+std::vector<std::string> QueueController::packetSplitter(std::string chatpayload)
+{
+	// Create result and temp vectors/strings. Push contents of chatpayload in temp and pushback temp onto result whenever size of temp is MTU.
+	std::vector<std::string> result;
+	std::string temp;
+	unsigned int iterator = 0;
+	while( iterator < charpayload.size())
+	{
+		if(temp.size() == settings->getMTU())
+		{
+			result.push_back(temp);
+			temp = "";
+		}
+		temp = temp + charpayload[iterator];
+	}		
+	//Also send the last few bits of data from chatpayload
+	result.push_back(temp);
+	return result;
+}
+
+std::vector<PIA> QueueController::packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result)
+{
+	//Creates packets based on input variables.
+	std::vector<PIA> PIAPackets;
+	for (auto i: result)
+	{
+		PIA newPIAPacket(destinationIP, SequenceNumber, AckNumber, Ack, NTA, i);
+		PIAPackets.push_back(newPIAPacket);
+	}
+	return PIAPackets;
+}
+
+void QueueController::packetPusher(PIA &packet)
+{
+}
+
+uint32_t QueueController::sequenceNumberGenerator(
+{
+	//SeqNumber 1 high than previous or not
+}
+
 void QueueController::ntaChecker(PIA &packet) {
     std::cout << "Still alive" << std::endl;
     // Create a temporary RoutingTable
