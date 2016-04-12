@@ -34,13 +34,27 @@ void GUIController::monitorGui()
 				//clear the chatwindow
 				
 				//ask for a new chathistory
-                std::vector<ChatMessage> toDisplay = ptrHistory->getChatHistory(ptrWindow->getNewCurrentUser());
                 currentUser = ptrWindow->getNewCurrentUser();
 				
 				//display it in the chatwindow
                 //  ... (toDisplay);
 			}
 		}
+}
+
+void GUIController::toDisplay()
+{
+    std::vector<ChatMessage> toDisplay = ptrHistory->getChatHistory(ptrWindow->getNewCurrentUser());
+    QString toDisplayString;
+	int i;
+	for (i=0;i<toDisplay.size();i++)
+	{
+		toDisplayString.push_back(toDisplay[0].time);
+		toDisplayString.push_back(":  ");
+		toDisplayString.push_back(toDisplay[0].message);
+		toDisplayString.push_back("/n");
+	}
+    ptrWindow->toDisplay(toDisplayString);
 }
 	
 //void chatHistory
