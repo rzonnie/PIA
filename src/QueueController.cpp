@@ -34,7 +34,7 @@ void QueueController::run() {
                 	}
                 	//retransmit it to the next node
                 	else{
-
+                		sendQueue->push_back(packet,true);
                 	}
                 }
             }

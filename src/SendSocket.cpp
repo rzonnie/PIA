@@ -59,6 +59,7 @@ void SendSocket::sendPacket(PIA &packet) {
     struct sockaddr_in multicastSender = {0};
     multicastSender.sin_family = AF_INET;
 
+
     //set the destination
     if(packet.getDestinationAddress()==settings->getMulticastGroup()){
     	//broadcast
