@@ -36,7 +36,7 @@ private:
      * want. 
      * @param packet PIA the packet you want to process
      */
-    void ackChecker(PIA &packet);
+    void ackProcessor(PIA &packet);
     
     /**
      * Send an ack for the packet in the parameter

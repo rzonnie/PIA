@@ -44,42 +44,47 @@ SendSocket::~SendSocket() {
 
 void SendSocket::run() {
     while (true) {
-        usleep(50);
+        usleep(500000);
         PIA packet = queue->retrievePacket();
         if (packet.getDestinationAddress() > 0)
             sendPacket(packet);
     }
 }
 
-void SendSocket::sendPacket(PIA &packet) {
+bool SendSocket::sendPacket(PIA &packet) {
     /**
      * Fill in the sockaddr_in to specify the destination of datagrams
      * In this case this is simply a port and multicast group address
      */
     struct sockaddr_in multicastSender = {0};
     multicastSender.sin_family = AF_INET;
-
+    multicastSender.sin_addr.s_addr = 0;
+    multicastSender.sin_port = htons(settings->getPort());
 
     //set the destination
-    if(packet.getDestinationAddress()==settings->getMulticastGroup()){
-    	//broadcast
-    	multicastSender.sin_addr.s_addr = settings->getMulticastGroup();
+    if (packet.getDestinationAddress() == settings->getMulticastGroup()) {
+        //broadcast
+        multicastSender.sin_addr.s_addr = settings->getMulticastGroup();
+    } else {
+        //next hop
+        multicastSender.sin_addr.s_addr = routingTable->getNextHop(packet.getDestinationAddress());
+        
+        if (routingTable->getNextHop(packet.getDestinationAddress()) == 0) {
+            std::cout << "ERRORS NO DESTINATION FOUND!" << std::endl;
+            return false;
+        }
     }
-    else{
-    	//next hop
-    	multicastSender.sin_addr.s_addr = routingTable->getNextHop(packet.getDestinationAddress());
-    }
-    multicastSender.sin_port = htons(settings->getPort());
 
     // Create a buffer for the packet
     char buffer[1500] = {};
 
     //read a packet
     packet.getData(buffer);
-
-    // send the actual packet
-    if (sendto(sockID, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
-        perror("Sendto failed");
-    //printf("Packet of size %d sent!\n", (int) packet.size());
+    if (multicastSender.sin_addr.s_addr > 0) {
+        // send the actual packet
+        if (sendto(sockID, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
+            perror("Sendto failed");
+        printf("Packet of sisdfze %d sent!\n", (int) packet.size());
+    }
 }
 

@@ -32,7 +32,8 @@ private:
      * Send an arbitrary packet
      * @param packet PIA
      */
-    void sendPacket(PIA &packet);
+    bool sendPacket(PIA &packet);
+    
     /**
      * Get the next destination for the UDP packet
      * @param final destination

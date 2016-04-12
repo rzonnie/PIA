@@ -13,6 +13,9 @@
 #include <map>
 #include <vector>
 #include <thread>
+#include <algorithm>
+#include <unistd.h>
+#include <thread>
 
 /**
  * DynamicQueue will be used as a queueing algorithm for the sender. For now only
@@ -57,7 +60,7 @@ public:
      */
     void defaultQueueAck(uint32_t sequence);
     void removeDefaultPacket(PIA &packet);
-    
+    void printDefaultQueue() const;
 private:
     /**
      * This queue will queue all default packets, except from ack's. If the 

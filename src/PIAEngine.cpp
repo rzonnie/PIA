@@ -13,6 +13,7 @@ PIAEngine::PIAEngine(Settings* settings)
     sendThread.detach();
     receivingThread.detach();
     queueControllerThread.detach();
+    announceThread.detach();
 }
 
 PIAEngine::~PIAEngine() {
@@ -22,35 +23,24 @@ void PIAEngine::run() {
 
     //TerminalGUI gui(settings, &routingTable);
     bool quit = false;
-    
+
 
     PIA defaultPacket(
-    		settings->getLocalIP(), //SOURCE
+            settings->getLocalIP(), //SOURCE
             inet_addr("192.168.5.5"), //IPaddr
             10033, //sequencenr
             2032, //acknr
             false, //ACK flag
             false, //NTA flag
-            "doei" //payload
-            );
-
-    PIA ackPacket(
-            settings->getLocalIP(), //SOURCE
-            inet_addr("192.168.5.5"), //IPaddr
-            100, //sequencenr
-            20, //acknr
-            true, //ACK flag
-            false, //NTA flag
-            "Dell Vostro" //payload
+            "doeasdfasdfdsai" //payload
             );
     sendQueue.push_back(defaultPacket, 1);
-    sleep(1);
-    sendQueue.removeDefaultPacket(defaultPacket);
-    
     while (!quit) {
         //gui.commandsListener();
         //quit = !gui.getAlive();
-        //sendQueue.push_back(ackPacket, 1);
+        //sendQueue.push_back(defaultPacket, 1);
+        std::cout << "PiaEngine Queue size: " << sendQueue.size_default() << std::endl;
+        //sendQueue.printDefaultQueue();
         sleep(1);
     }
 }

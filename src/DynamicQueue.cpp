@@ -6,8 +6,6 @@
  * Created on April 8, 2016, 9:02 AM
  */
 
-#include <algorithm>
-
 #include "../include/DynamicQueue.h"
 
 DynamicQueue::DynamicQueue() {
@@ -21,7 +19,7 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
     // Locking Thread
     //std::cout << "push_back: Locking Thread" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-    
+
     // Check whether it is an ack or nta packet with high priority
     if (packet.isAck() || packet.isNta()) {
         if (priorityQueue.count(packet.getAcknowledgementNumber()) < 1) {
@@ -45,12 +43,12 @@ PIA DynamicQueue::retrievePacket() {
     PIA packet;
     //std::cout << "pop: locking mutex" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-
+    
     if (!priorityQueue.empty()) {
         packet = priorityQueue[priorityQueuedElements[0]];
         priorityQueue.erase(priorityQueuedElements[0]);
         priorityQueuedElements.erase(priorityQueuedElements.begin());
-    } else if (!defaultQueuedElements.empty()) {
+    } else if (defaultQueuedElements.size() > 0) {
         for (auto element : defaultQueuedElements) {
             if (element.second) {
                 packet = defaultQueue[element.first];
@@ -58,27 +56,38 @@ PIA DynamicQueue::retrievePacket() {
         }
     }
 
-    //std::cout << "POP - unlocking mutex" << std::endl;
+    //std::cout << "pop: unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
     return packet;
 }
 
-void DynamicQueue::defaultQueueAck(uint32_t sequence){
-	defaultQueue.erase(sequence-1);
-	std::pair<uint32_t, bool> temp(sequence-1,false);
-	std::pair<uint32_t, bool> temp2(sequence-1,true);
-	auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
-	auto it2 = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp2);
-	if(it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
-	if(it2 != defaultQueuedElements.end()) defaultQueuedElements.erase(it2);
+void DynamicQueue::defaultQueueAck(uint32_t sequence) {
+    //std::cout << "pop: ack locking mutex" << std::endl;
+    pthread_mutex_lock(&mutex_queue);
+    
+    defaultQueue.erase(sequence - 1);
+    std::pair<uint32_t, bool> temp(sequence - 1, false);
+    std::pair<uint32_t, bool> temp2(sequence - 1, true);
+    
+    auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
+    auto it2 = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp2);
+    if (it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
+    if (it2 != defaultQueuedElements.end()) defaultQueuedElements.erase(it2);
+    
+    //std::cout << "pop: ack unlocking mutex" << std::endl;
+    pthread_mutex_unlock(&mutex_queue);
 }
 
 void DynamicQueue::removeDefaultPacket(PIA& packet) {
+    //std::cout << "pop: locking mutex" << std::endl;
+    pthread_mutex_lock(&mutex_queue);
     std::pair<uint32_t, bool> temp(packet.getSequenceNumber(), true);
     defaultQueue.erase(packet.getSequenceNumber());
     auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
     if (it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
     std::cout << "Removed an element!" << std::endl;
+    //std::cout << "POP - unlocking mutex" << std::endl;
+    pthread_mutex_unlock(&mutex_queue);
 }
 
 size_t DynamicQueue::size_default() const {
@@ -95,5 +104,12 @@ std::vector<uint32_t>* DynamicQueue::getAckQueuedElements() {
 
 std::vector<std::pair<uint32_t, bool> >* DynamicQueue::getDefaultQueuedElements() {
     return &defaultQueuedElements;
+}
+
+void DynamicQueue::printDefaultQueue() const {
+    for (auto element : defaultQueue) {
+        std::cout << "Seq number: " << element.first;
+        element.second.printPacket(true);
+    }
 }
 
