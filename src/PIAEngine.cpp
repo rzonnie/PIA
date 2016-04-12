@@ -25,7 +25,7 @@ void PIAEngine::run() {
     
 
     PIA defaultPacket(
-    		settings->getLocalIP(), //SOURCE
+    		256, //SOURCE
             inet_addr("192.168.5.1"), //IPaddr
             10033, //sequencenr
             2032, //acknr
@@ -33,7 +33,7 @@ void PIAEngine::run() {
             false, //NTA flag
             "Bartje Partje" //payload
             );
-    
+
     PIA ackPacket(
     		settings->getLocalIP(), //SOURCE
             inet_addr("192.168.5.5"), //IPaddr
