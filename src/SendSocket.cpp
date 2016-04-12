@@ -7,8 +7,9 @@
 
 #include "../include/SendSocket.h"
 
-SendSocket::SendSocket(Settings* settings, DynamicQueue* dynamicQueue)
+SendSocket::SendSocket(Settings* settings, DynamicQueue* dynamicQueue, RoutingTable* routingTable)
 : Socket(settings, dynamicQueue) {
+    this->routingTable = routingTable;
     init();
 }
 
@@ -38,6 +39,7 @@ void SendSocket::init() {
 }
 
 SendSocket::~SendSocket() {
+
 }
 
 void SendSocket::run() {
@@ -56,7 +58,16 @@ void SendSocket::sendPacket(PIA &packet) {
      */
     struct sockaddr_in multicastSender = {0};
     multicastSender.sin_family = AF_INET;
-    multicastSender.sin_addr.s_addr = settings->getMulticastGroup();
+
+    //set the destination
+    if(packet.getDestinationAddress()==settings->getMulticastGroup()){
+    	//broadcast
+    	multicastSender.sin_addr.s_addr = settings->getMulticastGroup();
+    }
+    else{
+    	//next hop
+    	multicastSender.sin_addr.s_addr = routingTable->getNextHop(packet.getDestinationAddress());
+    }
     multicastSender.sin_port = htons(settings->getPort());
 
     // Create a buffer for the packet
@@ -70,6 +81,4 @@ void SendSocket::sendPacket(PIA &packet) {
         perror("Sendto failed");
     //printf("Packet of size %d sent!\n", (int) packet.size());
 }
-
-
 

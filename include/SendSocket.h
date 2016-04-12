@@ -17,10 +17,11 @@
 #include "Socket.h"
 #include "PIA.h"
 #include "Settings.h"
+#include "RoutingTable.h"
 
 class SendSocket : public Socket {
 public:
-    SendSocket(Settings* settings, DynamicQueue* dynamicQueue);
+    SendSocket(Settings* settings, DynamicQueue* dynamicQueue, RoutingTable* routingTable);
     virtual ~SendSocket();
     
     void run() override;
@@ -32,6 +33,12 @@ private:
      * @param packet PIA
      */
     void sendPacket(PIA &packet);
+    /**
+     * Get the next destination for the UDP packet
+     * @param final destination
+     */
+
+    RoutingTable* routingTable;
 };
 
 #endif /* SENDSOCKET_H */

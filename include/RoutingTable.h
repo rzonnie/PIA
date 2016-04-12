@@ -14,6 +14,7 @@
 #include "Settings.h"
 #include <chrono>
 #include <algorithm>
+#include "functions.h"
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -52,6 +53,7 @@ public:
     int getMyIdentifier() const;
     void updateRoutingTable(RoutingTable &newRoutingTable);
     void printRoutingTable() const;
+    uint32_t getNextHop(uint32_t destinationAddress);
 };
 
 #endif /* ROUTINGTABLE_ */

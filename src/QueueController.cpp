@@ -25,11 +25,17 @@ void QueueController::run() {
                 } else if (receivingQueue->size_default() > 0) {
                     //It is probably a data packet
 
-                    //1. Interpret it
-                    defaultProcessor(packet);
+                	//Multihop
+                	if(packet.getDestinationAddress() == settings->getLocalIP()){
+                        //1. Interpret it
+                        defaultProcessor(packet);
+                        //2. Send an ACK
+                        sendAck(packet);
+                	}
+                	//retransmit it to the next node
+                	else{
 
-                    //2. Send an ACK
-                    sendAck(packet);
+                	}
                 }
             }
         } catch (exception &e) {

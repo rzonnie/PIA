@@ -34,7 +34,7 @@ private:
     DynamicQueue sendQueue;
     DynamicQueue receivingQueue;
     
-    SendSocket sendTemp = SendSocket(settings, &sendQueue);
+    SendSocket sendTemp = SendSocket(settings, &sendQueue, &routingTable);
     ReceivingSocket receiveTemp = ReceivingSocket(settings, &receivingQueue);
     Announcement announcement = Announcement(settings, &sendQueue, &routingTable);
     QueueController queueController = QueueController(settings , &sendQueue, &receivingQueue, &routingTable);
