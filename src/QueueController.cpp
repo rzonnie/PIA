@@ -12,7 +12,6 @@ QueueController::~QueueController() {
 void QueueController::run() {
     int cnt = 0;
     while (true) {
-        //routingTable->printRoutingTable();
         //std::cout<< "Queue controller: sending packets\n";
 
         //std::cout << "Queue controller: retrieving packets" << std::endl;
@@ -37,6 +36,7 @@ void QueueController::run() {
             routingTable->tagFallouts();
             cnt = 0;
         }
+        cnt++;
 
         //std::cout << "Queue controller: sleep 1 second" << std::endl;
         usleep(50);
