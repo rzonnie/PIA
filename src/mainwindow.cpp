@@ -48,3 +48,13 @@ int MainWindow::getNewCurrentUser()
 {
 	return newCurrentUser;
 }
+
+void MainWindow::toDisplay(QString QStringIn)
+{
+    ui->dialogueBox->setPlainText(QStringIn);
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)
+{
+    setNewCurrentUser(true);
+}

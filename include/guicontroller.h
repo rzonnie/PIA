@@ -16,6 +16,7 @@ public:
 
 private:
 	void startGui(int argc, char *argv[]);
+	void toDisplay();
 	void monitorGui();
 	int currentUser;
 	bool quit;
