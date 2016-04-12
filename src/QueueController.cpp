@@ -96,7 +96,6 @@ void QueueController::sendAck(PIA &packet) {
 
 void QueueController::ntaProcessor(PIA &packet) {
     // Create a temporary RoutingTable
-    std::cout << "Errors: " << printIP(packet.getSourceAddress()) << std::endl;
     RoutingTable temp;
     // Open an input stringstream
     std::istringstream payload(packet.getPayload());
