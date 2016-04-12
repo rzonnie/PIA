@@ -23,20 +23,30 @@ void PIAEngine::run() {
     //TerminalGUI gui(settings, &routingTable);
     bool quit = false;
     
-    /*PIA piapacket(
+    PIA defaultPacket(
             inet_addr("192.168.5.1"), //IPaddr
+            10033, //sequencenr
+            2032, //acknr
+            false, //ACK flag
+            false, //NTA flag
+            "Bartje Partje" //payload
+            );
+    
+    PIA ackPacket(
+            inet_addr("192.168.5.5"), //IPaddr
             100, //sequencenr
             20, //acknr
             true, //ACK flag
-            true, //NTA flag
-            "hi there" //payload
-            );*/
+            false, //NTA flag
+            "Dell Vostro" //payload
+            );
     
     while (!quit) {
         //gui.commandsListener();
         //quit = !gui.getAlive();
+        sendQueue.push_back(defaultPacket, 1);
+        sendQueue.push_back(ackPacket, 1);
         sleep(1);
-        //sendQueue.push_back(piapacket, 0);
     }
 }
 
