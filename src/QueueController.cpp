@@ -89,7 +89,7 @@ void QueueController::sendAck(PIA &packet) {
             packet.getSequenceNumber() + 1, //acknr
             true, //ACK flag
             false, //NTA flag
-            "" //payload
+            "hi" //payload
             );
     sendQueue->push_back(ackPacket, true);
 }

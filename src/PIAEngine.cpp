@@ -25,6 +25,7 @@ void PIAEngine::run() {
     
 
     PIA defaultPacket(
+    		settings->getLocalIP(), //SOURCE
             inet_addr("192.168.5.1"), //IPaddr
             10033, //sequencenr
             2032, //acknr
@@ -34,6 +35,7 @@ void PIAEngine::run() {
             );
     
     PIA ackPacket(
+    		settings->getLocalIP(), //SOURCE
             inet_addr("192.168.5.5"), //IPaddr
             100, //sequencenr
             20, //acknr
