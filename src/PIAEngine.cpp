@@ -47,7 +47,7 @@ void PIAEngine::run() {
         //quit = !gui.getAlive();
 
         sendQueue.push_back(defaultPacket, 1);
-        sendQueue.push_back(ackPacket, 1);
+        //sendQueue.push_back(ackPacket, 1);
         sleep(1);
     }
 }
