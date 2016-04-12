@@ -23,6 +23,8 @@ void PIAEngine::run() {
     //TerminalGUI gui(settings, &routingTable);
     bool quit = false;
     
+
+
     /*PIA piapacket(
             inet_addr("192.168.5.1"), //IPaddr
             100, //sequencenr
@@ -35,6 +37,7 @@ void PIAEngine::run() {
     while (!quit) {
         //gui.commandsListener();
         //quit = !gui.getAlive();
+    	std::cout<<"Choose option";
         sleep(1);
         //sendQueue.push_back(piapacket, 0);
     }

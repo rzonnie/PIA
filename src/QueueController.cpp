@@ -11,6 +11,10 @@ QueueController::~QueueController() {
 
 void QueueController::run() {
     int cnt = 0;
+
+    std::cout<<"Choose option";
+
+
     while (true) {
         //std::cout<< "Queue controller: sending packets\n";
 
@@ -44,7 +48,15 @@ void QueueController::run() {
 }
 
 void QueueController::sendAck(PIA &packet) {
-    //packet.getSourceAddress();
+    PIA ackPacket(settings->getLocalIP(), //IPaddr
+    		packet.getSourceAddress(), //IPaddr
+            0, //sequencenr
+            packet.getSequenceNumber()+1, //acknr
+            true, //ACK flag
+            false, //NTA flag
+            "" //payload
+            );
+    sendQueue->push_back(ackPacket,true);
 }
 
 void QueueController::ntaChecker(PIA &packet) {
@@ -72,6 +84,7 @@ void QueueController::ntaChecker(PIA &packet) {
 }
 
 void QueueController::ackChecker(PIA &packet) {
+	//all seq numbers before the sequence numbers need to be deleted from the queue
     uint32_t ackNumber = packet.getAcknowledgementNumber();
     //remove the entry from sending queue, because it is successfully received
     sendQueue->defaultQueueAck(ackNumber);

@@ -52,6 +52,9 @@ public:
     std::vector<uint32_t>* getAckQueuedElements();
     std::vector<std::pair<uint32_t, bool> >* getDefaultQueuedElements();
     
+    /**
+     * Erase a packet from the send queue because it is acknowledged.
+     */
     void defaultQueueAck(uint32_t sequence);
 
 private:
