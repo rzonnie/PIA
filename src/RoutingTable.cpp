@@ -54,12 +54,12 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 {
                     if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
-                        cout << "Ik kom hier 1x " << i.distance + 1 << endl;
+                        //cout << "Ik kom hier 1x " << i.distance + 1 << endl;
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
                         RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1);
                         //routingTable[k - 1] = temp;
                         addRoutingTableStruct(temp);
-                        printf("%u\n", j.distance);
+                        //printf("%u\n", j.distance);
                         //printf("%u\n", j.via);
                     }
                     newElement = false;
@@ -68,7 +68,6 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             }
             if (newElement) //If j looped over the full routing table I already had, and the destination was not found there:
             {
-                std::cout << "New Entry" << std::endl;
                 addRoutingTableStruct(makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1)); //Add it to my routing table
             }
         }
@@ -86,12 +85,11 @@ void RoutingTable::tagFallouts() {
 
         // When was the last update?
         if (routingTable[i].to != myIdentifier) {
-            if (timeElapsed.count() > 12 && routingTable[i].distance == 0) {
+            if (timeElapsed.count() > 7 && routingTable[i].distance == 0) {
                 //auto it = std::find(routingTable.begin(), routingTable.end(), element);
                 routingTable.erase(routingTable.begin() + i);
                 std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
-                printRoutingTable();
-            } else if (timeElapsed.count() > 8) {
+            } else if (timeElapsed.count() > 4) {
                 //std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
                 routingTable[i].distance = 0;
             }
@@ -100,11 +98,15 @@ void RoutingTable::tagFallouts() {
 }
 
 void RoutingTable::printRoutingTable() const {
-    printf("| TO \t\t\t | DIS \t\t\t | VIA \t\t\t |\n");
-    printf("----------------------------------------------------------------------\n");
+    std::chrono::time_point<std::chrono::system_clock> now;
+    now = std::chrono::system_clock::now();
+    
+    printf("\n\n| TO \t\t\t | DIS \t\t\t | VIA \t\t\t | STAMP \t |\n");
+    printf("------------------------------------------------------------------------------------------\n");
     for (auto element : routingTable) {
+        std::chrono::duration<double> timeElapsed = now - element.stamp;
         std::string to = printIP(element.to);
         std::string via = printIP(element.via);
-        printf("| %s \t\t| %u \t\t\t | %s \t |\n", to.c_str(), element.distance, via.c_str());
+        printf("| %s \t\t| %u \t\t\t | %s \t | %f \t |\n", to.c_str(), element.distance, via.c_str(), timeElapsed.count());
     }
 }
