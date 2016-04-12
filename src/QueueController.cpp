@@ -124,6 +124,7 @@ void QueueController::ackChecker(PIA &packet) {
 }
 
 void QueueController::defaultProcessor(PIA& packet) {
+    //packet.printPacket(true);
     //std::cout << "Packet Payload: " << packet.printPacket(true) << std::endl;
     receivingQueue->removeDefaultPacket(packet);
 }
