@@ -34,7 +34,9 @@ void PIAEngine::run() {
             false, //NTA flag
             "doeasdfasdfdsai" //payload
             );
+    
     sendQueue.push_back(defaultPacket, 1);
+    
     while (!quit) {
         //gui.commandsListener();
         //quit = !gui.getAlive();

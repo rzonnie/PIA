@@ -89,7 +89,7 @@ uint32_t QueueController::sequenceNumberGenerator() {
 }
 
 void QueueController::sendAck(PIA &packet) {
-
+	std::cout<<"Send ACK\n";
     PIA ackPacket(settings->getLocalIP(), //IPaddr
             packet.getSourceAddress(), //IPaddr
             0, //sequencenr
