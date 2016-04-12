@@ -6,7 +6,6 @@
 #include "DynamicQueue.h"
 #include "PIA.h"
 
-
 #include <sstream>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
@@ -19,11 +18,33 @@ public:
     
     void discardPacket();
     void run() override;
-    void ackChecker(PIA &packet);
-    void sendAck(PIA &packet);
 
 private:
-    void ntaChecker(PIA &packet);
+    /**
+     * If the received packet is an announcement, execute this code to update the 
+     * routing table
+     * @param packet PIA the packet you want to process
+     */
+    void ntaProcessor(PIA &packet);
+    
+    /**
+     * If the received packet is an acknowledgement, this code will do all things you
+     * want. 
+     * @param packet PIA the packet you want to process
+     */
+    void ackChecker(PIA &packet);
+    
+    /**
+     * Send an ack for the packet in the parameter
+     * @param packet PIA
+     */
+    void sendAck(PIA &packet);
+    
+    /**
+     * If the packet is a normal data packet, use this function.
+     * @param packet PIA a normal data packet
+     */
+    void defaultProcessor(PIA &packet);
     
     DynamicQueue* sendQueue;
     DynamicQueue* receivingQueue;

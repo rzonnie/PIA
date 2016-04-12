@@ -23,7 +23,7 @@ void QueueController::run() {
 
         //Check for NTA
         if (packet.isNta()) {
-            ntaChecker(packet);
+            ntaProcessor(packet);
         }            //Check for ACK
         else if (packet.isAck()) {
             ackChecker(packet);
@@ -31,13 +31,15 @@ void QueueController::run() {
             //It is probably a data packet
 
             //1. Interpret it
-
+            defaultProcessor(packet);
+            
             //2. Send an ACK
             sendAck(packet);
         }
 
         if (cnt > 25000) {
             routingTable->tagFallouts();
+            routingTable->printRoutingTable();
             cnt = 0;
         }
         cnt++;
@@ -59,8 +61,7 @@ void QueueController::sendAck(PIA &packet) {
     sendQueue->push_back(ackPacket,true);
 }
 
-void QueueController::ntaChecker(PIA &packet) {
-    std::cout << "Still alive" << std::endl;
+void QueueController::ntaProcessor(PIA &packet) {
     // Create a temporary RoutingTable
     RoutingTable temp;
 
@@ -76,7 +77,6 @@ void QueueController::ntaChecker(PIA &packet) {
     //temp.printRoutingTable();
     // Now update the actual routing table
     routingTable->updateRoutingTable(temp);
-    routingTable->printRoutingTable();
 
     //std::cout << "Routing table updated by host: ";
     //printIP(temp.getMyIdentifier());
@@ -88,4 +88,9 @@ void QueueController::ackChecker(PIA &packet) {
     uint32_t ackNumber = packet.getAcknowledgementNumber();
     //remove the entry from sending queue, because it is successfully received
     sendQueue->defaultQueueAck(ackNumber);
+}
+
+void QueueController::defaultProcessor(PIA& packet) {
+    std::cout << "Packet Payload: " << packet.getPayload() << std::endl;
+    receivingQueue->removeDefaultPacket(packet);
 }
