@@ -19,7 +19,7 @@ public:
     
     std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result);
     std::vector<std::string> packetSplitter(std::string chatpayload);
-    void packetPusher(PIA &packet);
+    void sendData(PIA &packet);
     void discardPacket();
     void run() override;
 
