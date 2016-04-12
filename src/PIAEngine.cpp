@@ -35,7 +35,7 @@ void PIAEngine::run() {
             );
 
     PIA ackPacket(
-    		settings->getLocalIP(), //SOURCE
+            settings->getLocalIP(), //SOURCE
             inet_addr("192.168.5.5"), //IPaddr
             100, //sequencenr
             20, //acknr
@@ -43,13 +43,14 @@ void PIAEngine::run() {
             false, //NTA flag
             "Dell Vostro" //payload
             );
+    sendQueue.push_back(defaultPacket, 1);
+    sleep(1);
+    sendQueue.removeDefaultPacket(defaultPacket);
     
     while (!quit) {
         //gui.commandsListener();
         //quit = !gui.getAlive();
-
-        //sendQueue.push_back(defaultPacket, 1);
-        sendQueue.push_back(ackPacket, 1);
+        //sendQueue.push_back(ackPacket, 1);
         sleep(1);
     }
 }
