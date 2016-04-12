@@ -40,7 +40,7 @@ void QueueController::run() {
         cnt++;
         usleep(50);
     }
-
+	
 }
 
 std::vector<std::string> QueueController::packetSplitter(std::string chatpayload) {
@@ -63,14 +63,16 @@ std::vector<std::string> QueueController::packetSplitter(std::string chatpayload
 std::vector<PIA> QueueController::packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result) {
     //Creates packets based on input variables.
     std::vector<PIA> PIAPackets;
-    for (auto i : result) {
-        PIA newPIAPacket(destinationIP, SequenceNumber, AckNumber, false, false, "Payload");
+    int i;
+    for (i = 0; i <= result.size(); i++) {
+        PIA newPIAPacket(settings->getLocalIP(), destinationIP, SequenceNumber+i, AckNumber, false, false, result[i]);
         PIAPackets.push_back(newPIAPacket);
     }
     return PIAPackets;
 }
 
-void QueueController::packetPusher(PIA &packet) {
+void QueueController::sendData(PIA &packet) {
+	
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {

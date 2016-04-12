@@ -15,6 +15,7 @@ Default/*
 /Default/
 Debug/*
 src/RoutingTableTestBench
+src/RoutingTableTestBench.cpp
 src/RoutingTableTestBench.o
 src/RoutingTable.o
 <<<<<<< HEAD
