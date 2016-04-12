@@ -12,24 +12,28 @@ QueueController::~QueueController() {
 void QueueController::run() {
     int cnt = 0;
     while (true) {
-        if (receivingQueue->size_ack() > 0 || receivingQueue->size_default() > 0) {
-            PIA packet = receivingQueue->retrievePacket();
+        try {
+            if (receivingQueue->size_ack() > 0 || receivingQueue->size_default() > 0) {
+                PIA packet = receivingQueue->retrievePacket();
 
-            //Check for NTA
-            if (packet.isNta()) {
-                ntaProcessor(packet);
-            }//Check for ACK
-            else if (packet.isAck()) {
-                ackChecker(packet);
-            } else if (receivingQueue->size_default() > 0) {
-                //It is probably a data packet
+                //Check for NTA
+                if (packet.isNta()) {
+                    ntaProcessor(packet);
+                }//Check for ACK
+                else if (packet.isAck()) {
+                    ackChecker(packet);
+                } else if (receivingQueue->size_default() > 0) {
+                    //It is probably a data packet
 
-                //1. Interpret it
-                defaultProcessor(packet);
+                    //1. Interpret it
+                    defaultProcessor(packet);
 
-                //2. Send an ACK
-                sendAck(packet);
+                    //2. Send an ACK
+                    sendAck(packet);
+                }
             }
+        } catch (exception &e) {
+            std::cout << e.what() << std::endl;
         }
 
         if (cnt > 25000) {
@@ -92,36 +96,35 @@ void QueueController::sendAck(PIA &packet) {
 
 void QueueController::ntaProcessor(PIA &packet) {
     // Create a temporary RoutingTable
-
+    std::cout << "Errors: " << packet.getPayload() << std::endl;
     RoutingTable temp;
+    // Open an input stringstream
+    std::istringstream payload(packet.getPayload());
 
-            // Open an input stringstream
-            std::istringstream payload(packet.getPayload());
+    // Interpret the archive information inside the stream
+    boost::archive::text_iarchive archive(payload);
 
-            // Interpret the archive information inside the stream
-            boost::archive::text_iarchive archive(payload);
+    // Stream the archive to the temporary routing table
+    archive >> temp;
 
-            // Stream the archive to the temporary routing table
-            archive >> temp;
+    //temp.printRoutingTable();
+    // Now update the actual routing table
+    routingTable->updateRoutingTable(temp);
 
-            //temp.printRoutingTable();
-            // Now update the actual routing table
-            routingTable->updateRoutingTable(temp);
-
-            //std::cout << "Routing table updated by host: ";
-            //printIP(temp.getMyIdentifier());
-            //std::cout << temp.getMyIdentifier() << std::endl;
+    //std::cout << "Routing table updated by host: ";
+    //printIP(temp.getMyIdentifier());
+    //std::cout << temp.getMyIdentifier() << std::endl;
 }
 
 void QueueController::ackChecker(PIA &packet) {
     //all seq numbers before the sequence numbers need to be deleted from the queue
 
     uint32_t ackNumber = packet.getAcknowledgementNumber();
-            //remove the entry from sending queue, because it is successfully received
-            sendQueue->defaultQueueAck(ackNumber);
+    //remove the entry from sending queue, because it is successfully received
+    sendQueue->defaultQueueAck(ackNumber);
 }
 
 void QueueController::defaultProcessor(PIA& packet) {
     std::cout << "Packet Payload: " << packet.getPayload() << std::endl;
-            receivingQueue->removeDefaultPacket(packet);
+    receivingQueue->removeDefaultPacket(packet);
 }
