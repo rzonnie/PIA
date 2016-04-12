@@ -16,7 +16,7 @@ public:
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
-    std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result)
+    std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result);
     std::vector<std::string> packetSplitter(std::string chatpayload);
     void packetPusher(PIA &packet);
     void discardPacket();
@@ -48,6 +48,8 @@ private:
      * @param packet PIA a normal data packet
      */
     void defaultProcessor(PIA &packet);
+    
+    uint32_t sequenceNumberGenerator();
     
     DynamicQueue* sendQueue;
     DynamicQueue* receivingQueue;
