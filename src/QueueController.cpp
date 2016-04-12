@@ -1,6 +1,5 @@
 #include "../include/QueueController.h"
 
-
 QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
     //MaxQueueSize = MQZ;
@@ -11,31 +10,33 @@ QueueController::~QueueController() {
 };
 
 void QueueController::run() {
+    int cnt = 0;
     while (true) {
         //routingTable->printRoutingTable();
-    	//std::cout<< "Queue controller: sending packets\n";
+        //std::cout<< "Queue controller: sending packets\n";
 
-        std::cout << "Queue controller: retrieving packets" << std::endl;
+        //std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
         //Check for NTA
-        if (packet.isNta()){
+        if (packet.isNta()) {
             ntaChecker(packet);
-        }
-        //Check for ACK
-        else if(packet.isAck()){
-        	ackChecker(packet);
-        }
-        else{
-        	//It is probably a data packet
+        }            //Check for ACK
+        else if (packet.isAck()) {
+            ackChecker(packet);
+        } else {
+            //It is probably a data packet
 
-        	//1. Interpret it
+            //1. Interpret it
 
-        	//2. Send an ACK
-        	sendAck(packet);
+            //2. Send an ACK
+            sendAck(packet);
         }
 
-        routingTable->tagFallouts();
+        if (cnt > 25000) {
+            routingTable->tagFallouts();
+            cnt = 0;
+        }
 
         //std::cout << "Queue controller: sleep 1 second" << std::endl;
         usleep(50);
@@ -43,7 +44,7 @@ void QueueController::run() {
 }
 
 void QueueController::sendAck(PIA &packet) {
-	//packet.getSourceAddress();
+    //packet.getSourceAddress();
 }
 
 void QueueController::ntaChecker(PIA &packet) {
