@@ -12,9 +12,6 @@ QueueController::~QueueController() {
 void QueueController::run() {
     int cnt = 0;
 
-    std::cout<<"Choose option";
-
-
     while (true) {
         //std::cout<< "Queue controller: sending packets\n";
 
