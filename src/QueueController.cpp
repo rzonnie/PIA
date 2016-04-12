@@ -21,7 +21,14 @@ void QueueController::run() {
                     ntaProcessor(packet);
                 }//Check for ACK
                 else if (packet.isAck()) {
-                    ackChecker(packet);
+                	//Multihop
+                	if(packet.getDestinationAddress() == settings->getLocalIP()){
+                		ackChecker(packet);
+                	}
+                	else{
+                		//retransmit it to the next node
+						sendQueue->push_back(packet,true);
+					}
                 } else if (receivingQueue->size_default() > 0) {
                     //It is probably a data packet
 
@@ -90,7 +97,7 @@ uint32_t QueueController::sequenceNumberGenerator() {
 }
 
 void QueueController::sendAck(PIA &packet) {
-
+	std::cout<<"Send ACK\n";
     PIA ackPacket(settings->getLocalIP(), //IPaddr
             packet.getSourceAddress(), //IPaddr
             0, //sequencenr

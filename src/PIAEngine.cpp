@@ -31,7 +31,7 @@ void PIAEngine::run() {
             2032, //acknr
             false, //ACK flag
             false, //NTA flag
-            "doei" //payload
+            "special message" //payload
             );
 
     PIA ackPacket(
@@ -43,9 +43,9 @@ void PIAEngine::run() {
             false, //NTA flag
             "Dell Vostro" //payload
             );
-    sendQueue.push_back(defaultPacket, 1);
-    sleep(1);
-    sendQueue.removeDefaultPacket(defaultPacket);
+    //sendQueue.push_back(defaultPacket, 1);
+    //sleep(1);
+    //sendQueue.removeDefaultPacket(defaultPacket);
     
     while (!quit) {
         //gui.commandsListener();
