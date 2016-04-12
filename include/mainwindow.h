@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-//#include <QMainWindow>
-//#include <QString>
+#include <QMainWindow>
+#include <QString>
 
 namespace Ui {
 class MainWindow;

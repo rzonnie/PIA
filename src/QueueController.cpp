@@ -15,7 +15,7 @@ void QueueController::run() {
         //routingTable->printRoutingTable();
     	//std::cout<< "Queue controller: sending packets\n";
 
-        std::cout << "Queue controller: retrieving packets" << std::endl;
+        //std::cout << "Queue controller: retrieving packets" << std::endl;
         PIA packet = receivingQueue->retrievePacket();
 
         //Check for NTA
