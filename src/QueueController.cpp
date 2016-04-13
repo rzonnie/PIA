@@ -77,7 +77,7 @@ void QueueController::sendData(std::string chatpayload, uint32_t destinationIP) 
     int i;
     for (i = 0; i < result.size(); i++) {
         PIA newPIAPacket(settings->getLocalIP(), destinationIP, 100 + i, 0, false, false, result[i]);
-        PIAPackets.insert(PIAPackets.begin(), newPIAPacket);
+        PIAPackets.push_back(newPIAPacket);
     }
     //send the packets
     sendPackets(PIAPackets);
@@ -89,11 +89,11 @@ void QueueController::sendPackets(std::vector<PIA> &packets) {
 
     //Add all the packets to the queue
     for (auto packet : packets) {
-        sendQueue->push_back(packet, true);
+        sendQueue->push_back(packet, false);
     }
 
     //Set the first item in the send queue to true.
-    //sendQueue->setDefaultQueuedElements(0, true);
+    sendQueue->setDefaultQueuedElements(0, true);
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {
