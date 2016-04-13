@@ -15,9 +15,11 @@ class GUIController
 {
 public:
 	GUIController(int argc, char *argv[]);
+    void startGui();
 
 private:
-	void startGui(int argc, char *argv[]);
+    int argc;
+    char **argv;
 
 };
 
