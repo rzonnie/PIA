@@ -35,8 +35,10 @@ void QueueController::run() {
                         }
                     }//retransmit it to the next node
                     else {
+                    	if (!packet.isAck()){
+                    		receivingQueue->removeDefaultPacket(packet);
+                    	}
                     	std::cout<<":forwarded a packet:\n";
-                        //receivingQueue->removeDefaultPacket(packet);
                         sendQueue->forwardPacket(packet, true);
                     }
                 }
@@ -110,7 +112,7 @@ void QueueController::sendAck(PIA &packet) {
             packet.getSequenceNumber() + 1, //acknr
             true, //ACK flag
             false, //NTA flag
-            "hi" //payload
+            "ack!" //payload
             );
     sendQueue->push_back(ackPacket, true);
 }

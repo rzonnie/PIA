@@ -20,6 +20,4 @@ src/RoutingTableTestBench.o
 src/RoutingTable.o
 src/TerminalGUITestBench
 src/TerminalGUITestBench.o
-src/Socket.cpp
-include/Socket.h
-
+*.pro.user
