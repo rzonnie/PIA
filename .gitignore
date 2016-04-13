@@ -20,4 +20,4 @@ src/RoutingTableTestBench.o
 src/RoutingTable.o
 src/TerminalGUITestBench
 src/TerminalGUITestBench.o
-Integration Project.pro.user
+*.pro.user
