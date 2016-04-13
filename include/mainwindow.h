@@ -11,6 +11,7 @@
 
 #include "../ui_mainwindow.h"
 #include "../include/ChatHistory.h"
+#include "QueueController.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QueueController* queueController, RoutingTable* routingTable, QWidget *parent = 0);
     ~MainWindow();
 
 	void setNewMessage(bool set);
@@ -40,12 +41,17 @@ private slots:
 
     void on_lineEdit_returnPressed();
 
+    void on_comboBox_activated(int index);
+
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow ui;
     bool newMessage;
     QString newCurrentUser;
     ChatHistory myChatHistory;
-    
+    QueueController* queueController;
+    RoutingTable* routingTable;
     QString newestMessage;
 };
 

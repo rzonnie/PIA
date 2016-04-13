@@ -60,6 +60,7 @@ public:
     void updateRoutingTable(RoutingTable &newRoutingTable);
     void printRoutingTable() const;
     uint32_t getNextHop(uint32_t destinationAddress);
+    vector<uint32_t> getHosts() const;
 };
 
 #endif /* ROUTINGTABLE_ */

@@ -21,7 +21,7 @@ public:
      * run during the entire thread life span.
      */
     virtual void run() = 0;
-
+    void setQuit(bool quit);
 protected:
     /**
      * Pointer to the settings

@@ -20,6 +20,14 @@ vector<RoutingTableStruct>* RoutingTable::getRoutingTable() {
     return &routingTable;
 }
 
+vector<uint32_t> RoutingTable::getHosts() const {
+    vector<uint32_t> temp = {};
+    for (auto element : routingTable) {
+        temp.push_back(element.to);
+    }
+    return temp;
+}
+
 void RoutingTable::addRoutingTableStruct(RoutingTableStruct Entry) {
     pthread_mutex_lock(&mutex_queue);
     routingTable.push_back(Entry);
