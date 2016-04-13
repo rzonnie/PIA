@@ -52,7 +52,7 @@ void ReceivingSocket::receivePacket() {
         peer_address_len = sizeof (struct sockaddr_storage);
 
         // allocate memory to put the received data into
-        char data[1500];
+        char data[1500] = {};
         int len;
         len = 0;
 
