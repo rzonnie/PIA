@@ -21,8 +21,8 @@ public:
     std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result);
     std::vector<std::string> packetSplitter(std::string chatpayload);
     void sendData(PIA &packet);
-    void makeAck(PIA &packet);
     uint32_t sequenceNumberGenerator();
+    void setTimestamp();
     void run() override;
 
 private:
