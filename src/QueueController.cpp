@@ -20,19 +20,22 @@ void QueueController::run() {
                 if (packet.isNta()) {
                     ntaProcessor(packet);
                 }//Check for ACK
-                else if (packet.isAck()) {
-                    ackProcessor(packet);
-                } else if (receivingQueue->size_default() > 0) {
+                else if (receivingQueue->size_default() > 0) {
                     //It is probably a data packet
 
                     //Multihop
                     if (packet.getDestinationAddress() == settings->getLocalIP()) {
                         //1. Interpret it
-                        defaultProcessor(packet);
-                        //2. Send an ACK
-                        sendAck(packet);
+                        if (packet.isAck()) {
+                            ackProcessor(packet);
+                        }else{
+                        	defaultProcessor(packet);
+                        	//2. Send an ACK
+                        	sendAck(packet);
+                        }
                     }//retransmit it to the next node
                     else {
+                    	std::cout<<":forwarded a packet:\n";
                         //receivingQueue->removeDefaultPacket(packet);
                         sendQueue->forwardPacket(packet, true);
                     }
