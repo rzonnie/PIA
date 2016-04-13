@@ -48,6 +48,12 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
     }
 }
 
+void DynamicQueue::forwardPacket(PIA &packet, bool sendState) {
+    priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
+    priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
+    //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
+}
+
 PIA DynamicQueue::retrievePacket() {
     PIA packet;
     //std::cout << "pop: locking mutex" << std::endl;
@@ -135,6 +141,9 @@ std::vector<uint32_t>* DynamicQueue::getAckQueuedElements() {
 
 std::vector<std::pair<uint32_t, bool> >* DynamicQueue::getDefaultQueuedElements() {
     return &defaultQueuedElements;
+}
+void DynamicQueue::setDefaultQueuedElements(uint item, bool state) {
+	defaultQueuedElements[item].first=state;
 }
 
 void DynamicQueue::printDefaultQueue() const {

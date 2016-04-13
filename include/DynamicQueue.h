@@ -10,6 +10,7 @@
 #define DYNAMICQUEUE_H
 
 #include "PIA.h"
+#include "Settings.h"
 #include <map>
 #include <vector>
 #include <thread>
@@ -27,6 +28,20 @@ public:
     DynamicQueue();
     virtual ~DynamicQueue();
     
+    /**
+     * set on of the default queued elements send state
+     * @param item uint
+     * @param state bool
+     */
+    void setDefaultQueuedElements(uint item, bool state);
+
+    /**
+     * add a packet to the priority queue
+     * @param packet PIA
+     * @param sendState bool
+     */
+    void forwardPacket(PIA &packet, bool sendState);
+
     /**
      * Add a PIA specified packet to one of the queues. It is automatically determined
      * what type of packet it is
