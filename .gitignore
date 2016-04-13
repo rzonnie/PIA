@@ -22,3 +22,6 @@ src/TerminalGUITestBench
 src/TerminalGUITestBench.o
 *.pro.user
 ui_mainwindow.h
+*.o
+Integration Project
+moc_mainwindow.cpp
