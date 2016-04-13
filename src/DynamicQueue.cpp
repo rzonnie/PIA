@@ -33,7 +33,12 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
         }
     } else if (packet.getDestinationAddress() > 0) {
         if (defaultQueue.count(packet.getSequenceNumber()) < 1) {
-            defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), packet));
+
+            auto now = std::chrono::steady_clock::now().time_since_epoch();
+            auto timeSinceEpoch = std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
+
+            defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), std::make_pair((double) timeSinceEpoch, packet)));
+
             defaultQueuedElements.push_back(std::make_pair(packet.getSequenceNumber(), sendState));
             //std::cout << "Added a packet! " << "Size: " << defaultQueue.size() << std::endl;
         }
@@ -47,7 +52,7 @@ PIA DynamicQueue::retrievePacket() {
     PIA packet;
     //std::cout << "pop: locking mutex" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-    
+
     if (!priorityQueue.empty()) {
         packet = priorityQueue[priorityQueuedElements[0]];
         priorityQueue.erase(priorityQueuedElements[0]);
@@ -55,7 +60,7 @@ PIA DynamicQueue::retrievePacket() {
     } else if (defaultQueuedElements.size() > 0) {
         for (auto element : defaultQueuedElements) {
             if (element.second) {
-                packet = defaultQueue[element.first];
+                packet = defaultQueue[element.first].second;
             }
         }
     }
@@ -68,16 +73,16 @@ PIA DynamicQueue::retrievePacket() {
 void DynamicQueue::defaultQueueAck(uint32_t sequence) {
     //std::cout << "pop: ack locking mutex" << std::endl;
     pthread_mutex_lock(&mutex_queue);
-    
+
     defaultQueue.erase(sequence - 1);
     std::pair<uint32_t, bool> temp(sequence - 1, false);
     std::pair<uint32_t, bool> temp2(sequence - 1, true);
-    
+
     auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
     auto it2 = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp2);
     if (it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
     if (it2 != defaultQueuedElements.end()) defaultQueuedElements.erase(it2);
-    
+
     //std::cout << "pop: ack unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
 }
@@ -86,9 +91,12 @@ void DynamicQueue::removeDefaultPacket(PIA& packet) {
     //std::cout << "pop: locking mutex" << std::endl;
     pthread_mutex_lock(&mutex_queue);
     std::pair<uint32_t, bool> temp(packet.getSequenceNumber(), true);
+    
     defaultQueue.erase(packet.getSequenceNumber());
+    
     auto it = std::find(defaultQueuedElements.begin(), defaultQueuedElements.end(), temp);
     if (it != defaultQueuedElements.end()) defaultQueuedElements.erase(it);
+    
     std::cout << "Removed an element!" << std::endl;
     //std::cout << "POP - unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
@@ -113,7 +121,7 @@ std::vector<std::pair<uint32_t, bool> >* DynamicQueue::getDefaultQueuedElements(
 void DynamicQueue::printDefaultQueue() const {
     for (auto element : defaultQueue) {
         std::cout << "Seq number: " << element.first;
-        element.second.printPacket(true);
+        element.second.second.printPacket(true);
     }
 }
 

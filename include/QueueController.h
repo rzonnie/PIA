@@ -21,6 +21,8 @@ public:
     std::vector<std::string> packetSplitter(std::string chatpayload);
     void sendData(PIA &packet);
     void discardPacket();
+    
+    void setTimestamp();
     void run() override;
 
 private:

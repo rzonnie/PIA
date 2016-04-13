@@ -118,11 +118,11 @@ uint32_t RoutingTable::getNextHop(uint32_t destinationAddress) {
     vector<RoutingTableStruct>* table = this->getRoutingTable();
     for (auto element : *table) {
         if (element.to == destinationAddress) {
-            std::cout << "NEXT HOP: " << printIP(element.via) << std::endl;
-            std::cout << "TARGET\t: " << printIP(destinationAddress) << std::endl;
+            //std::cout << "NEXT HOP: " << printIP(element.via) << std::endl;
+            //std::cout << "TARGET\t: " << printIP(destinationAddress) << std::endl;
             return element.via;
         }
     }
-    std::cout << "ERROR: NEXT HOP NOT FOUND" << std::endl;
+    //std::cout << "ERROR: NEXT HOP NOT FOUND" << std::endl;
     return 0;
 }

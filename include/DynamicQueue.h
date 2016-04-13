@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <unistd.h>
 #include <thread>
+#include <chrono>
 
 /**
  * DynamicQueue will be used as a queueing algorithm for the sender. For now only
@@ -67,7 +68,7 @@ private:
      * bool is set to true, it means an ack has been received for the previous packet
      * and it can thus be sent
      */
-    std::map<uint32_t, PIA> defaultQueue;
+    std::map<uint32_t, std::pair<double, PIA> > defaultQueue;
     
     /**
      * All sequence numbers inside the queue should be saved otherwise it is unknown
