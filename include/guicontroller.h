@@ -12,18 +12,19 @@
 #include "../include/mainwindow.h"
 #include "QueueController.h"
 #include "RoutingTable.h"
+#include "Settings.h"
 
 class GUIController
 {
 public:
-    GUIController(int argc, char *argv[], QueueController* queueController, RoutingTable* routingTable);
+    GUIController(int argc, char *argv[], QueueController* queueController, RoutingTable* routingTable, Settings* settings);
     void startGui();
-    void setQueueController(QueueController* queueController);
 private:
     int argc;
     char **argv;
     QueueController* queueController;
     RoutingTable* routingTable;
+    Settings* settings;
 };
 
 #endif // GUICONTROLLER_H

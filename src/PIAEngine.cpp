@@ -23,7 +23,7 @@ void PIAEngine::run(int argc, char *argv[]) {
     std::thread announceThread(&Announcement::run, &announcement);
     std::thread queueControllerThread(&QueueController::run, &queueController);
 
-    GUIController guiControl(argc, argv, &queueController, &routingTable);
+    GUIController guiControl(argc, argv, &queueController, &routingTable, settings);
     std::thread GUI(&GUIController::startGui, guiControl);
 
     GUI.detach();

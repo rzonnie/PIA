@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>PIA Chat</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -64,6 +64,12 @@
        <height>481</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: none;</string>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -72,21 +78,24 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>439</width>
-        <height>479</height>
+        <width>441</width>
+        <height>481</height>
        </rect>
       </property>
       <widget class="QTextEdit" name="textEdit">
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>10</y>
          <width>441</width>
          <height>471</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color : #6ecfde</string>
+        <string notr="true">background-color : #6ecfde; border: none;</string>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -97,17 +106,20 @@
     <widget class="QLineEdit" name="lineEdit">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>10</x>
        <y>540</y>
-       <width>361</width>
-       <height>41</height>
+       <width>421</width>
+       <height>61</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color : #6ecfde;</string>
+      <string notr="true">background-color : #ffffff; border: none;</string>
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton">

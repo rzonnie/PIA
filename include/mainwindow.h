@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QueueController* queueController, RoutingTable* routingTable, QWidget *parent = 0);
+    explicit MainWindow(QueueController* queueController, RoutingTable* routingTable, Settings* settings, QWidget *parent = 0);
     ~MainWindow();
 
 	void setNewMessage(bool set);
@@ -41,8 +41,6 @@ private slots:
 
     void on_lineEdit_returnPressed();
 
-    void on_comboBox_activated(int index);
-
     void on_pushButton_clicked();
 
 private:
@@ -52,6 +50,7 @@ private:
     ChatHistory myChatHistory;
     QueueController* queueController;
     RoutingTable* routingTable;
+    Settings* settings;
     QString newestMessage;
 };
 

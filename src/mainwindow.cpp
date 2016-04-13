@@ -2,10 +2,10 @@
 #include <vector>
 #include "functions.h"
 
-MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTable, QWidget *parent)
-    : queueController(queueController), routingTable(routingTable)
+MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTable, Settings* settings, QWidget *parent)
+    : queueController(queueController), routingTable(routingTable), settings(settings)
 {
-    newCurrentUser = "Group";
+    newCurrentUser = "";
     ui.setupUi(this);
     newMessage = false;
    
@@ -87,18 +87,13 @@ void MainWindow::toDisplay()
     ui.textEdit->setPlainText(toDisplayString);
 }
 
-void MainWindow::on_comboBox_activated(int index)
-{
-
-}
-
 void MainWindow::on_pushButton_clicked()
 {
-    std::cout << "REFRESH" << std::endl;
     std::vector<uint32_t> hosts = routingTable->getHosts();
-
+    ui.comboBox->clear();
     for (auto element : hosts) {
         QString qstr = QString::fromStdString(printIP(element));
-        addNewUser(qstr);
+        if (element != settings->getLocalIP())
+            addNewUser(qstr);
     }
 }

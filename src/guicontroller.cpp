@@ -1,8 +1,8 @@
 #include "../include/guicontroller.h"
 
 
-GUIController::GUIController(int argc, char *argv[], QueueController* queueController, RoutingTable* routingTable)
-    : argc(argc), argv(argv), queueController(queueController), routingTable(routingTable)
+GUIController::GUIController(int argc, char *argv[], QueueController* queueController, RoutingTable* routingTable, Settings* settings)
+    : argc(argc), argv(argv), queueController(queueController), routingTable(routingTable), settings(settings)
 {
     //startGui(argc, argv);
 }
@@ -10,11 +10,7 @@ GUIController::GUIController(int argc, char *argv[], QueueController* queueContr
 void GUIController::startGui()
 {
     QApplication a(argc, argv);
-    MainWindow w(queueController, routingTable);
+    MainWindow w(queueController, routingTable, settings);
     w.show();
     a.exec();
-}
-
-void GUIController::setQueueController(QueueController* queueController) {
-    this->queueController = queueController;
 }
