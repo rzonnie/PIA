@@ -14,6 +14,8 @@
 #include "Settings.h"
 #include <chrono>
 #include <algorithm>
+#include "functions.h"
+#include <thread>
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -32,6 +34,11 @@ private:
     uint32_t myIdentifier;
     Settings* settings;
     vector<RoutingTableStruct> routingTable = {};
+    
+    /**
+     * Necessary for thread locking
+     */
+    pthread_mutex_t mutex_queue;
 public:
     // Give boost access to the member functions and variables
     friend class boost::serialization::access;
@@ -52,6 +59,7 @@ public:
     int getMyIdentifier() const;
     void updateRoutingTable(RoutingTable &newRoutingTable);
     void printRoutingTable() const;
+    uint32_t getNextHop(uint32_t destinationAddress);
 };
 
 #endif /* ROUTINGTABLE_ */

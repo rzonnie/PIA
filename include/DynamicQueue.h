@@ -10,9 +10,14 @@
 #define DYNAMICQUEUE_H
 
 #include "PIA.h"
+#include "Settings.h"
 #include <map>
 #include <vector>
 #include <thread>
+#include <algorithm>
+#include <unistd.h>
+#include <thread>
+#include <chrono>
 
 /**
  * DynamicQueue will be used as a queueing algorithm for the sender. For now only
@@ -23,6 +28,20 @@ public:
     DynamicQueue();
     virtual ~DynamicQueue();
     
+    /**
+     * set on of the default queued elements send state
+     * @param item uint
+     * @param state bool
+     */
+    void setDefaultQueuedElements(uint item, bool state);
+
+    /**
+     * add a packet to the priority queue
+     * @param packet PIA
+     * @param sendState bool
+     */
+    void forwardPacket(PIA &packet, bool sendState);
+
     /**
      * Add a PIA specified packet to one of the queues. It is automatically determined
      * what type of packet it is
@@ -56,15 +75,36 @@ public:
      * Erase a packet from the send queue because it is acknowledged.
      */
     void defaultQueueAck(uint32_t sequence);
-    void removeDefaultPacket(PIA &packet);
     
+    /**
+     * Update the timestamp of a packet in the queue
+     * @param uint32_t sequenceNumber
+     * @param uint8_t timeout
+     */
+    void updateTimestamp(uint32_t sequenceNumber, uint32_t timeout);
+    
+    /**
+     * Get the timestamp of a specific element in the queue
+     * @param uint32_t sequenceNumber
+     * @return uint32_t timestamp
+     */
+    double getTimestamp(uint32_t sequenceNumber);
+    
+    /**
+     * Get the amount of time in milliseconds since the epoch
+     * @return double
+     */
+    static double getTime();
+    
+    void removeDefaultPacket(PIA &packet);
+    void printDefaultQueue() const;
 private:
     /**
      * This queue will queue all default packets, except from ack's. If the 
      * bool is set to true, it means an ack has been received for the previous packet
      * and it can thus be sent
      */
-    std::map<uint32_t, PIA> defaultQueue;
+    std::map<uint32_t, std::pair<double, PIA> > defaultQueue;
     
     /**
      * All sequence numbers inside the queue should be saved otherwise it is unknown

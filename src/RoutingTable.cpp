@@ -1,10 +1,9 @@
 #include "../include/RoutingTable.h"
-#include "../include/functions.h"
 
 using namespace std;
 
 RoutingTable::RoutingTable() {
-
+    pthread_mutex_init(&mutex_queue, NULL);
 }
 
 RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
@@ -12,7 +11,9 @@ RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
     uint32_t to = ID;
     uint8_t distance = 0;
     uint32_t via = ID;
+    pthread_mutex_lock(&mutex_queue);
     addRoutingTableStruct(makeStruct(to, via, distance));
+    pthread_mutex_unlock(&mutex_queue);
 }
 
 vector<RoutingTableStruct>* RoutingTable::getRoutingTable() {
@@ -20,7 +21,9 @@ vector<RoutingTableStruct>* RoutingTable::getRoutingTable() {
 }
 
 void RoutingTable::addRoutingTableStruct(RoutingTableStruct Entry) {
+    pthread_mutex_lock(&mutex_queue);
     routingTable.push_back(Entry);
+    pthread_mutex_unlock(&mutex_queue);
 }
 
 void RoutingTable::setMyIdentifier(int ID) {
@@ -54,13 +57,11 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 {
                     if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
-                        //cout << "Ik kom hier 1x " << i.distance + 1 << endl;
+                        pthread_mutex_lock(&mutex_queue);
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
                         RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1);
-                        //routingTable[k - 1] = temp;
+                        pthread_mutex_unlock(&mutex_queue);
                         addRoutingTableStruct(temp);
-                        //printf("%u\n", j.distance);
-                        //printf("%u\n", j.via);
                     }
                     newElement = false;
                 }
@@ -85,6 +86,7 @@ void RoutingTable::tagFallouts() {
 
         // When was the last update?
         if (routingTable[i].to != myIdentifier) {
+            pthread_mutex_lock(&mutex_queue);
             if (timeElapsed.count() > 7 && routingTable[i].distance == 0) {
                 //auto it = std::find(routingTable.begin(), routingTable.end(), element);
                 routingTable.erase(routingTable.begin() + i);
@@ -93,6 +95,7 @@ void RoutingTable::tagFallouts() {
                 //std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
                 routingTable[i].distance = 0;
             }
+            pthread_mutex_unlock(&mutex_queue);
         }
     }
 }
@@ -100,7 +103,7 @@ void RoutingTable::tagFallouts() {
 void RoutingTable::printRoutingTable() const {
     std::chrono::time_point<std::chrono::system_clock> now;
     now = std::chrono::system_clock::now();
-    
+
     printf("\n\n| TO \t\t\t | DIS \t\t\t | VIA \t\t\t | STAMP \t |\n");
     printf("------------------------------------------------------------------------------------------\n");
     for (auto element : routingTable) {
@@ -109,4 +112,17 @@ void RoutingTable::printRoutingTable() const {
         std::string via = printIP(element.via);
         printf("| %s \t\t| %u \t\t\t | %s \t | %f \t |\n", to.c_str(), element.distance, via.c_str(), timeElapsed.count());
     }
+}
+
+uint32_t RoutingTable::getNextHop(uint32_t destinationAddress) {
+    vector<RoutingTableStruct>* table = this->getRoutingTable();
+    for (auto element : *table) {
+        if (element.to == destinationAddress) {
+            //std::cout << "NEXT HOP: " << printIP(element.via) << std::endl;
+            //std::cout << "TARGET\t: " << printIP(destinationAddress) << std::endl;
+            return element.via;
+        }
+    }
+    std::cout << "ERROR: NEXT HOP NOT FOUND" << std::endl;
+    return 0;
 }

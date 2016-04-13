@@ -7,6 +7,7 @@
 #include "PIA.h"
 #include "functions.h"
 
+#include <stdlib.h>
 #include <sstream>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
@@ -17,13 +18,29 @@ public:
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
-    std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result);
-    std::vector<std::string> packetSplitter(std::string chatpayload);
-    void sendData(PIA &packet);
-    void discardPacket();
+    /**
+	 * Send some payload to the destination address, the input string is split into multiple
+	 * packets which are then added to the sending queue.
+	 * @param chatpayload std::string
+	 * @param destinationIP uint32_t
+	 */
+    void sendData(std::string chatpayload, uint32_t destinationIP);
+    
+    /**
+	 * Generate a sequence number
+	 */
+    uint32_t sequenceNumberGenerator();
+
+    void setTimestamp();
     void run() override;
 
 private:
+    /**
+     * Send packets from the vector and sets the first entry in the sending queue
+     * to true (ready to send).
+     */
+    void sendPackets(std::vector<PIA> &packets);
+
     /**
      * If the received packet is an announcement, execute this code to update the 
      * routing table
@@ -36,7 +53,7 @@ private:
      * want. 
      * @param packet PIA the packet you want to process
      */
-    void ackChecker(PIA &packet);
+    void ackProcessor(PIA &packet);
     
     /**
      * Send an ack for the packet in the parameter
@@ -49,8 +66,6 @@ private:
      * @param packet PIA a normal data packet
      */
     void defaultProcessor(PIA &packet);
-    
-    uint32_t sequenceNumberGenerator();
     
     DynamicQueue* sendQueue;
     DynamicQueue* receivingQueue;

@@ -105,10 +105,10 @@ void PIA::readData(char buffer[]) {
 
 void PIA::getData(char buffer[]) {
     //Complete packet
-    buffer[3] = (destinationAddress >> 24) & 0xff;
-    buffer[2] = (destinationAddress >> 16) & 0xff;
-    buffer[1] = (destinationAddress >> 8) & 0xff;
-    buffer[0] = destinationAddress & 0xff;
+    buffer[3] = (sourceAddress >> 24) & 0xff;
+    buffer[2] = (sourceAddress >> 16) & 0xff;
+    buffer[1] = (sourceAddress >> 8) & 0xff;
+    buffer[0] = sourceAddress & 0xff;
 
     buffer[7] = (destinationAddress >> 24) & 0xff;
     buffer[6] = (destinationAddress >> 16) & 0xff;
