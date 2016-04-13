@@ -18,3 +18,6 @@ ThreadRunner::ThreadRunner(Settings* settings)
 ThreadRunner::~ThreadRunner() {
 }
 
+void ThreadRunner::setQuit(bool quit) {
+    this->quit = quit;
+}

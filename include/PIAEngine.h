@@ -21,13 +21,14 @@
 #include "Announcement.h"
 #include <thread>
 #include "QueueController.h"
+#include "guicontroller.h"
 
 class PIAEngine {
 public:
     PIAEngine(Settings* settings);
     virtual ~PIAEngine();
     
-    void run();
+    void run(int argc, char *argv[]);
 private:
     Settings* settings;
     RoutingTable routingTable = RoutingTable(settings, settings->getLocalIP());

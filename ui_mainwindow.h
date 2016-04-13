@@ -18,6 +18,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
@@ -34,6 +35,7 @@ public:
     QWidget *scrollAreaWidgetContents;
     QTextEdit *textEdit;
     QLineEdit *lineEdit;
+    QPushButton *pushButton;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -53,7 +55,7 @@ public:
         frame->setFrameShadow(QFrame::Raised);
         comboBox = new QComboBox(frame);
         comboBox->setObjectName(QStringLiteral("comboBox"));
-        comboBox->setGeometry(QRect(160, 20, 121, 27));
+        comboBox->setGeometry(QRect(300, 20, 121, 27));
         comboBox->setStyleSheet(QStringLiteral(""));
         scrollArea = new QScrollArea(frame);
         scrollArea->setObjectName(QStringLiteral("scrollArea"));
@@ -72,6 +74,9 @@ public:
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setGeometry(QRect(40, 540, 361, 41));
         lineEdit->setStyleSheet(QStringLiteral("background-color : #6ecfde;"));
+        pushButton = new QPushButton(frame);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(10, 20, 99, 27));
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
@@ -82,15 +87,9 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        comboBox->clear();
-        comboBox->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "Group", 0)
-         << QApplication::translate("MainWindow", "Guido", 0)
-         << QApplication::translate("MainWindow", "Remi", 0)
-         << QApplication::translate("MainWindow", "Bart", 0)
-         << QApplication::translate("MainWindow", "Olaf", 0)
-        );
+        comboBox->setCurrentText(QString());
         lineEdit->setText(QString());
+        pushButton->setText(QApplication::translate("MainWindow", "Refresh", 0));
     } // retranslateUi
 
 };
