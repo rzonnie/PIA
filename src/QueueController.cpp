@@ -2,6 +2,8 @@
 
 QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
+    //MaxQueueSize = MQZ;
+    //MaxPacketLength = MPL;
 }
 
 QueueController::~QueueController() {
@@ -48,7 +50,7 @@ void QueueController::run() {
         cnt++;
         usleep(50);
     }
-
+	
 }
 
 void QueueController::sendData(std::string chatpayload, uint32_t destinationIP) {
@@ -67,7 +69,7 @@ void QueueController::sendData(std::string chatpayload, uint32_t destinationIP) 
     //Also send the last few bits of data from chatpayload
     result.push_back(temp);
 
-    //Create packets
+    //Create packets from the strings
     std::vector<PIA> PIAPackets;
     int i;
     for (i = 0; i <= result.size(); i++) {
@@ -92,11 +94,10 @@ void QueueController::sendPackets(std::vector<PIA> &packets) {
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {
-    //SeqNumber 1 high than previous or not
+	return rand() % RAND_MAX;
 }
 
 void QueueController::sendAck(PIA &packet) {
-	std::cout<<"Send ACK\n";
     PIA ackPacket(settings->getLocalIP(), //IPaddr
             packet.getSourceAddress(), //IPaddr
             0, //sequencenr
@@ -131,6 +132,7 @@ void QueueController::ntaProcessor(PIA &packet) {
 
 void QueueController::ackProcessor(PIA &packet) {
     //all seq numbers before the sequence numbers need to be deleted from the queue
+    
     uint32_t ackNumber = packet.getAcknowledgementNumber();
     //remove the entry from sending queue, because it is successfully received
     sendQueue->defaultQueueAck(ackNumber);

@@ -7,6 +7,7 @@
 #include "PIA.h"
 #include "functions.h"
 
+#include <stdlib.h>
 #include <sstream>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
@@ -17,11 +18,19 @@ public:
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
-    //Add some payload to the sending queue
+    /**
+	 * Send some payload to the destination address, the input string is split into multiple
+	 * packets which are then added to the sending queue.
+	 * @param chatpayload std::string
+	 * @param destinationIP uint32_t
+	 */
     void sendData(std::string chatpayload, uint32_t destinationIP);
-
-    void discardPacket();
     
+    /**
+	 * Generate a sequence number
+	 */
+    uint32_t sequenceNumberGenerator();
+
     void setTimestamp();
     void run() override;
 
@@ -57,8 +66,6 @@ private:
      * @param packet PIA a normal data packet
      */
     void defaultProcessor(PIA &packet);
-    
-    uint32_t sequenceNumberGenerator();
     
     DynamicQueue* sendQueue;
     DynamicQueue* receivingQueue;
