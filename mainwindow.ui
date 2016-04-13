@@ -48,6 +48,9 @@
        <height>27</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <item>
       <property name="text">
        <string>Guido</string>
@@ -75,7 +78,7 @@
        <x>0</x>
        <y>50</y>
        <width>441</width>
-       <height>431</height>
+       <height>481</height>
       </rect>
      </property>
      <property name="widgetResizable">
@@ -87,16 +90,16 @@
         <x>0</x>
         <y>0</y>
         <width>439</width>
-        <height>429</height>
+        <height>479</height>
        </rect>
       </property>
-      <widget class="QTextEdit" name="dialogueBox">
+      <widget class="QTextEdit" name="textEdit">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
          <width>441</width>
-         <height>441</height>
+         <height>471</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -108,20 +111,20 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QLineEdit" name="TextMessage">
+    <widget class="QLineEdit" name="lineEdit">
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>510</y>
+       <y>540</y>
        <width>361</width>
-       <height>51</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color : #6ecfde;</string>
      </property>
      <property name="text">
-      <string>                           type your message here</string>
+      <string/>
      </property>
     </widget>
    </widget>
