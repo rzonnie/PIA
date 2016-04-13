@@ -18,10 +18,10 @@ src/RoutingTableTestBench
 src/RoutingTableTestBench.cpp
 src/RoutingTableTestBench.o
 src/RoutingTable.o
+<<<<<<< HEAD
 src/TerminalGUITestBench
 src/TerminalGUITestBench.o
-*.pro.user
-ui_mainwindow.h
-*.o
-Integration Project
-moc_mainwindow.cpp
+=======
+src/Socket.cpp
+include/Socket.h
+>>>>>>> c594669289ff910c255c7e2f83b1df10ee5e0566

@@ -24,7 +24,6 @@ double DynamicQueue::getTime() {
 void DynamicQueue::push_back(PIA &packet, bool sendState) {
     // Locking Thread
     //std::cout << "push_back: Locking Thread" << std::endl;
-
     if (packet.getDestinationAddress() > 0) {
         pthread_mutex_lock(&mutex_queue);
 

@@ -1,79 +1,60 @@
 #include "../include/mainwindow.h"
-
+#include "ui_mainwindow.h"
+#include <string>
+#include <iostream>
+#include <QString>
+#include <stdio.h>
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent)
 {
-    newCurrentUser = "Group";
-    ui.setupUi(this);
+    ui->setupUi(this);
     newMessage = false;
-   
+    newCurrentUser = false;
 }
 
 MainWindow::~MainWindow()
 {
-
+    delete ui;
 }
 
-
-void MainWindow::addNewUser(QString newUser)
+void MainWindow::on_TextMessage_returnPressed()
 {
-   ui.comboBox->addItem(newUser);
+    newestMessage = ui->TextMessage->text();
+    setNewMessage(true);
 }
 
-void MainWindow::removeUser(int index)
+void MainWindow::addNewUser(const QString newUser)
 {
-    ui.comboBox->removeItem(index);
+   ui->comboBox->addItem(newUser);
 }
 
-void MainWindow::setNewMessage(bool set)	//there is a new message
+void MainWindow::setNewMessage(bool set)
 {
 	newMessage = set;
 }
 
-void MainWindow::setNewCurrentUser(QString set)	//set the new user by his ID
+void MainWindow::setNewCurrentUser(int set)
 {
 	newCurrentUser = set;
 }
 
-bool MainWindow::getNewMessage()	//tell if there is a new message to be fetched
+bool MainWindow::getNewMessage()
 {
 	return newMessage;
 }
 
-QString MainWindow::getNewCurrentUser()	//ask for the current user ID
+int MainWindow::getNewCurrentUser()
 {
 	return newCurrentUser;
 }
 
-QString MainWindow::getNewestMessage()	//return the newest message in QString
+void MainWindow::toDisplay(QString QStringIn)
 {
-    return newestMessage;
+    ui->dialogueBox->setPlainText(QStringIn);
 }
 
-
-void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)	// a new current user is chosen
+void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)
 {
-    setNewCurrentUser(arg1);
-}
-void MainWindow::on_lineEdit_returnPressed()
-{
-    QString self = "me";
-    myChatHistory.AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
-    ui.lineEdit->clear();
-    toDisplay();
-    ui.textEdit->verticalScrollBar()->setSliderPosition(ui.textEdit->verticalScrollBar()->maximum());
-}
-void MainWindow::toDisplay()
-{
-    std::vector<ChatMessage> toDisplay = myChatHistory.getChatHistory(getNewCurrentUser());
-    QString toDisplayString;
-	int i;
-	for (i=0;i<toDisplay.size();i++)
-	{
-        toDisplayString.push_back(toDisplay[i].user);
-        toDisplayString.push_back(": ");
-        toDisplayString.push_back(toDisplay[i].message);
-        toDisplayString.push_back("\n");
-	}
-    ui.textEdit->setPlainText(toDisplayString);
+    setNewCurrentUser(true);
 }

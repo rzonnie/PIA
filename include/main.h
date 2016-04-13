@@ -16,9 +16,6 @@
 #include "Settings.h"
 #include "PIA.h"
 #include "PIAEngine.h"
-#include "mainwindow.h"
-#include "guicontroller.h"
-#include <thread>
 
 #endif	/* MAIN_ */
 
