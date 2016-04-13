@@ -1,9 +1,8 @@
 #include "../include/QueueController.h"
 
-QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
-: ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
-    //MaxQueueSize = MQZ;
-    //MaxPacketLength = MPL;
+QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable, ChatHistory* chatHistory)
+: ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable), chatHistory(chatHistory) {
+    // Empty Constructor
 }
 
 QueueController::~QueueController() {
@@ -32,6 +31,10 @@ void QueueController::run() {
                 else if (receivingQueue->size_default() > 0 || receivingQueue->size_ack() > 0) {
                     if (packet.getDestinationAddress() == settings->getLocalIP()) {
                         	defaultProcessor(packet);
+
+                            std::cout << "The Other user says: " << packet.getPayload() << std::endl;
+                            chatHistory->AddToHistory(QString::fromStdString(printIP(packet.getSourceAddress())), QString::fromStdString(packet.getPayload()), QString::fromStdString(printIP(packet.getSourceAddress())));
+
                             //2end an ACK
                         	sendAck(packet);
                             std::cout<<"Send an ACK\n";

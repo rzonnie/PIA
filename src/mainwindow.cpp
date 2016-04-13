@@ -2,8 +2,8 @@
 #include <vector>
 #include "functions.h"
 
-MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTable, Settings* settings, QWidget *parent)
-    : queueController(queueController), routingTable(routingTable), settings(settings)
+MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTable, Settings* settings, ChatHistory* chatHistory, QWidget *parent)
+    : queueController(queueController), routingTable(routingTable), settings(settings), chatHistory(chatHistory)
 {
     newCurrentUser = "";
     ui.setupUi(this);
@@ -13,7 +13,7 @@ MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTa
 
 MainWindow::~MainWindow()
 {
-
+    std::cout << "CLOSED MAIN WINDOW" << std::endl;
 }
 
 
@@ -58,14 +58,20 @@ void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)	// a new c
     setNewCurrentUser(arg1);
 }
 
+void MainWindow::on_comboBox_activated(int index) {
+
+}
+
 // A text message has been sent
 void MainWindow::on_lineEdit_returnPressed()
 {
     QString self = "me";
-    myChatHistory.AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
     // This is the text message
-
-    queueController->sendData(ui.lineEdit->text().toStdString(),inet_addr(getNewCurrentUser().toStdString().c_str()));
+    if (getNewCurrentUser().toStdString() != "") {
+        chatHistory->AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
+        queueController->sendData(ui.lineEdit->text().toStdString(),inet_addr(getNewCurrentUser().toStdString().c_str()));
+        std::cout << "Message has been sent to " << getNewCurrentUser().toStdString() << std::endl;
+    }
     ui.lineEdit->clear();
     toDisplay();
     ui.textEdit->verticalScrollBar()->setSliderPosition(ui.textEdit->verticalScrollBar()->maximum());
@@ -74,7 +80,7 @@ void MainWindow::on_lineEdit_returnPressed()
 // Display all data of the current user
 void MainWindow::toDisplay()
 {
-    std::vector<ChatMessage> toDisplay = myChatHistory.getChatHistory(getNewCurrentUser());
+    std::vector<ChatMessage> toDisplay = chatHistory->getChatHistory(getNewCurrentUser());
     QString toDisplayString;
 	int i;
 	for (i=0;i<toDisplay.size();i++)

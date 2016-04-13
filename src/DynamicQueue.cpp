@@ -112,7 +112,7 @@ void DynamicQueue::removeDefaultPacket(PIA& packet) {
 void DynamicQueue::updateTimestamp(uint32_t sequenceNumber, uint32_t timeout) {
     pthread_mutex_lock(&mutex_queue);
     if (defaultQueue.size() > 0 && defaultQueue.find(sequenceNumber) != defaultQueue.end()) {
-        std::cout << "Updating timestamp" << std::endl;
+        //std::cout << "Updating timestamp" << std::endl;
         defaultQueue[sequenceNumber].first = getTime() + timeout;
     }
     pthread_mutex_unlock(&mutex_queue);

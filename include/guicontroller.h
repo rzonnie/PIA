@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QWidget>
 #include <vector>
+#include <string>
 
 #include "ChatHistory.h"
 #include "../include/mainwindow.h"
@@ -17,7 +18,7 @@
 class GUIController
 {
 public:
-    GUIController(int argc, char *argv[], QueueController* queueController, RoutingTable* routingTable, Settings* settings);
+    GUIController(int argc, char *argv[], QueueController* queueController, RoutingTable* routingTable, Settings* settings, ChatHistory* chatHistory);
     void startGui();
 private:
     int argc;
@@ -25,6 +26,7 @@ private:
     QueueController* queueController;
     RoutingTable* routingTable;
     Settings* settings;
+    ChatHistory* chatHistory;
 };
 
 #endif // GUICONTROLLER_H

@@ -22,6 +22,7 @@ public:
      */
     virtual void run() = 0;
     void setQuit(bool quit);
+    bool getQuit() const;
 protected:
     /**
      * Pointer to the settings

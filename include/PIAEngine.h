@@ -21,6 +21,7 @@
 #include "Announcement.h"
 #include <thread>
 #include "QueueController.h"
+#include "ChatHistory.h"
 #include "guicontroller.h"
 
 class PIAEngine {
@@ -34,11 +35,12 @@ private:
     RoutingTable routingTable = RoutingTable(settings, settings->getLocalIP());
     DynamicQueue sendQueue;
     DynamicQueue receivingQueue;
+    ChatHistory chatHistory;
     
     SendSocket sendTemp = SendSocket(settings, &sendQueue, &routingTable);
     ReceivingSocket receiveTemp = ReceivingSocket(settings, &receivingQueue);
     Announcement announcement = Announcement(settings, &sendQueue, &routingTable);
-    QueueController queueController = QueueController(settings , &sendQueue, &receivingQueue, &routingTable);
+    QueueController queueController = QueueController(settings , &sendQueue, &receivingQueue, &routingTable, &chatHistory);
 };
 
 #endif	/* PIAENGINE_H */

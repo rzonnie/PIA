@@ -6,6 +6,7 @@ ReceivingSocket::ReceivingSocket(Settings *settings, DynamicQueue* receivingQueu
 }
 
 void ReceivingSocket::init() {
+    try {
     /**
      * Setting the reuse var to 1 so multiple programs can read from this port
      * This is only useful if you want multiple clients to be able to listen on this port, for example when testing your application locally
@@ -35,6 +36,9 @@ void ReceivingSocket::init() {
     group_req.imr_interface.s_addr = settings->getLocalIP(); //the address of the interface to perform the join on (our IP address)
     if (setsockopt(sockID, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *) &group_req, sizeof (group_req)) < 0)
         throw std::runtime_error("Failed to join multicast group!");
+    } catch (exception &e) {
+        std::cout << "Receiving Socket: " << e.what() << std::endl;
+    }
 }
 
 void ReceivingSocket::run() {
@@ -53,22 +57,17 @@ void ReceivingSocket::receivePacket() {
 
         // allocate memory to put the received data into
         char data[1500] = {};
-        int len;
-        len = 0;
-
+        int len = 0;
         // Receive packet and put its contents in data, recvfrom will block until a packet for this socket has been received
         len = recvfrom(sockID, data, sizeof (data), 0, (struct sockaddr *) &peer_address, &peer_address_len);
-        //std::cout << "Packet Received: " << data << " data length: " << len << std::endl;
-        //if (len > 0) {
-        //    q.push(std::string(data, len));
-        //}
 
         PIA packet;
         packet.readData(data);
         queue->push_back(packet, true);
-        std::cout << "Received: " << packet.getAcknowledgementNumber() << std::endl;
+        //std::cout << "Received: " << packet.getAcknowledgementNumber() << std::endl;
 
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
+        throw e;
     }
 }
