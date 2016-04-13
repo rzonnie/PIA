@@ -21,3 +21,4 @@ src/RoutingTable.o
 src/TerminalGUITestBench
 src/TerminalGUITestBench.o
 *.pro.user
+ui_mainwindow.h
