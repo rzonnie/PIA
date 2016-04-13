@@ -12,12 +12,12 @@ class ChatHistory
 {
 public:
         ChatHistory();
-        std::vector<ChatMessage> getChatHistory (int);
-        void AddToHistory (QString user, QString message, int ID);
+        std::vector<ChatMessage> getChatHistory (QString ID);
+        void AddToHistory(QString sentBy, QString message, QString ID);
 
 
 private:
-    std::map<int, std::vector<ChatMessage> > MessagesAndTimes;
+    std::map<QString, std::vector<ChatMessage> > MessagesAndTimes;
 };
 
 #endif // CHATHISTORY_H

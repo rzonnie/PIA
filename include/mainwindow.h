@@ -25,13 +25,14 @@ public:
     ~MainWindow();
 
 	void setNewMessage(bool set);
-	void setNewCurrentUser(int set);
+    void setNewCurrentUser(QString set);
 	bool getNewMessage();
-	int getNewCurrentUser();
+    QString getNewCurrentUser();
     QString getNewestMessage();
     void toDisplay();
     void addNewUser(QString newUser);
     void removeUser(int index);
+
 
 private slots:
 
@@ -42,7 +43,7 @@ private slots:
 private:
     Ui::MainWindow ui;
     bool newMessage;
-    int newCurrentUser;
+    QString newCurrentUser;
     ChatHistory myChatHistory;
     
     QString newestMessage;

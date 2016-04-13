@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
 {
-    newCurrentUser = 1;
+    newCurrentUser = "Group";
     ui.setupUi(this);
     newMessage = false;
    
@@ -30,7 +30,7 @@ void MainWindow::setNewMessage(bool set)	//there is a new message
 	newMessage = set;
 }
 
-void MainWindow::setNewCurrentUser(int set)	//set the new user by his ID
+void MainWindow::setNewCurrentUser(QString set)	//set the new user by his ID
 {
 	newCurrentUser = set;
 }
@@ -40,7 +40,7 @@ bool MainWindow::getNewMessage()	//tell if there is a new message to be fetched
 	return newMessage;
 }
 
-int MainWindow::getNewCurrentUser()	//ask for the current user ID
+QString MainWindow::getNewCurrentUser()	//ask for the current user ID
 {
 	return newCurrentUser;
 }
@@ -53,31 +53,12 @@ QString MainWindow::getNewestMessage()	//return the newest message in QString
 
 void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)	// a new current user is chosen
 {
-    if(arg1 == "Guido")
-    {
-        setNewCurrentUser(1);
-        toDisplay();
-    }
-    if(arg1 == "Remi")
-    {
-        setNewCurrentUser(2);
-        toDisplay();
-    }
-    if(arg1 == "Bart")
-    {
-        setNewCurrentUser(3);
-        toDisplay();
-    }
-    if(arg1 == "Olaf")
-    {
-        setNewCurrentUser(4);
-        toDisplay();
-    }
-
+    setNewCurrentUser(arg1);
 }
 void MainWindow::on_lineEdit_returnPressed()
 {
-    myChatHistory.AddToHistory("me", ui.lineEdit->text(), getNewCurrentUser());
+    QString self = "me";
+    myChatHistory.AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
     ui.lineEdit->clear();
     toDisplay();
     ui.textEdit->verticalScrollBar()->setSliderPosition(ui.textEdit->verticalScrollBar()->maximum());
