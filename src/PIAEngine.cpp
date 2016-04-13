@@ -9,17 +9,25 @@
 #include "../include/PIAEngine.h"
 
 PIAEngine::PIAEngine(Settings* settings)
-: settings(settings) {
-    sendThread.detach();
-    receivingThread.detach();
-    queueControllerThread.detach();
-    announceThread.detach();
+: settings(settings)
+{
+    std::cout << "START" << std::endl;
 }
 
 PIAEngine::~PIAEngine() {
 }
 
 void PIAEngine::run() {
+
+    std::thread sendThread(&SendSocket::run, &sendTemp);
+    std::thread receivingThread(&ReceivingSocket::run, &receiveTemp);
+    std::thread announceThread(&Announcement::run, &announcement);
+    std::thread queueControllerThread(&QueueController::run, &queueController);
+
+    sendThread.detach();
+    receivingThread.detach();
+    queueControllerThread.detach();
+    announceThread.detach();
 
     //TerminalGUI gui(settings, &routingTable);
     bool quit = false;

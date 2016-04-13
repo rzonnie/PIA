@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
     GUIController myController(argc, argv);
     std::thread GUI(&GUIController::startGui, myController);
     GUI.detach();
+
     // Create a namespace alias
     namespace po = boost::program_options;
 
@@ -32,9 +33,10 @@ int main(int argc, char *argv[])
         std::cout << desc << "\n";
     } else if (vm.count("port") && vm.count("port") && vm.count("ip") && vm.count("username")) {
         // Now all mandatory flags have been set
-        std::cout << "asadfasdf" << std::endl;
         settings = Settings(vm["username"].as<std::string>(), vm["port"].as<int>(), vm["ip"].as<std::string>(), vm["mgroup"].as<std::string>());
+
         PIAEngine engine(&settings);
+        std::cout << "asadfasdf" << std::endl;
         engine.run();
     }
     return 0;

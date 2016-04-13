@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.2.1
+** Created by: Qt User Interface Compiler version 5.6.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -65,7 +65,7 @@ public:
         textEdit = new QTextEdit(scrollAreaWidgetContents);
         textEdit->setObjectName(QStringLiteral("textEdit"));
         textEdit->setGeometry(QRect(0, 0, 441, 471));
-        textEdit->setStyleSheet(QStringLiteral("background-color : #FFFFFF"));
+        textEdit->setStyleSheet(QStringLiteral("background-color : #6ecfde"));
         textEdit->setReadOnly(true);
         scrollArea->setWidget(scrollAreaWidgetContents);
         lineEdit = new QLineEdit(frame);
@@ -84,6 +84,7 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         comboBox->clear();
         comboBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Group", 0)
          << QApplication::translate("MainWindow", "Guido", 0)
          << QApplication::translate("MainWindow", "Remi", 0)
          << QApplication::translate("MainWindow", "Bart", 0)
