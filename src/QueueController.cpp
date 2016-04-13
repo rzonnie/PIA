@@ -24,28 +24,20 @@ void QueueController::run() {
                 else if (packet.isAck() && (packet.getDestinationAddress() == settings->getLocalIP())){
                     std::cout<< "ack incoming\n";
                     ackProcessor(packet);
-                }
+                }//Check for ACK to be forwarded
                 else if (packet.isAck() && (packet.getDestinationAddress() != settings->getLocalIP())){
                     sendQueue->forwardPacket(packet, true);
                     std::cout<<"Forwarding an ACK\n";
-                }
+                }//Check for DATA
                 else if (receivingQueue->size_default() > 0 || receivingQueue->size_ack() > 0) {
-                    //It is probably a data packet
-
-                    //Multihop
                     if (packet.getDestinationAddress() == settings->getLocalIP()) {
-                        //1. Interpret it
 
-                        if (packet.isAck()) {
-
-                            ackProcessor(packet);
-                        }else{
                         	defaultProcessor(packet);
                         	//2. Send an ACK
                         	sendAck(packet);
                             std::cout<<"Send an ACK\n";
                         }
-                    }//retransmit it to the next node
+                //Check for DATA forwarding
                     else {
                     	if (!packet.isAck()){
                     		receivingQueue->removeDefaultPacket(packet);
