@@ -44,7 +44,7 @@ SendSocket::~SendSocket() {
 
 void SendSocket::run() {
     while (true) {
-        usleep(500000);
+        usleep(50);
         PIA packet = queue->retrievePacket();
         if (packet.getDestinationAddress() > 0)
             sendPacket(packet);
@@ -70,7 +70,7 @@ bool SendSocket::sendPacket(PIA &packet) {
         multicastSender.sin_addr.s_addr = routingTable->getNextHop(packet.getDestinationAddress());
         
         if (routingTable->getNextHop(packet.getDestinationAddress()) == 0) {
-            std::cout << "ERRORS NO DESTINATION FOUND!" << std::endl;
+            //std::cout << "ERRORS NO DESTINATION FOUND!" << std::endl;
             return false;
         }
     }
@@ -84,7 +84,7 @@ bool SendSocket::sendPacket(PIA &packet) {
         // send the actual packet
         if (sendto(sockID, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
             perror("Sendto failed");
-        printf("Packet of sisdfze %d sent!\n", (int) packet.size());
+        //printf("Packet of sisdfze %d sent!\n", (int) packet.size());
     }
 }
 
