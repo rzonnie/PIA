@@ -13,6 +13,8 @@ INCLUDEPATH += . examples include
 LIBS += \
     -lboost_program_options\
     -lboost_serialization
+CONFIG += c++11
+
 
 # Input
 HEADERS += \
