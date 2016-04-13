@@ -81,7 +81,7 @@ std::vector<PIA> QueueController::packetCreator(uint32_t destinationIP, uint32_t
 }
 
 void QueueController::sendData(PIA &packet) {
-
+	sendQueue.pushBack(packet,false);
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {

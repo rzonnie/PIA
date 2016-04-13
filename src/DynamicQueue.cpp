@@ -21,7 +21,11 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
     pthread_mutex_lock(&mutex_queue);
 
     // Check whether it is an ack or nta packet with high priority
-    if (packet.isAck() || packet.isNta()) {
+    // Or it needs to be forwarded
+    if (packet.isAck() || packet.isNta()
+    		|| (packet.getSourceAddress() != settings.getLocalIP()
+    			&& packet.getDestinationAddress() != settings.getLocalIP())
+			) {
         if (priorityQueue.count(packet.getAcknowledgementNumber()) < 1) {
             priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
             priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
