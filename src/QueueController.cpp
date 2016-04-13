@@ -20,7 +20,7 @@ void QueueController::run() {
                 if (packet.isNta()) {
                     ntaProcessor(packet);
                 }//Check for ACK
-                else if (receivingQueue->size_default() > 0) {
+                else if (receivingQueue->size_default() > 0 || receivingQueue->size_ack() > 0) {
                     //It is probably a data packet
 
                     //Multihop
@@ -38,7 +38,7 @@ void QueueController::run() {
                     	if (!packet.isAck()){
                     		receivingQueue->removeDefaultPacket(packet);
                     	}
-                    	std::cout<<":forwarded a packet:\n";
+                        std::cout<<"forwarded a packet:\n";
                         sendQueue->forwardPacket(packet, true);
                     }
                 }
