@@ -103,7 +103,7 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color : #FFFFFF</string>
+        <string notr="true">background-color : #6ecfde</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>
