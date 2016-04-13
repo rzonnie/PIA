@@ -9,7 +9,7 @@
 #include <QComboBox>
 #include <QScrollBar>
 
-#include "ui_mainwindow.h"
+#include "../ui_mainwindow.h"
 #include "../include/ChatHistory.h"
 
 namespace Ui {
