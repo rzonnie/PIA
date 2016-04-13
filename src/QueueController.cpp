@@ -2,6 +2,8 @@
 
 QueueController::QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable)
 : ThreadRunner(settings), sendQueue(sendQueue), receivingQueue(receivingQueue), routingTable(routingTable) {
+    //MaxQueueSize = MQZ;
+    //MaxPacketLength = MPL;
 }
 
 QueueController::~QueueController() {
@@ -11,7 +13,6 @@ void QueueController::run() {
     int cnt = 0;
     while (true) {
         try {
-
             if (receivingQueue->size_ack() > 0 || receivingQueue->size_default() > 0) {
                 PIA packet = receivingQueue->retrievePacket();
 
@@ -20,21 +21,15 @@ void QueueController::run() {
                     ntaProcessor(packet);
                 }//Check for ACK
                 else if (packet.isAck()) {
-                    ackProcessor(packet);
+                    ackChecker(packet);
                 } else if (receivingQueue->size_default() > 0) {
                     //It is probably a data packet
 
-                    //Multihop
-                    if (packet.getDestinationAddress() == settings->getLocalIP()) {
-                        //1. Interpret it
-                        defaultProcessor(packet);
-                        //2. Send an ACK
-                        sendAck(packet);
-                    }//retransmit it to the next node
-                    else {
-                        //receivingQueue->removeDefaultPacket(packet);
-                        sendQueue->push_back(packet, true);
-                    }
+                    //1. Interpret it
+                    defaultProcessor(packet);
+
+                    //2. Send an ACK
+                    sendAck(packet);
                 }
             }
         } catch (exception &e) {
@@ -49,7 +44,7 @@ void QueueController::run() {
         cnt++;
         usleep(50);
     }
-
+	
 }
 
 std::vector<std::string> QueueController::packetSplitter(std::string chatpayload) {
@@ -74,22 +69,24 @@ std::vector<PIA> QueueController::packetCreator(uint32_t destinationIP, uint32_t
     std::vector<PIA> PIAPackets;
     int i;
     for (i = 0; i <= result.size(); i++) {
-        PIA newPIAPacket(settings->getLocalIP(), destinationIP, SequenceNumber + i, AckNumber, false, false, result[i]);
+        PIA newPIAPacket(settings->getLocalIP(), destinationIP, SequenceNumber+i, AckNumber, ACK, false, result[i]);
         PIAPackets.push_back(newPIAPacket);
     }
     return PIAPackets;
 }
 
 void QueueController::sendData(PIA &packet) {
-
+	//Sends the actual packet to the controller. Packets that are acks
+	bool canIGo = false	
+	sendQueue->push_back(packet, canIGo);
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {
-    //SeqNumber 1 high than previous or not
+	return rand() % RAND_MAX;
 }
 
 void QueueController::sendAck(PIA &packet) {
-	std::cout<<"Send ACK\n";
+
     PIA ackPacket(settings->getLocalIP(), //IPaddr
             packet.getSourceAddress(), //IPaddr
             0, //sequencenr
@@ -99,6 +96,17 @@ void QueueController::sendAck(PIA &packet) {
             "hi" //payload
             );
     sendQueue->push_back(ackPacket, true);
+
+void QueueController::makeAck(PIA &packet) {
+	//This method creates an ack packet after getting a packet from the receiving queue
+	packetCreator(packet.getSourceAddress(), //Destination
+		sequenceNumberGenerator, //Seq Number
+		packet.getSequenceNumber() + 1 //Ack Number
+		true, //Ack
+		false, //NTA
+		"" //Payload
+		);
+            /*sendQueue->push_back(ackPacket, true);*/
 }
 
 void QueueController::ntaProcessor(PIA &packet) {
@@ -122,8 +130,9 @@ void QueueController::ntaProcessor(PIA &packet) {
     //std::cout << temp.getMyIdentifier() << std::endl;
 }
 
-void QueueController::ackProcessor(PIA &packet) {
+void QueueController::ackChecker(PIA &packet) {
     //all seq numbers before the sequence numbers need to be deleted from the queue
+    
     uint32_t ackNumber = packet.getAcknowledgementNumber();
     //remove the entry from sending queue, because it is successfully received
     sendQueue->defaultQueueAck(ackNumber);

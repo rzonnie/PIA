@@ -7,6 +7,7 @@
 #include "PIA.h"
 #include "functions.h"
 
+#include <stdlib.h>
 #include <sstream>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
@@ -20,7 +21,8 @@ public:
     std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result);
     std::vector<std::string> packetSplitter(std::string chatpayload);
     void sendData(PIA &packet);
-    void discardPacket();
+    void makeAck(PIA &packet);
+    uint32_t sequenceNumberGenerator();
     void run() override;
 
 private:

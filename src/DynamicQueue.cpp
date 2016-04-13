@@ -27,13 +27,13 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
             priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
             //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
         }
-    } else if (packet.getDestinationAddress() > 0) {
-        if (defaultQueue.count(packet.getSequenceNumber()) < 1) {
-            defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), packet));
-            defaultQueuedElements.push_back(std::make_pair(packet.getSequenceNumber(), sendState));
-            //std::cout << "Added a packet! " << "Size: " << defaultQueue.size() << std::endl;
-        }
-    }
+    }  else if (packet.getDestinationAddress() > 0) {
+		if (defaultQueue.count(packet.getSequenceNumber()) < 1) {
+			defaultQueue.insert(std::make_pair(packet.getSequenceNumber(), packet));
+			defaultQueuedElements.push_back(std::make_pair(packet.getSequenceNumber(), sendState));
+                //std::cout << "Added a packet! " << "Size: " << defaultQueue.size() << std::endl;
+		}
+	}
 
     //std::cout << "push_back: unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
