@@ -19,26 +19,38 @@ void QueueController::run() {
                 //Check for NTA
                 if (packet.isNta()) {
                     ntaProcessor(packet);
-                }//Check for ACK
-                else if (receivingQueue->size_default() > 0) {
+                }
+                //check for ACK
+                else if (packet.isAck() && (packet.getDestinationAddress() == settings->getLocalIP())){
+                    std::cout<< "ack incoming\n";
+                    ackProcessor(packet);
+                }
+                else if (packet.isAck() && (packet.getDestinationAddress() != settings->getLocalIP())){
+                    sendQueue->forwardPacket(packet, true);
+                    std::cout<<"Forwarding an ACK\n";
+                }
+                else if (receivingQueue->size_default() > 0 || receivingQueue->size_ack() > 0) {
                     //It is probably a data packet
 
                     //Multihop
                     if (packet.getDestinationAddress() == settings->getLocalIP()) {
                         //1. Interpret it
+
                         if (packet.isAck()) {
+
                             ackProcessor(packet);
                         }else{
                         	defaultProcessor(packet);
                         	//2. Send an ACK
                         	sendAck(packet);
+                            std::cout<<"Send an ACK\n";
                         }
                     }//retransmit it to the next node
                     else {
                     	if (!packet.isAck()){
                     		receivingQueue->removeDefaultPacket(packet);
                     	}
-                    	std::cout<<":forwarded a packet:\n";
+                        std::cout<<"forwarded a packet:\n";
                         sendQueue->forwardPacket(packet, true);
                     }
                 }
