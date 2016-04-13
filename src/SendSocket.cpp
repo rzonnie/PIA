@@ -48,7 +48,7 @@ void SendSocket::run() {
         PIA packet = queue->retrievePacket();
         //std::cout << "Help: " << queue->getTime() - queue->getTimestamp(packet.getSequenceNumber()) << std::endl;
         if (packet.getDestinationAddress() > 0 && queue->getTime() - queue->getTimestamp(packet.getSequenceNumber()) > 10) {
-            std::cout << "Sending packet" << std::endl;
+            //std::cout << "Sending packet" << std::endl;
             sendPacket(packet);
             queue->updateTimestamp(packet.getSequenceNumber(), 2000);
         }

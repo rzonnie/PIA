@@ -50,51 +50,54 @@ void QueueController::run() {
         cnt++;
         usleep(50);
     }
-	
+
 }
 
 void QueueController::sendData(std::string chatpayload, uint32_t destinationIP) {
     //Split the input into multiple strings
-	// Create result and temp vectors/strings. Push contents of chatpayload in temp and pushback temp onto result whenever size of temp is MTU.
+    // Create result and temp vectors/strings. Push contents of chatpayload in temp and pushback temp onto result whenever size of temp is MTU.
     std::vector<std::string> result;
     std::string temp;
-    unsigned int iterator = 0;
-    while (iterator < chatpayload.size()) {
-        if (temp.size() == settings->getMTU()) {
+    unsigned int index = 0;
+    while (index < strlen(chatpayload.c_str())) {
+        // subtract the header size of 20 bytes
+        if (temp.size() == settings->getMTU() - 20) {
             result.push_back(temp);
             temp = "";
         }
-        temp = temp + chatpayload[iterator];
+        temp = temp + chatpayload[index];
+        index++;
     }
+    
     //Also send the last few bits of data from chatpayload
     result.push_back(temp);
 
     //Create packets from the strings
     std::vector<PIA> PIAPackets;
     int i;
-    for (i = 0; i <= result.size(); i++) {
+    for (i = 0; i < result.size(); i++) {
         PIA newPIAPacket(settings->getLocalIP(), destinationIP, 100 + i, 0, false, false, result[i]);
-        PIAPackets.push_back(newPIAPacket);
+        PIAPackets.insert(PIAPackets.begin(), newPIAPacket);
     }
     //send the packets
     sendPackets(PIAPackets);
 
-    std::cout<<"created "<<result.size()<<"packets\n";
+    std::cout << "created " << result.size() << " packets\n";
 }
 
 void QueueController::sendPackets(std::vector<PIA> &packets) {
 
-	//Add all the packets to the queue
-	for(auto packet : packets){
-		sendQueue->push_back(packet,false);
-	}
+    //Add all the packets to the queue
+    for (auto packet : packets) {
+        sendQueue->push_back(packet, true);
+    }
 
-	//Set the first item in the send queue to true.
-	sendQueue->setDefaultQueuedElements(0,true);
+    //Set the first item in the send queue to true.
+    //sendQueue->setDefaultQueuedElements(0, true);
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {
-	return rand() % RAND_MAX;
+    return rand() % RAND_MAX;
 }
 
 void QueueController::sendAck(PIA &packet) {
@@ -132,13 +135,13 @@ void QueueController::ntaProcessor(PIA &packet) {
 
 void QueueController::ackProcessor(PIA &packet) {
     //all seq numbers before the sequence numbers need to be deleted from the queue
-    
+
     uint32_t ackNumber = packet.getAcknowledgementNumber();
     //remove the entry from sending queue, because it is successfully received
     sendQueue->defaultQueueAck(ackNumber);
 
-	//Set the first item in the send queue to true.
-	sendQueue->setDefaultQueuedElements(0,true);
+    //Set the first item in the send queue to true.
+    sendQueue->setDefaultQueuedElements(0, true);
 }
 
 void QueueController::defaultProcessor(PIA& packet) {

@@ -63,7 +63,6 @@ PIA DynamicQueue::retrievePacket() {
         packet = priorityQueue[priorityQueuedElements[0]];
         priorityQueue.erase(priorityQueuedElements[0]);
         priorityQueuedElements.erase(priorityQueuedElements.begin());
-        std::cout << "Removed from queue" << size_default() << std::endl;
     } else if (defaultQueuedElements.size() > 0) {
         for (auto element : defaultQueuedElements) {
             if (element.second) {
@@ -143,7 +142,7 @@ std::vector<std::pair<uint32_t, bool> >* DynamicQueue::getDefaultQueuedElements(
     return &defaultQueuedElements;
 }
 void DynamicQueue::setDefaultQueuedElements(uint item, bool state) {
-	defaultQueuedElements[item].first=state;
+	defaultQueuedElements[item].second=state;
 }
 
 void DynamicQueue::printDefaultQueue() const {
