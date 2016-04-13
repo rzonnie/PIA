@@ -1,20 +1,13 @@
-//#include <QApplication>
-#include <arpa/inet.h>
-
 #include "../include/main.h"
-#include "../include/SendSocket.h"
-#include "../include/DynamicQueue.h"
-#include "../include/mainwindow.h"
-#include "../include/Settings.h"
-#include "../include/guicontroller.h"
 
 Settings settings;
 
 int main(int argc, char *argv[])
 {
     GUIController myController(argc, argv);
+    std::thread GUI(&GUIController::startGui, myController);
+    GUI.detach();
     // Create a namespace alias
-    std::cout << "Je moeder" << std::endl;
     namespace po = boost::program_options;
 
     po::options_description desc("Allowed PIA Options");
@@ -39,6 +32,7 @@ int main(int argc, char *argv[])
         std::cout << desc << "\n";
     } else if (vm.count("port") && vm.count("port") && vm.count("ip") && vm.count("username")) {
         // Now all mandatory flags have been set
+        std::cout << "asadfasdf" << std::endl;
         settings = Settings(vm["username"].as<std::string>(), vm["port"].as<int>(), vm["ip"].as<std::string>(), vm["mgroup"].as<std::string>());
         PIAEngine engine(&settings);
         engine.run();

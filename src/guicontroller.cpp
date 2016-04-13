@@ -2,13 +2,13 @@
 
 
 GUIController::GUIController(int argc, char *argv[])
+    : argc(argc), argv(argv)
 {
-	startGui(argc, argv);
+    //startGui(argc, argv);
 }
 
-void GUIController::startGui(int argc, char *argv[])
+void GUIController::startGui()
 {
-    std::cout << "startingGUI" << std::endl;
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
