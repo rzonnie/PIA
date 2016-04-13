@@ -60,6 +60,27 @@ public:
      * Erase a packet from the send queue because it is acknowledged.
      */
     void defaultQueueAck(uint32_t sequence);
+    
+    /**
+     * Update the timestamp of a packet in the queue
+     * @param uint32_t sequenceNumber
+     * @param uint8_t timeout
+     */
+    void updateTimestamp(uint32_t sequenceNumber, uint32_t timeout);
+    
+    /**
+     * Get the timestamp of a specific element in the queue
+     * @param uint32_t sequenceNumber
+     * @return uint32_t timestamp
+     */
+    double getTimestamp(uint32_t sequenceNumber);
+    
+    /**
+     * Get the amount of time in milliseconds since the epoch
+     * @return double
+     */
+    static double getTime();
+    
     void removeDefaultPacket(PIA &packet);
     void printDefaultQueue() const;
 private:

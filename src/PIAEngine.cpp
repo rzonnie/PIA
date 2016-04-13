@@ -40,7 +40,7 @@ void PIAEngine::run() {
     while (!quit) {
         //gui.commandsListener();
         //quit = !gui.getAlive();
-        //sendQueue.push_back(defaultPacket, 1);
+        //sendQueue.printDefaultQueue();
         std::cout << "PiaEngine Queue size: " << sendQueue.size_default() << std::endl;
         //sendQueue.printDefaultQueue();
         sleep(1);

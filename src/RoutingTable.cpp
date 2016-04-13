@@ -123,6 +123,6 @@ uint32_t RoutingTable::getNextHop(uint32_t destinationAddress) {
             return element.via;
         }
     }
-    //std::cout << "ERROR: NEXT HOP NOT FOUND" << std::endl;
+    std::cout << "ERROR: NEXT HOP NOT FOUND" << std::endl;
     return 0;
 }

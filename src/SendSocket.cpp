@@ -46,8 +46,12 @@ void SendSocket::run() {
     while (true) {
         usleep(50);
         PIA packet = queue->retrievePacket();
-        if (packet.getDestinationAddress() > 0)
+        //std::cout << "Help: " << queue->getTime() - queue->getTimestamp(packet.getSequenceNumber()) << std::endl;
+        if (packet.getDestinationAddress() > 0 && queue->getTime() - queue->getTimestamp(packet.getSequenceNumber()) > 10) {
+            std::cout << "Sending packet" << std::endl;
             sendPacket(packet);
+            queue->updateTimestamp(packet.getSequenceNumber(), 2000);
+        }
     }
 }
 
@@ -68,11 +72,6 @@ bool SendSocket::sendPacket(PIA &packet) {
     } else {
         //next hop
         multicastSender.sin_addr.s_addr = routingTable->getNextHop(packet.getDestinationAddress());
-        
-        if (routingTable->getNextHop(packet.getDestinationAddress()) == 0) {
-            //std::cout << "ERRORS NO DESTINATION FOUND!" << std::endl;
-            return false;
-        }
     }
 
     // Create a buffer for the packet
@@ -82,9 +81,12 @@ bool SendSocket::sendPacket(PIA &packet) {
     packet.getData(buffer);
     if (multicastSender.sin_addr.s_addr > 0) {
         // send the actual packet
-        if (sendto(sockID, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) //sent a UDP packet containing our example data
+        if (sendto(sockID, buffer, packet.size(), 0, (struct sockaddr*) &multicastSender, sizeof (struct sockaddr_in)) < 0) { //sent a UDP packet containing our example data
             perror("Sendto failed");
-        //printf("Packet of sisdfze %d sent!\n", (int) packet.size());
+            return false;
+        }
+        return true;
     }
+    return false;
 }
 
