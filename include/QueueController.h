@@ -17,15 +17,21 @@ public:
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
-    std::vector<PIA> packetCreator(uint32_t destinationIP, uint32_t SequenceNumber, uint32_t AckNumber, bool ACK, bool NTA, std::vector<std::string> result);
-    std::vector<std::string> packetSplitter(std::string chatpayload);
-    void sendData(PIA &packet);
+    //Add some payload to the sending queue
+    void sendData(std::string chatpayload, uint32_t destinationIP);
+
     void discardPacket();
     
     void setTimestamp();
     void run() override;
 
 private:
+    /**
+     * Send packets from the vector and sets the first entry in the sending queue
+     * to true (ready to send).
+     */
+    void sendPackets(std::vector<PIA> &packets);
+
     /**
      * If the received packet is an announcement, execute this code to update the 
      * routing table

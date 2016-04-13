@@ -22,16 +22,15 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
 
     // Check whether it is an ack or nta packet with high priority
     // Or it needs to be forwarded
-    if (packet.isAck() || packet.isNta()
-    		|| (packet.getSourceAddress() != settings.getLocalIP()
-    			&& packet.getDestinationAddress() != settings.getLocalIP())
-			) {
+
+    if (packet.isAck() || packet.isNta()) {
         if (priorityQueue.count(packet.getAcknowledgementNumber()) < 1) {
             priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
             priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
             //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
         }
-    } else if (packet.getDestinationAddress() > 0) {
+    }
+    else if (packet.getDestinationAddress() > 0) {
         if (defaultQueue.count(packet.getSequenceNumber()) < 1) {
 
             auto now = std::chrono::steady_clock::now().time_since_epoch();
@@ -46,6 +45,12 @@ void DynamicQueue::push_back(PIA &packet, bool sendState) {
 
     //std::cout << "push_back: unlocking mutex" << std::endl;
     pthread_mutex_unlock(&mutex_queue);
+}
+
+void DynamicQueue::forwardPacket(PIA &packet, bool sendState) {
+    priorityQueue.insert(std::make_pair(packet.getAcknowledgementNumber(), packet));
+    priorityQueuedElements.push_back(packet.getAcknowledgementNumber());
+    //std::cout << "Added a packet! " << "Size: " << ackQueue.size() << std::endl;
 }
 
 PIA DynamicQueue::retrievePacket() {
@@ -116,6 +121,9 @@ std::vector<uint32_t>* DynamicQueue::getAckQueuedElements() {
 
 std::vector<std::pair<uint32_t, bool> >* DynamicQueue::getDefaultQueuedElements() {
     return &defaultQueuedElements;
+}
+void DynamicQueue::setDefaultQueuedElements(uint item, bool state) {
+	defaultQueuedElements[item].first=state;
 }
 
 void DynamicQueue::printDefaultQueue() const {
