@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 {
     GUIController myController(argc, argv);
     // Create a namespace alias
+    std::cout << "Je moeder" << std::endl;
     namespace po = boost::program_options;
 
     po::options_description desc("Allowed PIA Options");
