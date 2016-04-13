@@ -3,6 +3,14 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <string>
+#include <iostream>
+#include <stdio.h>
+#include <QComboBox>
+#include <QScrollBar>
+
+#include "ui_mainwindow.h"
+#include "../include/ChatHistory.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,21 +28,22 @@ public:
 	void setNewCurrentUser(int set);
 	bool getNewMessage();
 	int getNewCurrentUser();
-    void toDisplay(QString QStringIn);
+    QString getNewestMessage();
+    void toDisplay();
+    void addNewUser(QString newUser);
+    void removeUser(int index);
 
 private slots:
-    void on_lineEdit_returnPressed();
 
     void on_comboBox_currentIndexChanged(const QString &arg1);
 
-    void on_TextMessage_returnPressed();
-
-    void addNewUser(const QString newUser);
+    void on_lineEdit_returnPressed();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow ui;
     bool newMessage;
     int newCurrentUser;
+    ChatHistory myChatHistory;
     
     QString newestMessage;
 };

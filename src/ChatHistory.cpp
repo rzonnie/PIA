@@ -1,17 +1,17 @@
-#ifndef CHATHISTORY_H
-#define CHATHISTORY_H
 #include "../include/ChatHistory.h"
 
 ChatHistory::ChatHistory()
 {
-    //const
+	
 }
 
-void ChatHistory::AddToHistory(int time, QString message, int ID)
+void ChatHistory::AddToHistory(QString sentBy, QString message, int ID)
 {
 	ChatMessage newMessage;
-	newMessage.time = time;
+    newMessage.user = sentBy;
 	newMessage.message = message;
+    std::cout << "ID: " << ID << std::endl << "Number of users with a history: " << MessagesAndTimes.size() << std::endl;
+    std::cout << "number of messages in this history: " << MessagesAndTimes[ID].size() << std::endl;
     MessagesAndTimes[ID].push_back(newMessage);
 }
 
@@ -20,4 +20,3 @@ std::vector<ChatMessage> ChatHistory::getChatHistory(int ID)
 	return MessagesAndTimes[ID];
 }
 
-#endif // CHATHISTORY_H

@@ -1,7 +1,9 @@
 #ifndef CHATMESSAGE_H
 #define CHATMESSAGE_H
+#include <string>
+
 struct ChatMessage {
-    int time;
+    QString user;
     QString message;
 };
 
