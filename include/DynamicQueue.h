@@ -97,6 +97,8 @@ public:
     static double getTime();
     
     void removeDefaultPacket(PIA &packet);
+    void removeDestination(uint32_t IP);
+
     void printDefaultQueue() const;
 private:
     /**

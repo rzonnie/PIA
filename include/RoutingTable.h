@@ -52,7 +52,7 @@ public:
     RoutingTable(Settings* settings, uint32_t ID);
     vector<RoutingTableStruct>* getRoutingTable();
     RoutingTableStruct makeStruct(uint32_t to, uint32_t via, int16_t distance);
-    void tagFallouts();
+    std::vector<uint32_t> tagFallouts();
     
     void addRoutingTableStruct(RoutingTableStruct Entry);
     void setMyIdentifier(int ID);

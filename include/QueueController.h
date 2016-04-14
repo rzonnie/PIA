@@ -69,7 +69,7 @@ private:
      * @param packet PIA a normal data packet
      */
     void defaultProcessor(PIA &packet);
-    
+
     ChatHistory* chatHistory;
     DynamicQueue* sendQueue;
     DynamicQueue* receivingQueue;

@@ -87,7 +87,8 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
     }
 }
 
-void RoutingTable::tagFallouts() {
+std::vector<uint32_t> RoutingTable::tagFallouts() {
+    std::vector<uint32_t> fallOuts = {};
     std::chrono::time_point<std::chrono::system_clock> now;
     now = std::chrono::system_clock::now();
 
@@ -98,7 +99,7 @@ void RoutingTable::tagFallouts() {
         if (routingTable[i].to != myIdentifier) {
             pthread_mutex_lock(&mutex_queue);
             if (timeElapsed.count() > 7 && routingTable[i].distance == -1) {
-                //auto it = std::find(routingTable.begin(), routingTable.end(), element);
+                fallOuts.push_back(routingTable[i].to);
                 routingTable.erase(routingTable.begin() + i);
                 std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
             } else if (timeElapsed.count() > 4) {
@@ -108,6 +109,8 @@ void RoutingTable::tagFallouts() {
             pthread_mutex_unlock(&mutex_queue);
         }
     }
+
+    return fallOuts;
 }
 
 void RoutingTable::printRoutingTable() const {

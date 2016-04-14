@@ -10,6 +10,7 @@ QueueController::~QueueController() {
 
 void QueueController::run() {
     int cnt = 0;
+    std::vector<uint32_t> fallOuts = {};
     while (true) {
         try {
             if (receivingQueue->size_ack() > 0 || receivingQueue->size_default() > 0) {
@@ -54,8 +55,14 @@ void QueueController::run() {
         }
 
         if (cnt > 25000) {
-            routingTable->tagFallouts();
-            routingTable->printRoutingTable();
+            fallOuts = routingTable->tagFallouts();
+            for (size_t i = 0; i < fallOuts.size(); i++) {
+                sendQueue->removeDestination(fallOuts[i]);
+                std::cout << "Removing packets destined to: " << printIP(fallOuts[i]) << std::endl;
+                fallOuts.erase(fallOuts.begin() + i);
+            }
+            sendQueue->printDefaultQueue();
+            //routingTable->printRoutingTable();
             cnt = 0;
         }
         cnt++;
@@ -156,6 +163,6 @@ void QueueController::ackProcessor(PIA &packet) {
 }
 
 void QueueController::defaultProcessor(PIA& packet) {
-    packet.printPacket(true);
+    //packet.printPacket(true);
     receivingQueue->removeDefaultPacket(packet);
 }

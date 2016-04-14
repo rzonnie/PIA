@@ -109,6 +109,15 @@ void DynamicQueue::removeDefaultPacket(PIA& packet) {
     pthread_mutex_unlock(&mutex_queue);
 }
 
+void DynamicQueue::removeDestination(uint32_t IP) {
+    for (auto element : defaultQueue) {
+        if (element.second.second.getDestinationAddress() == IP) {
+            std::cout << "This packet should be removed" << std::endl;
+            defaultQueueAck(element.second.second.getSequenceNumber() + 1);
+        }
+    }
+}
+
 void DynamicQueue::updateTimestamp(uint32_t sequenceNumber, uint32_t timeout) {
     pthread_mutex_lock(&mutex_queue);
     if (defaultQueue.size() > 0 && defaultQueue.find(sequenceNumber) != defaultQueue.end()) {
