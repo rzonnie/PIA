@@ -37,7 +37,7 @@ void QueueController::run() {
 
                             //GroupChat
                             if(packet.isGroup()){
-                                chatHistory->AddToHistory(QString::fromStdString("1.1.1.1"), QString::fromStdString(packet.getPayload()), QString::fromStdString("1.1.1.1"));
+                                chatHistory->AddToHistory(QString::fromStdString(printIP(packet.getSourceAddress())), QString::fromStdString(packet.getPayload()), QString::fromStdString("1.1.1.1"));
                             }else{
                                chatHistory->AddToHistory(QString::fromStdString(printIP(packet.getSourceAddress())), QString::fromStdString(packet.getPayload()), QString::fromStdString(printIP(packet.getSourceAddress())));
                             }
