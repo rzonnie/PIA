@@ -57,21 +57,23 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
         {
             for (auto j : routingTable) //Loop over all routing table entries to consider if you have the destination already
             {
-                if (j.to == i.to && j.to != settings->getLocalIP()) //Check if the destination is already in your list
+                if (j.to == i.to) //Check if the destination is already in your list
                 {
-                    if (i.distance == -1 && j.distance != -1) {
-                        pthread_mutex_lock(&mutex_queue);
-                        routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                        RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
-                        pthread_mutex_unlock(&mutex_queue);
-                        addRoutingTableStruct(temp);
-                    } else if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
-                    {
-                        pthread_mutex_lock(&mutex_queue);
-                        routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                        RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1);
-                        pthread_mutex_unlock(&mutex_queue);
-                        addRoutingTableStruct(temp);
+                    if (j.to != settings->getLocalIP()) {
+                        if (i.distance == -1 && j.distance != -1) {
+                            pthread_mutex_lock(&mutex_queue);
+                            routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
+                            RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
+                            pthread_mutex_unlock(&mutex_queue);
+                            addRoutingTableStruct(temp);
+                        } else if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
+                        {
+                            pthread_mutex_lock(&mutex_queue);
+                            routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
+                            RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1);
+                            pthread_mutex_unlock(&mutex_queue);
+                            addRoutingTableStruct(temp);
+                        }
                     }
                     newElement = false;
                 }
