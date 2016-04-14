@@ -57,7 +57,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
         {
             for (auto j : routingTable) //Loop over all routing table entries to consider if you have the destination already
             {
-                if (j.to == i.to) //Check if the destination is already in your list
+                if (j.to == i.to && j.to != settings->getLocalIP()) //Check if the destination is already in your list
                 {
                     if (i.distance == -1 && j.distance != -1) {
                         pthread_mutex_lock(&mutex_queue);
