@@ -8,6 +8,7 @@ MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTa
     newCurrentUser = "";
     ui.setupUi(this);
     newMessage = false;
+    startTimer();
    
 }
 
@@ -102,4 +103,17 @@ void MainWindow::on_pushButton_clicked()
         if (element != settings->getLocalIP())
             addNewUser(qstr);
     }
+}
+
+void MainWindow::startTimer() {
+    // timer in milliseconds
+    #if QT_VERSION>=QT_VERSION_CHECK(5,0,0)
+        timer.start(200, Qt::CoarseTimer, this);
+    #else
+        timer.start(200, this);
+    #endif
+}
+
+void MainWindow::timerEvent(QTimerEvent * ev) {
+    toDisplay();
 }
