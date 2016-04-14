@@ -65,6 +65,17 @@ void PIA::setAck(bool ack) {
         flagsAndHeader &= ~(1 << 30);
 }
 
+void PIA::setGroup(bool group) {
+    if (group)
+        flagsAndHeader |= (1 << 29);
+    else
+        flagsAndHeader &= ~(1 << 29);
+}
+
+bool PIA::isGroup() const {
+    return (flagsAndHeader >> 29 & 1);
+}
+
 bool PIA::isAck() const {
     return (flagsAndHeader >> 30 & 1);
 }

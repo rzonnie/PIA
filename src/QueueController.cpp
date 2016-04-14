@@ -107,9 +107,26 @@ void QueueController::sendPackets(std::vector<PIA> &packets) {
 
     //Add all the packets to the queue
     for (auto packet : packets) {
-        sendQueue->push_back(packet, false);
+        //Multicast the packet if it is a group
+        if(packet.getDestinationAddress()==inet_addr("1.1.1.1")){
+            packet.setGroup(true);
+            if(routingTable->getHosts().size()==0){
+                std::cout<<"Nobody in group chat. :(\n";
+            }
+            else{
+                std::cout<<"Send to group!\n";
+                for(auto host : routingTable->getHosts()){
+                    std::cout<<" *"<<printIP(host)<<std::endl;
+                    packet.setDestinationAddress(host);
+                    sendQueue->push_back(packet, false);
+                }
+            }
+        }
+        //Single destination
+        else{
+             sendQueue->push_back(packet, false);
+        }
     }
-
     //Set the first item in the send queue to true.
     sendQueue->setDefaultQueuedElements(0, true);
 }

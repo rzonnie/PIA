@@ -43,6 +43,8 @@ public:
     bool isAck() const;
     void setNta(bool nta);
     bool isNta() const;
+    void setGroup(bool group);
+    bool isGroup() const;
 
     void printPacket(bool format);
     size_t size() const;
