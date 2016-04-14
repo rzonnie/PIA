@@ -51,7 +51,7 @@ public:
     RoutingTable();
     RoutingTable(Settings* settings, uint32_t ID);
     vector<RoutingTableStruct>* getRoutingTable();
-    RoutingTableStruct makeStruct(uint32_t to, uint32_t via, uint8_t distance);
+    RoutingTableStruct makeStruct(uint32_t to, uint32_t via, int16_t distance);
     void tagFallouts();
     
     void addRoutingTableStruct(RoutingTableStruct Entry);

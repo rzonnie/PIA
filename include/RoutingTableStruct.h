@@ -8,7 +8,7 @@
 struct RoutingTableStruct
 {
     uint32_t to;
-    uint8_t distance;
+    int16_t distance;
     uint32_t via;
     std::chrono::time_point<std::chrono::system_clock> stamp; // timestamp
 };

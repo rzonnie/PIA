@@ -9,7 +9,7 @@ RoutingTable::RoutingTable() {
 RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
 : settings(settings), myIdentifier(ID) {
     uint32_t to = ID;
-    uint8_t distance = 0;
+    int16_t distance = 0;
     uint32_t via = ID;
     addRoutingTableStruct(makeStruct(to, via, distance));
 }
@@ -38,7 +38,7 @@ int RoutingTable::getMyIdentifier() const {
     return myIdentifier;
 }
 
-RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, uint8_t distance) {
+RoutingTableStruct RoutingTable::makeStruct(uint32_t to, uint32_t via, int16_t distance) {
     RoutingTableStruct NewEntry;
     NewEntry.to = to;
     NewEntry.via = via;
@@ -59,7 +59,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             {
                 if (j.to == i.to) //Check if the destination is already in your list
                 {
-                    if (i.distance == 0) {
+                    if (i.distance == -1) {
                         pthread_mutex_lock(&mutex_queue);
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
                         RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
@@ -97,13 +97,13 @@ void RoutingTable::tagFallouts() {
         // When was the last update?
         if (routingTable[i].to != myIdentifier) {
             pthread_mutex_lock(&mutex_queue);
-            if (timeElapsed.count() > 7 && routingTable[i].distance == 0) {
+            if (timeElapsed.count() > 7 && routingTable[i].distance == -1) {
                 //auto it = std::find(routingTable.begin(), routingTable.end(), element);
                 routingTable.erase(routingTable.begin() + i);
                 std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
             } else if (timeElapsed.count() > 4) {
                 //std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
-                routingTable[i].distance = 0;
+                routingTable[i].distance = -1;
             }
             pthread_mutex_unlock(&mutex_queue);
         }
