@@ -122,12 +122,16 @@ void QueueController::sendPackets(std::vector<PIA> &packets) {
             }
             else{
                 std::cout<<"Send to group!\n";
+                size_t i = 0;
                 for(auto host : routingTable->getHosts()){
+                    std::cout << "Sending to: " << printIP(host) << std::endl;
                     if(host!=settings->getLocalIP()){
                         std::cout<<" *"<<printIP(host)<<std::endl;
+                        packet.setSequenceNumber(i + packet.getSequenceNumber());
                         packet.setDestinationAddress(host);
-                        sendQueue->push_back(packet, false);
+                        sendQueue->push_back(packet, true);
                     }
+                    i++;
                 }
             }
         }

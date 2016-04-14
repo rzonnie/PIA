@@ -100,11 +100,11 @@ std::vector<uint32_t> RoutingTable::tagFallouts() {
         // When was the last update?
         if (routingTable[i].to != myIdentifier) {
             pthread_mutex_lock(&mutex_queue);
-            if (timeElapsed.count() > 7 && routingTable[i].distance == -1) {
+            if (timeElapsed.count() > 3 && routingTable[i].distance == -1) {
                 fallOuts.push_back(routingTable[i].to);
                 routingTable.erase(routingTable.begin() + i);
                 std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
-            } else if (timeElapsed.count() > 4) {
+            } else if (timeElapsed.count() > 2) {
                 //std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
                 routingTable[i].distance = -1;
             }
