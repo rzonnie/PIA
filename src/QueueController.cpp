@@ -34,7 +34,13 @@ void QueueController::run() {
                         	defaultProcessor(packet);
 
                             std::cout << "The Other user says: " << packet.getPayload() << std::endl;
-                            chatHistory->AddToHistory(QString::fromStdString(printIP(packet.getSourceAddress())), QString::fromStdString(packet.getPayload()), QString::fromStdString(printIP(packet.getSourceAddress())));
+
+                            //GroupChat
+                            if(packet.isGroup()){
+                                chatHistory->AddToHistory(QString::fromStdString("1.1.1.1"), QString::fromStdString(packet.getPayload()), QString::fromStdString("1.1.1.1"));
+                            }else{
+                               chatHistory->AddToHistory(QString::fromStdString(printIP(packet.getSourceAddress())), QString::fromStdString(packet.getPayload()), QString::fromStdString(printIP(packet.getSourceAddress())));
+                            }
 
                             //2end an ACK
                         	sendAck(packet);
@@ -97,10 +103,11 @@ void QueueController::sendData(std::string chatpayload, uint32_t destinationIP) 
         PIA newPIAPacket(settings->getLocalIP(), destinationIP, 100 + i, 0, false, false, result[i]);
         PIAPackets.push_back(newPIAPacket);
     }
-    //send the packets
-    sendPackets(PIAPackets);
 
     std::cout << "created " << result.size() << " packets\n";
+
+    //send the packets
+    sendPackets(PIAPackets);
 }
 
 void QueueController::sendPackets(std::vector<PIA> &packets) {
@@ -110,15 +117,17 @@ void QueueController::sendPackets(std::vector<PIA> &packets) {
         //Multicast the packet if it is a group
         if(packet.getDestinationAddress()==inet_addr("1.1.1.1")){
             packet.setGroup(true);
-            if(routingTable->getHosts().size()==0){
+            if(routingTable->getHosts().size()<=1){
                 std::cout<<"Nobody in group chat. :(\n";
             }
             else{
                 std::cout<<"Send to group!\n";
                 for(auto host : routingTable->getHosts()){
-                    std::cout<<" *"<<printIP(host)<<std::endl;
-                    packet.setDestinationAddress(host);
-                    sendQueue->push_back(packet, false);
+                    if(host!=settings->getLocalIP()){
+                        std::cout<<" *"<<printIP(host)<<std::endl;
+                        packet.setDestinationAddress(host);
+                        sendQueue->push_back(packet, false);
+                    }
                 }
             }
         }
@@ -127,8 +136,10 @@ void QueueController::sendPackets(std::vector<PIA> &packets) {
              sendQueue->push_back(packet, false);
         }
     }
-    //Set the first item in the send queue to true.
-    sendQueue->setDefaultQueuedElements(0, true);
+    if(sendQueue->getDefaultQueuedElements()->size()>0){
+        //Set the first item in the send queue to true.
+        sendQueue->setDefaultQueuedElements(0, true);
+    }
 }
 
 uint32_t QueueController::sequenceNumberGenerator() {

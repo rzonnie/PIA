@@ -69,9 +69,9 @@ void MainWindow::on_lineEdit_returnPressed()
     QString self = "me";
     // This is the text message
     if (getNewCurrentUser().toStdString() != "") {
+        std::cout << "Message has been sent to " << getNewCurrentUser().toStdString() << std::endl;
         chatHistory->AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
         queueController->sendData(ui.lineEdit->text().toStdString(),inet_addr(getNewCurrentUser().toStdString().c_str()));
-        std::cout << "Message has been sent to " << getNewCurrentUser().toStdString() << std::endl;
     }
     ui.lineEdit->clear();
     toDisplay();
@@ -98,6 +98,8 @@ void MainWindow::on_pushButton_clicked()
 {
     std::vector<uint32_t> hosts = routingTable->getHosts();
     ui.comboBox->clear();
+    QString groupchat = QString::fromStdString("1.1.1.1");
+    addNewUser(groupchat);
     for (auto element : hosts) {
         QString qstr = QString::fromStdString(printIP(element));
         if (element != settings->getLocalIP())
