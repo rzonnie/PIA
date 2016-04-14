@@ -67,7 +67,7 @@ void MainWindow::toDisplay()
 {
     std::vector<ChatMessage> toDisplay = myChatHistory.getChatHistory(getNewCurrentUser());
     QString toDisplayString;
-	int i;
+    size_t i;
 	for (i=0;i<toDisplay.size();i++)
 	{
         toDisplayString.push_back(toDisplay[i].user);
