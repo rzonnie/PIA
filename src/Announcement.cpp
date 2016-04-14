@@ -11,7 +11,7 @@ void Announcement::run() {
         std::string message = stringify();
         PIA packet(settings->getLocalIP(), settings->getMulticastGroup(), 4444, 4444, false, true, message);
         sendQueue->push_back(packet);
-        usleep(100000);
+        usleep(400000);
     }
 }
 
