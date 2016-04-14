@@ -55,7 +55,10 @@ std::string Settings::getUsername() {
     return username;
 }
 
-const uint16_t Settings::getMTU() const {
+uint16_t Settings::getMTU() const {
     return MTU;
 }
 
+int16_t Settings::getInfinite() const {
+    return infinite;
+}

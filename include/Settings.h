@@ -37,7 +37,8 @@ public:
     int getPort();
     void setUsername(std::string username);
     std::string getUsername();
-    const uint16_t getMTU() const;
+    uint16_t getMTU() const;
+    int16_t getInfinite() const;
 private:
     std::string username;
     uint32_t port;
@@ -46,6 +47,7 @@ private:
     uint32_t localIP;
     uint32_t multicastGroup;
     uint16_t MTU = 1472;
+    int16_t infinite = -1;
 };
 
 #endif	/* SETTINGS_H */

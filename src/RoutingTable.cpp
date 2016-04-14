@@ -60,10 +60,10 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 if (j.to == i.to) //Check if the destination is already in your list
                 {
                     if (j.to != settings->getLocalIP()) {
-                        if (i.distance == -1 && j.distance != -1) {
+                        if (i.distance == settings->getInfinite() && j.distance != settings->getInfinite()) {
                             pthread_mutex_lock(&mutex_queue);
                             routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                            RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
+                            RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), settings->getInfinite());
                             pthread_mutex_unlock(&mutex_queue);
                             addRoutingTableStruct(temp);
                         } else if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
@@ -79,7 +79,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 }
                 k++; //Increase k to still be able to access the k'th element of the vector
             }
-            if (newElement && i.distance != -1) //If j looped over the full routing table I already had, and the destination was not found there:
+            if (newElement && i.distance != settings->getInfinite()) //If j looped over the full routing table I already had, and the destination was not found there:
             {
                 addRoutingTableStruct(makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1)); //Add it to my routing table
             }
@@ -106,7 +106,7 @@ std::vector<uint32_t> RoutingTable::tagFallouts() {
                 std::cout << "Erased an element" << " for " << printIP(routingTable[i].to) << std::endl;
             } else if (timeElapsed.count() > 4) {
                 //std::cout << "Time elapsed: " << timeElapsed.count() << " for " << printIP(routingTable[i].to) << std::endl;
-                routingTable[i].distance = -1;
+                routingTable[i].distance = settings->getInfinite();
             }
             pthread_mutex_unlock(&mutex_queue);
         }

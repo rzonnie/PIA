@@ -75,12 +75,12 @@ void MainWindow::on_lineEdit_returnPressed()
     }
     ui.lineEdit->clear();
     toDisplay();
-    ui.textEdit->verticalScrollBar()->setSliderPosition(ui.textEdit->verticalScrollBar()->maximum());
 }
 
 // Display all data of the current user
 void MainWindow::toDisplay()
 {
+    int temp = ui.textEdit->verticalScrollBar()->sliderPosition();
     std::vector<ChatMessage> toDisplay = chatHistory->getChatHistory(getNewCurrentUser());
     QString toDisplayString;
     size_t i;
@@ -92,6 +92,7 @@ void MainWindow::toDisplay()
         toDisplayString.push_back("\n");
 	}
     ui.textEdit->setPlainText(toDisplayString);
+    ui.textEdit->verticalScrollBar()->setSliderPosition(temp);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -108,9 +109,9 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::startTimer() {
     // timer in milliseconds
     #if QT_VERSION>=QT_VERSION_CHECK(5,0,0)
-        timer.start(200, Qt::CoarseTimer, this);
+        timer.start(500, Qt::CoarseTimer, this);
     #else
-        timer.start(200, this);
+        timer.start(500, this);
     #endif
 }
 
