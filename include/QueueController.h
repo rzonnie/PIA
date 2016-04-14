@@ -6,15 +6,18 @@
 #include "DynamicQueue.h"
 #include "PIA.h"
 #include "functions.h"
+#include "ChatHistory.h"
 
 #include <stdlib.h>
 #include <sstream>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 
+class GUIController;
+
 class QueueController : public ThreadRunner {
 public:
-    QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable);
+    QueueController(Settings* settings, DynamicQueue* sendQueue, DynamicQueue* receivingQueue, RoutingTable* routingTable, ChatHistory* chatHistory);
     //Input: pointer to receiving, ack and default queues
     virtual ~QueueController();
     
@@ -67,6 +70,7 @@ private:
      */
     void defaultProcessor(PIA &packet);
     
+    ChatHistory* chatHistory;
     DynamicQueue* sendQueue;
     DynamicQueue* receivingQueue;
     RoutingTable* routingTable;

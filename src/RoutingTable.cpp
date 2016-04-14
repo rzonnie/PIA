@@ -11,19 +11,23 @@ RoutingTable::RoutingTable(Settings* settings, uint32_t ID)
     uint32_t to = ID;
     uint8_t distance = 0;
     uint32_t via = ID;
-    pthread_mutex_lock(&mutex_queue);
     addRoutingTableStruct(makeStruct(to, via, distance));
-    pthread_mutex_unlock(&mutex_queue);
 }
 
 vector<RoutingTableStruct>* RoutingTable::getRoutingTable() {
     return &routingTable;
 }
 
+vector<uint32_t> RoutingTable::getHosts() const {
+    vector<uint32_t> temp = {};
+    for (auto element : routingTable) {
+        temp.push_back(element.to);
+    }
+    return temp;
+}
+
 void RoutingTable::addRoutingTableStruct(RoutingTableStruct Entry) {
-    pthread_mutex_lock(&mutex_queue);
     routingTable.push_back(Entry);
-    pthread_mutex_unlock(&mutex_queue);
 }
 
 void RoutingTable::setMyIdentifier(int ID) {

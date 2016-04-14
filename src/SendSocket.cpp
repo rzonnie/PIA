@@ -33,7 +33,7 @@ void SendSocket::init() {
         if (setsockopt(sockID, IPPROTO_IP, IP_MULTICAST_IF, (char *) &local, sizeof (local)) < 0)
             throw std::runtime_error("Local interface failed");
     } catch (std::exception &e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "Send Socket: " << e.what() << std::endl;
         throw e;
     }
 }
@@ -49,6 +49,7 @@ void SendSocket::run() {
         //std::cout << "Help: " << queue->getTime() - queue->getTimestamp(packet.getSequenceNumber()) << std::endl;
         if (packet.getDestinationAddress() > 0 && queue->getTime() - queue->getTimestamp(packet.getSequenceNumber()) > 10) {
             //std::cout << "Sending packet" << std::endl;
+            std::cout << "Sendsocket: default queue size -> " << queue->size_default() << std::endl;
             sendPacket(packet);
             queue->updateTimestamp(packet.getSequenceNumber(), 2000);
         }

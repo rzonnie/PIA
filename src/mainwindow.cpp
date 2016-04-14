@@ -1,9 +1,11 @@
 #include "../include/mainwindow.h"
+#include <vector>
+#include "functions.h"
 
-
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QueueController* queueController, RoutingTable* routingTable, Settings* settings, ChatHistory* chatHistory, QWidget *parent)
+    : queueController(queueController), routingTable(routingTable), settings(settings), chatHistory(chatHistory)
 {
-    newCurrentUser = "Group";
+    newCurrentUser = "";
     ui.setupUi(this);
     newMessage = false;
    
@@ -11,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+    std::cout << "CLOSED MAIN WINDOW" << std::endl;
 }
 
 
@@ -50,22 +52,35 @@ QString MainWindow::getNewestMessage()	//return the newest message in QString
     return newestMessage;
 }
 
-
+// Another user has been selected
 void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)	// a new current user is chosen
 {
     setNewCurrentUser(arg1);
 }
+
+void MainWindow::on_comboBox_activated(int index) {
+
+}
+
+// A text message has been sent
 void MainWindow::on_lineEdit_returnPressed()
 {
     QString self = "me";
-    myChatHistory.AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
+    // This is the text message
+    if (getNewCurrentUser().toStdString() != "") {
+        chatHistory->AddToHistory(self, ui.lineEdit->text(), getNewCurrentUser());
+        queueController->sendData(ui.lineEdit->text().toStdString(),inet_addr(getNewCurrentUser().toStdString().c_str()));
+        std::cout << "Message has been sent to " << getNewCurrentUser().toStdString() << std::endl;
+    }
     ui.lineEdit->clear();
     toDisplay();
     ui.textEdit->verticalScrollBar()->setSliderPosition(ui.textEdit->verticalScrollBar()->maximum());
 }
+
+// Display all data of the current user
 void MainWindow::toDisplay()
 {
-    std::vector<ChatMessage> toDisplay = myChatHistory.getChatHistory(getNewCurrentUser());
+    std::vector<ChatMessage> toDisplay = chatHistory->getChatHistory(getNewCurrentUser());
     QString toDisplayString;
     size_t i;
 	for (i=0;i<toDisplay.size();i++)
@@ -76,4 +91,15 @@ void MainWindow::toDisplay()
         toDisplayString.push_back("\n");
 	}
     ui.textEdit->setPlainText(toDisplayString);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    std::vector<uint32_t> hosts = routingTable->getHosts();
+    ui.comboBox->clear();
+    for (auto element : hosts) {
+        QString qstr = QString::fromStdString(printIP(element));
+        if (element != settings->getLocalIP())
+            addNewUser(qstr);
+    }
 }
