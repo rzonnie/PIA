@@ -33,7 +33,7 @@ void PIAEngine::run(int argc, char *argv[]) {
     std::thread queueControllerThread(&QueueController::run, &queueController);
     queueControllerThread.detach();
 
-
+    std::cout<<encryptDecrypt(encryptDecrypt("hello world, how are you doing","gehaktbal13"),"gehaktbal");
     // Wait for the GUI to be joinable
     if (GUI.joinable()) {
         GUI.join();

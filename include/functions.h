@@ -6,5 +6,6 @@
 #include <sstream>
 
 std::string printIP(long int inetaddr);
+std::string encryptDecrypt(std::string toEncrypt, std::string password);
 
 #endif /* FUNCTIONS_H */

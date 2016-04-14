@@ -23,6 +23,7 @@
 #include "QueueController.h"
 #include "ChatHistory.h"
 #include "guicontroller.h"
+#include "functions.h"
 
 class PIAEngine {
 public:
