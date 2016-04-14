@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <QComboBox>
 #include <QScrollBar>
+#include <QBasicTimer>
 
 #include "../ui_mainwindow.h"
 #include "../include/ChatHistory.h"
@@ -33,7 +34,8 @@ public:
     void toDisplay();
     void addNewUser(QString newUser);
     void removeUser(int index);
-
+    void startTimer();
+    void timerEvent(QTimerEvent* ev);
 
 private slots:
 
@@ -46,6 +48,7 @@ private slots:
     void on_pushButton_clicked();
 
 private:
+    QBasicTimer timer;
     Ui::MainWindow ui;
     bool newMessage;
     QString newCurrentUser;
