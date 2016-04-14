@@ -24,6 +24,7 @@
 #include "ChatHistory.h"
 #include "guicontroller.h"
 #include "functions.h"
+#include "Crypto++/BasicCryptoPPWrap.h"
 
 class PIAEngine {
 public:
