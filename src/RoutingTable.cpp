@@ -59,7 +59,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             {
                 if (j.to == i.to) //Check if the destination is already in your list
                 {
-                    if (i.distance == -1) {
+                    if (i.distance == -1 && j.distance != -1) {
                         pthread_mutex_lock(&mutex_queue);
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
                         RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
@@ -77,7 +77,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                 }
                 k++; //Increase k to still be able to access the k'th element of the vector
             }
-            if (newElement) //If j looped over the full routing table I already had, and the destination was not found there:
+            if (newElement && i.distance != -1) //If j looped over the full routing table I already had, and the destination was not found there:
             {
                 addRoutingTableStruct(makeStruct(i.to, newRoutingTable.getMyIdentifier(), i.distance + 1)); //Add it to my routing table
             }
@@ -120,7 +120,7 @@ void RoutingTable::printRoutingTable() const {
         std::chrono::duration<double> timeElapsed = now - element.stamp;
         std::string to = printIP(element.to);
         std::string via = printIP(element.via);
-        printf("| %s \t\t| %u \t\t\t | %s \t | %f \t |\n", to.c_str(), element.distance, via.c_str(), timeElapsed.count());
+        printf("| %s \t\t| %i \t\t\t | %s \t | %f \t |\n", to.c_str(), element.distance, via.c_str(), timeElapsed.count());
     }
 }
 
