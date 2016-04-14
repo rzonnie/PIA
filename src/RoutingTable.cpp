@@ -63,7 +63,7 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
                         if (i.distance == -1 && j.distance != -1) {
                             pthread_mutex_lock(&mutex_queue);
                             routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
-                            RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
+                            RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), -1);
                             pthread_mutex_unlock(&mutex_queue);
                             addRoutingTableStruct(temp);
                         } else if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
