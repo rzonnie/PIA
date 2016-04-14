@@ -62,7 +62,7 @@ void QueueController::run() {
                 fallOuts.erase(fallOuts.begin() + i);
             }
             sendQueue->printDefaultQueue();
-            //routingTable->printRoutingTable();
+            routingTable->printRoutingTable();
             cnt = 0;
         }
         cnt++;
