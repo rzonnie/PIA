@@ -59,7 +59,13 @@ void RoutingTable::updateRoutingTable(RoutingTable &newRoutingTable) {
             {
                 if (j.to == i.to) //Check if the destination is already in your list
                 {
-                    if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
+                    if (i.distance == 0) {
+                        pthread_mutex_lock(&mutex_queue);
+                        routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
+                        RoutingTableStruct temp = makeStruct(i.to, newRoutingTable.getMyIdentifier(), 0);
+                        pthread_mutex_unlock(&mutex_queue);
+                        addRoutingTableStruct(temp);
+                    } else if (j.distance >= i.distance + 1) //Is the distance smaller than at least the step to the node?
                     {
                         pthread_mutex_lock(&mutex_queue);
                         routingTable.erase(routingTable.begin() + k); //Use k instead of auto, otherwise .begin and.erase are not possible.
